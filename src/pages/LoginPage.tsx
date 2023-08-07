@@ -1,9 +1,10 @@
-import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
+import { Box, Button, Center, Group, PasswordInput, TextInput, Text, Title, Modal } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from '@mantine/notifications';
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as rest from '@/rest';
+import { useDisclosure } from "@mantine/hooks";
 
 
 interface FormFields
@@ -14,6 +15,8 @@ interface FormFields
 
 export default function LoginPage()
 {
+    const [messageBoxShowing, {open: openMessageBox, close: closeMessageBox}] = useDisclosure(false);
+    const [message, setMessage] = React.useState('');
     const location = useLocation();
     const navigate = useNavigate();
     const form = useForm<FormFields>({
@@ -29,16 +32,24 @@ export default function LoginPage()
     });
 
     return (
-        <Box maw={320} mx="auto">
-            <form onSubmit={form.onSubmit(onSubmit)}>
-                <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
-                <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
+        <>
+            <Center mih='100vh'>
+                <Box maw={640} mx="auto" w='40%'>
+                    <form onSubmit={form.onSubmit(onSubmit)}>
+                        <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
+                        <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
 
-                <Group position="right" mt="md">
-                    <Button type="submit">Register</Button>
-                </Group>
-            </form>
-        </Box>
+                        <Group position="right" mt="md">
+                            <Button type="submit">Login</Button>
+                        </Group>
+                    </form>
+                </Box>
+            </Center>
+            <Modal opened={messageBoxShowing} onClose={closeMessageBox} withCloseButton={false} centered>
+                <Title order={1}>Error</Title>
+                <Text>{message}</Text>
+            </Modal>
+        </>
     );
 
 
@@ -71,10 +82,8 @@ export default function LoginPage()
             }
             else
             {
-                notifications.show({
-                    title: "Failed to Log In",
-                    message: result.error
-                });
+                setMessage(result.error);
+                openMessageBox();
             }
         })();
     }

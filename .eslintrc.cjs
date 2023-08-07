@@ -8,6 +8,7 @@ module.exports = {
     'plugin:@typescript-eslint/stylistic-type-checked',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
+    'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',

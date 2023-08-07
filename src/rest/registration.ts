@@ -1,6 +1,6 @@
-import axios, { AxiosError } from 'axios';
-import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
+import axios from 'axios';
+import { restUrl } from './url';
 
 
 export interface AccountRegistrationData

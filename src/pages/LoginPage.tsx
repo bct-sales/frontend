@@ -5,6 +5,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as rest from '@/rest';
 import { useDisclosure } from "@mantine/hooks";
+import { useAuth } from "@/auth/context";
 
 
 interface FormFields
@@ -17,6 +18,7 @@ export default function LoginPage()
 {
     const [messageBoxShowing, {open: openMessageBox, close: closeMessageBox}] = useDisclosure(false);
     const [message, setMessage] = React.useState('');
+    const auth = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const form = useForm<FormFields>({
@@ -85,10 +87,9 @@ export default function LoginPage()
 
             if ( result.success )
             {
-                notifications.show({
-                    title: "Login Succeeded",
-                    message: 'Congratulations'
-                });
+                const accessToken = result.value;
+                auth.login(accessToken);
+                navigate('/events');
             }
             else
             {

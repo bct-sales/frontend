@@ -2,7 +2,6 @@ import { Box, Button, Group, Modal, PasswordInput, TextInput, Text, Title, Cente
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import * as rest from '@/rest';
-import { notifications } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 
@@ -25,15 +24,17 @@ export default function RegisterPage()
 
     return (
         <>
-            <Center maw={320} mx="auto" mih='100vh'>
-                <form onSubmit={form.onSubmit(onSubmit)}>
-                    <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
-                    <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
+            <Center mih='100vh'>
+                <Box maw={640} mx="auto" w='40%'>
+                    <form onSubmit={form.onSubmit(onSubmit)}>
+                        <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
+                        <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
 
-                    <Group position="right" mt="md">
-                        <Button type="submit">Register</Button>
-                    </Group>
-                </form>
+                        <Group position="right" mt="md">
+                            <Button type="submit">Register</Button>
+                        </Group>
+                    </form>
+                </Box>
             </Center>
             <Modal opened={messageBoxShowing} onClose={closeMessageBox} withCloseButton={false} centered>
                 <Title order={1}>Error</Title>

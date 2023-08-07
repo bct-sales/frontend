@@ -1,8 +1,10 @@
-import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
+import { Box, Button, Group, Modal, PasswordInput, TextInput, Text, Title, Center } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import * as rest from '@/rest';
 import { notifications } from "@mantine/notifications";
+import { useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
 
 
 interface FormFields
@@ -14,22 +16,30 @@ interface FormFields
 
 export default function RegisterPage()
 {
+    const [messageBoxShowing, {open: openMessageBox, close: closeMessageBox}] = useDisclosure(false);
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
     const form = useForm<FormFields>({
         initialValues: { emailAddress: '', password: '' }
     });
 
     return (
-        <Box maw={320} mx="auto">
-            <form onSubmit={form.onSubmit(onSubmit)}>
-                <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
-                <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
+        <>
+            <Center maw={320} mx="auto" mih='100vh'>
+                <form onSubmit={form.onSubmit(onSubmit)}>
+                    <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
+                    <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
 
-                <Group position="right" mt="md">
-                    <Button type="submit">Register</Button>
-                </Group>
-            </form>
-        </Box>
+                    <Group position="right" mt="md">
+                        <Button type="submit">Register</Button>
+                    </Group>
+                </form>
+            </Center>
+            <Modal opened={messageBoxShowing} onClose={closeMessageBox} withCloseButton={false} centered>
+                <Title order={1}>Error</Title>
+                <Text>{message}</Text>
+            </Modal>
+        </>
     );
 
 
@@ -48,10 +58,8 @@ export default function RegisterPage()
             }
             else
             {
-                notifications.show({
-                    title: "Registration Failed",
-                    message: result.error
-                });
+                setMessage(result.error);
+                openMessageBox();
             }
         })();
     }

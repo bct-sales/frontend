@@ -32,17 +32,19 @@ export default function RegisterPage()
     );
 
 
-    async function onSubmit(formFields: FormFields)
+    function onSubmit(formFields: FormFields)
     {
-        const success = await rest.registerUser(formFields);
+        void (async () => {
+            const success = await rest.registerUser(formFields);
 
-        if ( success )
-        {
-            navigate('/login');
-        }
-        else
-        {
-            console.log('Registration failed :-(');
-        }
+            if ( success )
+            {
+                navigate('/login');
+            }
+            else
+            {
+                console.log('Registration failed :-(');
+            }
+        })();
     }
 }

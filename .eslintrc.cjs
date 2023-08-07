@@ -10,6 +10,8 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
+    '@typescript-eslint/semi': 0,
+    '@typescript-eslint/brace-style': 0,
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },

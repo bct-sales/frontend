@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { restUrl } from './url';
+import { Result, failure, success } from '@/result';
 
 
 export interface AccountRegistrationData
@@ -9,12 +10,7 @@ export interface AccountRegistrationData
     password: string;
 }
 
-interface AccountRegistrationResponse
-{
-    result: string;
-}
-
-export async function registerUser( data: AccountRegistrationData ): Promise<boolean>
+export async function registerUser( data: AccountRegistrationData ): Promise<Result<undefined, string>>
 {
     const payload = {
         email_address: data.emailAddress,
@@ -22,7 +18,24 @@ export async function registerUser( data: AccountRegistrationData ): Promise<boo
     };
 
     const url = restUrl('/register');
-    const response = await axios.post<AccountRegistrationResponse>( url, payload ).catch( reason => { console.error(reason); return undefined; } );
 
-    return response?.status === 201;
+    try
+    {
+        await axios.post( url, payload );
+
+        return success<undefined>(undefined);
+    }
+    catch ( error: unknown )
+    {
+        if ( axios.isAxiosError(error) && error.response )
+        {
+            const data = error.response.data as unknown;
+
+            if ( typeof data === 'object' && data !== null && 'detail' in data && typeof data.detail === 'string' )
+            {
+                return failure<string>(data.detail);
+            }
+        }
+        return failure<string>('Unknown error');
+    }
 }

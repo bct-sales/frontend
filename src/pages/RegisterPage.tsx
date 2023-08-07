@@ -2,6 +2,7 @@ import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import * as rest from '@/rest';
+import { notifications } from "@mantine/notifications";
 
 
 interface FormFields
@@ -35,15 +36,22 @@ export default function RegisterPage()
     function onSubmit(formFields: FormFields)
     {
         void (async () => {
-            const success = await rest.registerUser(formFields);
+            const result = await rest.registerUser(formFields);
 
-            if ( success )
+            if ( result.success )
             {
-                navigate('/login');
+                const options = {
+                    state: { registrationSucceeded: true }
+                };
+
+                navigate('/login', options);
             }
             else
             {
-                console.log('Registration failed :-(');
+                notifications.show({
+                    title: "Registration Failed",
+                    message: result.error
+                });
             }
         })();
     }

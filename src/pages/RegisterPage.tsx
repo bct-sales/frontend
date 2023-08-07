@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as rest from '@/rest';
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
+import { isValidEmailAddress, isValidPassword } from "@/validation";
 
 
 interface FormFields
@@ -19,13 +20,20 @@ export default function RegisterPage()
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
     const form = useForm<FormFields>({
-        initialValues: { emailAddress: '', password: '' }
+        initialValues: {
+            emailAddress: '',
+            password: ''
+        },
+        validate: {
+            emailAddress: validateEmailAddress,
+            password: validatePassword,
+        }
     });
 
     return (
         <>
             <Center mih='100vh'>
-                <Box maw={640} mx="auto" w='40%'>
+                <Box maw={320} mx="auto" w='40%'>
                     <form onSubmit={form.onSubmit(onSubmit)}>
                         <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
                         <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
@@ -43,6 +51,30 @@ export default function RegisterPage()
         </>
     );
 
+
+    function validatePassword(password: string): string | null
+    {
+        if ( isValidPassword(password) )
+        {
+            return null;
+        }
+        else
+        {
+            return `Password should at least be 8 characters long`;
+        }
+    }
+
+    function validateEmailAddress(emailAddress: string): string | null
+    {
+        if ( isValidEmailAddress(emailAddress) )
+        {
+            return null;
+        }
+        else
+        {
+            return `Invalid email address`;
+        }
+    }
 
     function onSubmit(formFields: FormFields)
     {

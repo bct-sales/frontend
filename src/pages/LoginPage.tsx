@@ -20,7 +20,10 @@ export default function LoginPage()
     const location = useLocation();
     const navigate = useNavigate();
     const form = useForm<FormFields>({
-        initialValues: { emailAddress: '', password: '' }
+        initialValues: {
+            emailAddress: '',
+            password: ''
+        },
     });
 
 
@@ -34,13 +37,13 @@ export default function LoginPage()
     return (
         <>
             <Center mih='100vh'>
-                <Box maw={640} mx="auto" w='40%'>
+                <Box maw={320} mx="auto" w='40%'>
                     <form onSubmit={form.onSubmit(onSubmit)}>
                         <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
                         <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
 
                         <Group position="right" mt="md">
-                            <Button type="submit">Login</Button>
+                            <Button type="submit" disabled={!nonemptyInputs()}>Login</Button>
                         </Group>
                     </form>
                 </Box>
@@ -52,6 +55,13 @@ export default function LoginPage()
         </>
     );
 
+
+    function nonemptyInputs()
+    {
+        const fields = form.values;
+
+        return fields.emailAddress.length > 0 && fields.password.length > 0;
+    }
 
     function redirectedFromSuccessfulRegistration()
     {

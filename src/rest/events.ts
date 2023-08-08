@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
-import { SalesEvent } from './models';
+import { RawSalesEvent } from './raw-models';
 import { extractDetailFromException } from './error-handling';
 
 
-export async function listEvents(accessToken: string): Promise<Result<SalesEvent[], string>>
+export async function listEvents(accessToken: string): Promise<Result<RawSalesEvent[], string>>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
@@ -15,7 +15,7 @@ export async function listEvents(accessToken: string): Promise<Result<SalesEvent
 
     try
     {
-        const response = await axios.get<SalesEvent[]>( url, { headers } );
+        const response = await axios.get<RawSalesEvent[]>( url, { headers } );
         const data = response.data;
 
         return success(data);

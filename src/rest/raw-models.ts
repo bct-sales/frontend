@@ -1,4 +1,4 @@
-export interface SalesEvent
+export interface RawSalesEvent
 {
     sales_event_id: number;
     date: string;

@@ -2,7 +2,7 @@ import { useAuth } from "@/auth/context";
 import { listEvents } from "@/rest/events";
 import { RawSalesEvent } from "@/rest/raw-models";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Group, Paper, SimpleGrid, Text, Title } from "@mantine/core";
+import { Box, Button, Card, Paper, SimpleGrid, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -48,7 +48,7 @@ export default function EventsPage(): JSX.Element
                 <>
                     An error occurred
                 </>
-            )
+            );
         }
     }
     else

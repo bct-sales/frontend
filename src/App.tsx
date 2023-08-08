@@ -2,7 +2,6 @@ import { Header, MantineProvider, Title } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { Outlet } from 'react-router-dom';
 import { AuthProvider } from './auth/provider';
-import { useAuth } from './auth/context';
 
 
 function AppHeader()

@@ -11,11 +11,11 @@ export default function EventsPage(): JSX.Element
 {
     const navigate = useNavigate();
     const auth = useAuth();
-    const accessToken = auth.token;
+    const accessToken = auth.authenticated ? auth.accessToken : undefined;
     const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
     const response = useRequest(requester);
 
-    if ( !accessToken )
+    if ( !auth.authenticated )
     {
         console.error('Unauthenticated user should not be able to get here');
         navigate('/login');

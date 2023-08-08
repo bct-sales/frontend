@@ -28,11 +28,15 @@ export default function LoginPage()
         },
     });
 
-
     React.useEffect(() => {
         if ( redirectedFromSuccessfulRegistration() )
         {
             showSuccessfulRegistrationNotification();
+        }
+
+        if ( auth.authenticated )
+        {
+            navigate('/events');
         }
     });
 
@@ -88,8 +92,19 @@ export default function LoginPage()
             if ( result.success )
             {
                 const accessToken = result.value;
-                auth.login(accessToken);
-                navigate('/events');
+                const emailAddress = formFields.emailAddress;
+
+                if ( !auth.authenticated )
+                {
+                    auth.login(emailAddress, accessToken);
+                    navigate('/events');
+                }
+                else
+                {
+                    console.error('Bug detected: user should not be able to reach login page while authenticated');
+                    setMessage('You have encountered a bug');
+                    openMessageBox();
+                }
             }
             else
             {

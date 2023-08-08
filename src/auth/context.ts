@@ -1,18 +1,30 @@
 import React from 'react';
 
 
-export interface AuthContext
+export interface Authenticated
 {
-    token: string | undefined;
-    login: ( token: string ) => void;
+    authenticated: true;
+
+    emailAddress: string;
+
+    accessToken: string;
+
     logout: () => void;
 }
 
+export interface Unauthenticated
+{
+    authenticated: false;
 
-export const AuthContext = React.createContext<AuthContext | null>( null );
+    login: (emailAddress: string, accessToken: string) => void;
+}
+
+export type AuthenticationStatus = Authenticated | Unauthenticated;
+
+export const AuthContext = React.createContext<AuthenticationStatus | null>(null);
 
 
-export function useAuth(): AuthContext
+export function useAuth(): AuthenticationStatus
 {
     const context = React.useContext(AuthContext);
 

@@ -5,8 +5,13 @@ import { RawSalesEvent } from './raw-models';
 import { extractDetailFromException } from './error-handling';
 
 
-export async function listEvents(accessToken: string): Promise<Result<RawSalesEvent[], string>>
+export async function listEvents(accessToken: string | undefined): Promise<Result<RawSalesEvent[], string>>
 {
+    if ( accessToken === undefined )
+    {
+        return failure('Not authenticated');
+    }
+
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };

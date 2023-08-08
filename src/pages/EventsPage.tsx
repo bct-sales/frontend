@@ -12,7 +12,7 @@ export default function EventsPage(): JSX.Element
     const navigate = useNavigate();
     const auth = useAuth();
     const accessToken = auth.token;
-    const requester = useCallback(async () => listEvents(accessToken), []);
+    const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
     const response = useRequest(requester);
 
     if ( !accessToken )

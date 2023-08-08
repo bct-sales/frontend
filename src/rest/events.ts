@@ -2,6 +2,7 @@ import axios from 'axios';
 import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
 import { SalesEvent } from './models';
+import { extractDetailFromException } from './error-handling';
 
 
 export async function listEvents(accessToken: string): Promise<Result<SalesEvent[], string>>
@@ -10,7 +11,7 @@ export async function listEvents(accessToken: string): Promise<Result<SalesEvent
         Authorization: `Bearer ${accessToken}`
     };
 
-    const url = restUrl('/login');
+    const url = restUrl('/events');
 
     try
     {
@@ -21,17 +22,16 @@ export async function listEvents(accessToken: string): Promise<Result<SalesEvent
     }
     catch ( error: unknown )
     {
-        if ( axios.isAxiosError(error) && error.response )
+        const detail = extractDetailFromException(error);
+
+        if ( detail )
         {
-            const data = error.response.data as unknown;
-
-            if ( typeof data === 'object' && data !== null && 'detail' in data && typeof data.detail === 'string' )
-            {
-                return failure<string>(data.detail);
-            }
+            return failure<string>(detail);
         }
-
-        console.error(error);
-        return failure<string>('Unknown error');
+        else
+        {
+            console.error(error);
+            return failure<string>('Unknown error');
+        }
     }
 }

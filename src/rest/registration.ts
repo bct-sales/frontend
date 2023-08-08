@@ -1,6 +1,7 @@
 import { Result, failure, success } from '@/result';
 import axios from 'axios';
 import { restUrl } from './url';
+import { extractDetailFromException } from './error-handling';
 
 
 export interface AccountRegistrationData
@@ -27,15 +28,16 @@ export async function registerUser( data: AccountRegistrationData ): Promise<Res
     }
     catch ( error: unknown )
     {
-        if ( axios.isAxiosError(error) && error.response )
-        {
-            const data = error.response.data as unknown;
+        const detail = extractDetailFromException(error);
 
-            if ( typeof data === 'object' && data !== null && 'detail' in data && typeof data.detail === 'string' )
-            {
-                return failure<string>(data.detail);
-            }
+        if ( detail )
+        {
+            return failure<string>(detail);
         }
-        return failure<string>('Unknown error');
+        else
+        {
+            console.error(error);
+            return failure<string>('Unknown error');
+        }
     }
 }

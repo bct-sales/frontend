@@ -1,18 +1,58 @@
-import { Header, MantineProvider, Title } from '@mantine/core';
+import { Button, Group, Header, MantineProvider, Title, Text } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './auth/provider';
+import { useAuth } from './auth/context';
 
 
 function AppHeader()
 {
-    // const auth = useAuth();
+    const navigate = useNavigate();
+    const auth = useAuth();
 
     return (
-        <Header height={{base: 50, md: 70}}>
-            <Title>BCT Sales</Title>
+        <Header p='lg' height={{base: 60, md: 80}}>
+            <Group position='apart'>
+                <Title>BCT Sales</Title>
+                {renderLogoutFunctionality()}
+            </Group>
         </Header>
     );
+
+
+    function renderLogoutFunctionality(): JSX.Element
+    {
+        if ( auth.authenticated )
+        {
+            return (
+                <Group position='right'>
+                    <Text>
+                        Logged in as {auth.emailAddress}
+                    </Text>
+                    <Button onClick={onLogout}>Logout</Button>
+                </Group>
+            );
+
+
+        }
+        else
+        {
+            return <></>;
+        }
+    }
+
+    function onLogout()
+    {
+        if ( auth.authenticated )
+        {
+            auth.logout();
+            navigate('/login');
+        }
+        else
+        {
+            console.error('Bug!');
+        }
+    }
 }
 
 

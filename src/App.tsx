@@ -1,9 +1,6 @@
-import { MantineProvider } from '@mantine/core'
-import { Notifications } from '@mantine/notifications'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import RegisterPage from './pages/RegisterPage';
-import LoginPage from './pages/LoginPage';
-import EventsPage from './pages/EventsPage';
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import { Outlet } from 'react-router-dom';
 import { AuthProvider } from './auth/provider';
 
 
@@ -12,13 +9,7 @@ export default function App() {
         <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
             <AuthProvider>
                 <Notifications />
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/register" element={ <RegisterPage /> } />
-                        <Route path="/login" element={ <LoginPage /> } />
-                        <Route path="/events" element={ <EventsPage /> } />
-                    </Routes>
-                </BrowserRouter>
+                <Outlet />
             </AuthProvider>
         </MantineProvider>
     );

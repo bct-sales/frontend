@@ -64,10 +64,12 @@ export default function EventsPage(): JSX.Element
 
 function EventViewer({ event } : { event: SalesEvent }): JSX.Element
 {
+    const navigate = useNavigate();
+
     return (
         <>
             <Card maw={250} withBorder p='md'>
-                <Button fullWidth fz='xl' mb='lg'>
+                <Button fullWidth fz='xl' mb='lg' onClick={onClick}>
                     {event.date.format()}
                 </Button>
                 <Text>
@@ -79,4 +81,11 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
             </Card>
         </>
     );
+
+
+    function onClick()
+    {
+        console.log('Clicked!');
+        navigate(`/events/${event.id}/items`);
+    }
 }

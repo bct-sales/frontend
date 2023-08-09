@@ -10,6 +10,7 @@ export interface RawSalesEvent
 
 export interface RawItem
 {
+    item_id: number;
     description: string;
     price_in_cents: number;
     recipient_id: number;

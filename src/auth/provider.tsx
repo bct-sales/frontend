@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AuthContext, Authenticated, AuthenticationStatus, Unauthenticated } from './context';
+import { AuthContext, Authenticated, AuthenticationStatus, Role, Unauthenticated } from './context';
 import { createInitialAuthentication } from '@/settings';
 
 
@@ -18,9 +18,9 @@ export function AuthProvider( { children }: { children: React.ReactNode; } ): JS
     {
         const initialAuthentication = createInitialAuthentication();
 
-        if ( initialAuthentication )
+        if ( initialAuthentication !== undefined )
         {
-            return createAuthenticatedStatus(initialAuthentication.emailAddress, initialAuthentication.accessToken);
+            return createAuthenticatedStatus(initialAuthentication);
         }
         else
         {
@@ -28,12 +28,11 @@ export function AuthProvider( { children }: { children: React.ReactNode; } ): JS
         }
     }
 
-    function createAuthenticatedStatus(emailAddress: string, accessToken: string): Authenticated
+    function createAuthenticatedStatus(data: { emailAddress: string, role: Role, accessToken: string }): Authenticated
     {
         return {
+            ...data,
             authenticated: true,
-            emailAddress,
-            accessToken,
             logout,
         };
     }
@@ -46,9 +45,9 @@ export function AuthProvider( { children }: { children: React.ReactNode; } ): JS
         };
     }
 
-    function login(emailAddress: string, accessToken: string): void
+    function login(emailAddress: string, role: Role, accessToken: string): void
     {
-        setAuthenticationStatus(createAuthenticatedStatus(emailAddress, accessToken));
+        setAuthenticationStatus(createAuthenticatedStatus(emailAddress, role, accessToken));
     }
 
     function logout(): void

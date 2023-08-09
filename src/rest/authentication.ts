@@ -1,21 +1,25 @@
 import axios from 'axios';
 import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
+import { z } from 'zod';
 
 
-export interface AuthenticationData
-{
-    emailAddress: string;
+const AuthenticationData = z.object({
+    emailAddress: z.string().email(),
+    password: z.string(),
+});
 
-    password: string;
-}
+export type AuthenticationData = z.infer<typeof AuthenticationData>;
 
-interface LoginResponse
-{
-    access_token: string;
 
-    token_type: string;
-}
+const LoginResponse = z.object({
+    access_token: z.string(),
+    role: z.union([z.literal('seller'), z.literal('admin')]),
+    token_type: z.string(),
+});
+
+type LoginResponse = z.infer<typeof LoginResponse>;
+
 
 export async function authenticateUser( data: AuthenticationData ): Promise<Result<string, string>>
 {

@@ -2,7 +2,7 @@ import { useAuth } from "@/auth/context";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Card, NumberInput, Paper, SimpleGrid, TextInput, Title } from "@mantine/core";
+import { Box, Card, Group, Header, NumberInput, Paper, SimpleGrid, Stack, TextInput, Title } from "@mantine/core";
 import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -31,14 +31,16 @@ export default function ItemsPage(): JSX.Element
 
             return (
                 <>
-                    <Paper maw={800} mx='auto' p="md">
-                        <Title>
+                    <Header height={60}>
+                        <Title p={10}>
                             Sale Event {eventId} Items
                         </Title>
+                    </Header>
+                    <Paper maw={800} mx='auto' p="md">
                         <Box my={50}>
-                            <SimpleGrid cols={3}>
+                            <Stack>
                                 {events.map(item => <ItemViewer key={item.id} item={item} />)}
-                            </SimpleGrid>
+                            </Stack>
                         </Box>
                     </Paper>
                 </>
@@ -70,9 +72,11 @@ function ItemViewer({ item } : { item: Item }): JSX.Element
 
     return (
         <>
-            <Card maw={250} withBorder p='md'>
-                <TextInput value={item.description} />
-                <NumberInput value={price} step={0.5} precision={2} min={0} formatter={formatter} onChange={onChangePrice} />
+            <Card withBorder p='md'>
+                <Group position="apart">
+                    <TextInput value={item.description} placeholder="Description" w='82%' />
+                    <NumberInput value={price} step={0.5} precision={2} min={0} formatter={formatter} onChange={onChangePrice} placeholder="Price" w='15%' miw='100px' />
+                </Group>
             </Card>
         </>
     );

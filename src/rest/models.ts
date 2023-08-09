@@ -60,6 +60,11 @@ export class Item
         // NOP
     }
 
+    public get id(): number
+    {
+        return this.data.item_id;
+    }
+
     public get description(): string
     {
         return this.data.description;

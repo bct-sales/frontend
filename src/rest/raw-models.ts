@@ -1,12 +1,4 @@
-export interface RawSalesEvent
-{
-    sales_event_id: number;
-    date: string;
-    start_time: string;
-    end_time: string;
-    location: string;
-    description: string;
-}
+import { z } from 'zod';
 
 export interface RawItem
 {
@@ -17,3 +9,18 @@ export interface RawItem
     sales_event_id: number;
     owner_id: number;
 }
+
+export const RawSalesEvent = z.object({
+    sales_event_id: z.number().nonnegative(),
+    date: z.string(),
+    start_time: z.string(),
+    end_time: z.string(),
+    location: z.string(),
+    description: z.string(),
+});
+
+export type RawSalesEvent = z.infer<typeof RawSalesEvent>;
+
+export const RawSalesEvents = z.array(RawSalesEvent);
+
+export type RawSalesEvents = z.infer<typeof RawSalesEvents>;

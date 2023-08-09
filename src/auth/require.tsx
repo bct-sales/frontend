@@ -7,7 +7,7 @@ export function RequireAuth( { children }: { children: React.ReactNode; } ): JSX
 {
     const auth = useAuth();
 
-    if ( !auth.token )
+    if ( !auth.authenticated )
     {
         return (
             <Navigate to="/login" />

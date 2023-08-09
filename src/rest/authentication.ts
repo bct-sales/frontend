@@ -2,6 +2,7 @@ import axios from 'axios';
 import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
 import { z } from 'zod';
+import { Role } from '@/auth/context';
 
 
 const AuthenticationData = z.object({
@@ -21,7 +22,7 @@ const LoginResponse = z.object({
 type LoginResponse = z.infer<typeof LoginResponse>;
 
 
-export async function authenticateUser( data: AuthenticationData ): Promise<Result<string, string>>
+export async function authenticateUser( data: AuthenticationData ): Promise<Result<{role: Role, accessToken: string}, string>>
 {
     const payload = {
         grant_type: 'password',
@@ -30,7 +31,7 @@ export async function authenticateUser( data: AuthenticationData ): Promise<Resu
     };
     const headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    };
 
     const url = restUrl('/login');
 
@@ -38,8 +39,9 @@ export async function authenticateUser( data: AuthenticationData ): Promise<Resu
     {
         const response = await axios.post<LoginResponse>( url, payload, { headers } );
         const accessToken = response.data.access_token;
+        const role = response.data.role;
 
-        return success<string>(accessToken);
+        return success({ role, accessToken });
     }
     catch ( error: unknown )
     {

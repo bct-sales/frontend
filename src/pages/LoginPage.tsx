@@ -91,12 +91,12 @@ export default function LoginPage()
 
             if ( result.success )
             {
-                const accessToken = result.value;
+                const {role, accessToken} = result.value;
                 const emailAddress = formFields.emailAddress;
 
                 if ( !auth.authenticated )
                 {
-                    auth.login(emailAddress, accessToken);
+                    auth.login(emailAddress, role, accessToken);
                     navigate('/events');
                 }
                 else

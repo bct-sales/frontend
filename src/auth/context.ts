@@ -1,6 +1,9 @@
 import React from 'react';
 
 
+export type Role = "seller" | "admin";
+
+
 export interface Authenticated
 {
     authenticated: true;
@@ -9,6 +12,8 @@ export interface Authenticated
 
     accessToken: string;
 
+    role: Role;
+
     logout: () => void;
 }
 
@@ -16,7 +21,7 @@ export interface Unauthenticated
 {
     authenticated: false;
 
-    login: (emailAddress: string, accessToken: string) => void;
+    login: (emailAddress: string, role: Role, accessToken: string) => void;
 }
 
 export type AuthenticationStatus = Authenticated | Unauthenticated;

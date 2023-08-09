@@ -47,7 +47,7 @@ export function AuthProvider( { children }: { children: React.ReactNode; } ): JS
 
     function login(emailAddress: string, role: Role, accessToken: string): void
     {
-        setAuthenticationStatus(createAuthenticatedStatus(emailAddress, role, accessToken));
+        setAuthenticationStatus(createAuthenticatedStatus({ emailAddress, role, accessToken }));
     }
 
     function logout(): void

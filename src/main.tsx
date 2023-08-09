@@ -24,8 +24,12 @@ if ( root )
                     element: <pages.LoginPage />
                 },
                 {
+                    path: "events/:eventId/items",
+                    element: <pages.ItemsPage />
+                },
+                {
                     path: "events",
-                    element: <pages.EventsPage />
+                    element: <pages.EventsPage />,
                 }
             ]
         },

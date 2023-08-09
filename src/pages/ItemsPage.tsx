@@ -2,8 +2,8 @@ import { useAuth } from "@/auth/context";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Card, Paper, SimpleGrid, Text, Title } from "@mantine/core";
-import { useCallback } from "react";
+import { Box, Card, NumberInput, Paper, SimpleGrid, TextInput, Title } from "@mantine/core";
+import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 
@@ -66,13 +66,37 @@ export default function ItemsPage(): JSX.Element
 
 function ItemViewer({ item } : { item: Item }): JSX.Element
 {
+    const [price, setPrice] = useState<number>(0);
+
     return (
         <>
             <Card maw={250} withBorder p='md'>
-                <Text>
-                    {item.description}
-                </Text>
+                <TextInput value={item.description} />
+                <NumberInput value={price} step={0.5} precision={2} min={0} formatter={formatter} onChange={onChangePrice} />
             </Card>
         </>
     );
+
+
+    function onChangePrice(value: number | '')
+    {
+        const newPrice = value === '' ? 0 : value;
+
+        setPrice(newPrice);
+    }
+
+    function formatter(str: string): string
+    {
+        const value = parseFloat(str);
+
+        if ( Number.isNaN(value) )
+        {
+            return str;
+        }
+        else
+        {
+            const euro = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR'});
+            return euro.format(value);
+        }
+    }
 }

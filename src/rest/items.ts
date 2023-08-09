@@ -6,18 +6,23 @@ import { extractDetailFromException } from './error-handling';
 import { Item } from './models';
 
 
-export async function listItems(accessToken: string | undefined): Promise<Result<Item[], string>>
+export async function listItems(accessToken: string | undefined, salesEventId: number | undefined): Promise<Result<Item[], string>>
 {
     if ( accessToken === undefined )
     {
         return failure('Not authenticated');
     }
 
+    if ( salesEventId === undefined )
+    {
+        return failure('No sales event specified');
+    }
+
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };
 
-    const url = restUrl('/me/items');
+    const url = restUrl(`/me/events/${salesEventId}/items`);
 
     try
     {

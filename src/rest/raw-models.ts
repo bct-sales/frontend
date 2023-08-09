@@ -7,3 +7,12 @@ export interface RawSalesEvent
     location: string;
     description: string;
 }
+
+export interface RawItem
+{
+    description: string;
+    price_in_cents: number;
+    recipient_id: number;
+    sales_event_id: number;
+    owner_id: number;
+}

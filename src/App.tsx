@@ -27,13 +27,11 @@ function AppHeader()
             return (
                 <Group position='right'>
                     <Text>
-                        Logged in as {auth.emailAddress}
+                        Logged in as {auth.emailAddress} ({auth.role})
                     </Text>
                     <Button onClick={onLogout}>Logout</Button>
                 </Group>
             );
-
-
         }
         else
         {

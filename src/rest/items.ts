@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
-import { RawItem } from './raw-models';
+import { RawItem, RawItems } from './raw-models';
 import { extractDetailFromException } from './error-handling';
 import { Item } from './models';
 
@@ -26,8 +26,8 @@ export async function listItems(accessToken: string | undefined, salesEventId: n
 
     try
     {
-        const response = await axios.get<RawItem[]>( url, { headers } );
-        const data = response.data;
+        const response = await axios.get<unknown>( url, { headers } );
+        const data = RawItems.parse(response.data);
 
         return success(data.map(x => new Item(x)));
     }

@@ -1,14 +1,5 @@
 import { z } from 'zod';
 
-export interface RawItem
-{
-    item_id: number;
-    description: string;
-    price_in_cents: number;
-    recipient_id: number;
-    sales_event_id: number;
-    owner_id: number;
-}
 
 export const RawSalesEvent = z.object({
     sales_event_id: z.number().nonnegative(),
@@ -24,3 +15,18 @@ export type RawSalesEvent = z.infer<typeof RawSalesEvent>;
 export const RawSalesEvents = z.array(RawSalesEvent);
 
 export type RawSalesEvents = z.infer<typeof RawSalesEvents>;
+
+export const RawItem = z.object({
+    item_id: z.number().nonnegative(),
+    description: z.string(),
+    price_in_cents: z.number().nonnegative(),
+    recipient_id: z.number().nonnegative(),
+    sales_event_id: z.number().nonnegative(),
+    owner_id: z.number().nonnegative(),
+});
+
+export const RawItems = z.array(RawItem);
+
+export type RawItem = z.infer<typeof RawItem>;
+
+export type RawItems = z.infer<typeof RawItems>;

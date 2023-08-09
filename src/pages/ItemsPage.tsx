@@ -4,11 +4,12 @@ import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { Box, Card, Paper, SimpleGrid, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 export default function ItemsPage(): JSX.Element
 {
+    const { eventId } = useParams();
     const navigate = useNavigate();
     const auth = useAuth();
     const accessToken = auth.authenticated ? auth.accessToken : undefined;
@@ -31,7 +32,7 @@ export default function ItemsPage(): JSX.Element
                 <>
                     <Paper maw={800} mx='auto' p="md">
                         <Title>
-                            Upcoming Sale Events
+                            Sale Event {eventId} Items
                         </Title>
                         <Box my={50}>
                             <SimpleGrid cols={3}>

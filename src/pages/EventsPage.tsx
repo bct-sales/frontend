@@ -1,6 +1,6 @@
 import { useAuth } from "@/auth/context";
 import { listEvents } from "@/rest/events";
-import { RawSalesEvent } from "@/rest/raw-models";
+import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { Box, Button, Card, Paper, SimpleGrid, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
@@ -35,7 +35,7 @@ export default function EventsPage(): JSX.Element
                         </Title>
                         <Box my={50}>
                             <SimpleGrid cols={3}>
-                                {events.map(event => <EventViewer key={event.sales_event_id} event={event} />)}
+                                {events.map(event => <EventViewer key={event.id} event={event} />)}
                             </SimpleGrid>
                         </Box>
                     </Paper>
@@ -62,16 +62,16 @@ export default function EventsPage(): JSX.Element
 }
 
 
-function EventViewer({ event } : { event: RawSalesEvent }): JSX.Element
+function EventViewer({ event } : { event: SalesEvent }): JSX.Element
 {
     return (
         <>
             <Card maw={250} withBorder p='md'>
                 <Button fullWidth fz='xl' mb='lg'>
-                    {event.date}
+                    {event.date.format()}
                 </Button>
                 <Text>
-                    {event.start_time} - {event.end_time} ({event.location})
+                    {event.startTime.format()} - {event.endTime.format()} ({event.location})
                 </Text>
                 <Text>
                     {event.description}

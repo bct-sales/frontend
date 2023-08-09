@@ -1,6 +1,7 @@
 import { BCTDate } from "@/date";
-import { RawSalesEvent } from "./raw-models";
+import { RawItem, RawSalesEvent } from "./raw-models";
 import { BCTTime } from "@/time";
+import { MoneyAmount } from "@/money-amount";
 
 
 export class SalesEvent
@@ -48,5 +49,39 @@ export class SalesEvent
     public get raw(): RawSalesEvent
     {
         return this.data;
+    }
+}
+
+
+export class Item
+{
+    constructor(public readonly data: RawItem)
+    {
+        // NOP
+    }
+
+    public get description(): string
+    {
+        return this.data.description;
+    }
+
+    public get price(): MoneyAmount
+    {
+        return new MoneyAmount(this.data.price_in_cents);
+    }
+
+    public get recipientId(): number
+    {
+        return this.data.recipient_id;
+    }
+
+    public get ownerId(): number
+    {
+        return this.data.owner_id;
+    }
+
+    public get salesEventId(): number
+    {
+        return this.data.sales_event_id;
     }
 }

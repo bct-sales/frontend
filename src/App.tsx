@@ -1,4 +1,4 @@
-import { Button, Group, Header, MantineProvider, Title, Text } from '@mantine/core';
+import { Button, Group, Header, MantineProvider, Title, Text, MediaQuery } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './auth/provider';
@@ -13,7 +13,9 @@ function AppHeader()
     return (
         <Header p='lg' height={{base: 60, md: 80}}>
             <Group position='apart'>
-                <Title>BCT Sales</Title>
+                <MediaQuery smallerThan='sm' styles={{display: 'none'}}>
+                    <Title>BCT Sales</Title>
+                </MediaQuery>
                 {renderLogoutFunctionality()}
             </Group>
         </Header>

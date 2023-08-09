@@ -9,11 +9,12 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export default function ItemsPage(): JSX.Element
 {
-    const { eventId } = useParams();
+    const params = useParams();
+    const eventId = params.eventId ? parseInt(params.eventId) : undefined;
     const navigate = useNavigate();
     const auth = useAuth();
     const accessToken = auth.authenticated ? auth.accessToken : undefined;
-    const requester = useCallback(async () => listItems(accessToken), [accessToken]);
+    const requester = useCallback(async () => listItems(accessToken, eventId), [accessToken, eventId]);
     const response = useRequest(requester);
 
     if ( !auth.authenticated )
@@ -47,7 +48,7 @@ export default function ItemsPage(): JSX.Element
         {
             return (
                 <>
-                    An error occurred
+                    An error occurred: {response.payload.error}
                 </>
             );
         }

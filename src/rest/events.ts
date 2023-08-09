@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
-import { RawSalesEvent } from './raw-models';
+import { RawSalesEvent, RawSalesEvents } from './raw-models';
 import { extractDetailFromException } from './error-handling';
 import { SalesEvent } from './models';
 
@@ -21,8 +21,8 @@ export async function listEvents(accessToken: string | undefined): Promise<Resul
 
     try
     {
-        const response = await axios.get<RawSalesEvent[]>( url, { headers } );
-        const data = response.data;
+        const response = await axios.get<unknown>( url, { headers } );
+        const data = RawSalesEvents.parse(response.data);
 
         return success(data.map(x => new SalesEvent(x)));
     }

@@ -2,7 +2,7 @@ import { useAuth } from "@/auth/context";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Paper, SimpleGrid, Text, Title } from "@mantine/core";
+import { Box, Button, Card, Flex, Paper, SimpleGrid, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -29,14 +29,14 @@ export default function EventsPage(): JSX.Element
 
             return (
                 <>
-                    <Paper maw={800} mx='auto' p="md">
+                    <Paper mx='auto' p="md">
                         <Title>
                             Upcoming Sale Events
                         </Title>
                         <Box my={50}>
-                            <SimpleGrid cols={3}>
+                            <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
                                 {events.map(event => <EventViewer key={event.id} event={event} />)}
-                            </SimpleGrid>
+                            </Flex>
                         </Box>
                     </Paper>
                 </>
@@ -68,7 +68,7 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
 
     return (
         <>
-            <Card maw={250} withBorder p='md'>
+            <Card withBorder p='md' miw={300}>
                 <Button fullWidth fz='xl' mb='lg' onClick={onClick}>
                     {event.date.format()}
                 </Button>

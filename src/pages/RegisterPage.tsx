@@ -5,6 +5,7 @@ import * as rest from '@/rest';
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { isValidEmailAddress, isValidPassword } from "@/validation";
+import { notifications } from "@mantine/notifications";
 
 
 interface FormFields
@@ -83,11 +84,11 @@ export default function RegisterPage()
 
             if ( result.success )
             {
-                const options = {
-                    state: { registrationSucceeded: true }
-                };
+                notifications.show({
+                    message: 'Registration successful!',
+                });
 
-                navigate('/login', options);
+                navigate('/login');
             }
             else
             {

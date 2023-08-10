@@ -19,7 +19,6 @@ export default function LoginPage()
     const [messageBoxShowing, {open: openMessageBox, close: closeMessageBox}] = useDisclosure(false);
     const [message, setMessage] = React.useState('');
     const auth = useAuth();
-    const location = useLocation();
     const navigate = useNavigate();
     const form = useForm<FormFields>({
         initialValues: {
@@ -29,11 +28,6 @@ export default function LoginPage()
     });
 
     React.useEffect(() => {
-        if ( redirectedFromSuccessfulRegistration() )
-        {
-            showSuccessfulRegistrationNotification();
-        }
-
         if ( auth.authenticated )
         {
             navigate('/events');
@@ -67,21 +61,6 @@ export default function LoginPage()
         const fields = form.values;
 
         return fields.emailAddress.length > 0 && fields.password.length > 0;
-    }
-
-    function redirectedFromSuccessfulRegistration()
-    {
-        const state = location.state as unknown;
-
-        return typeof(state) === 'object' && state !== null && 'registrationSucceeded' in location.state;
-    }
-
-    function showSuccessfulRegistrationNotification(): void
-    {
-        notifications.show({
-            title: 'Registration',
-            message: 'Registration successful!',
-        });
     }
 
     function onSubmit(formFields: FormFields)

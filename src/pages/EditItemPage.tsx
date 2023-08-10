@@ -1,9 +1,9 @@
 import { AuthenticatedSeller } from "@/auth/types";
 import ItemEditor from "@/components/ItemEditor";
+import StateGuard from "@/components/StateGuard";
 import { Item } from "@/rest/models";
 import { Button } from "@mantine/core";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 
 
 interface Props
@@ -13,32 +13,24 @@ interface Props
 
 export default function EditItemPage(props: Props): JSX.Element
 {
-    const location = useLocation();
-    const state = location.state as unknown;
+    return (
+        <StateGuard<Item>
+            child={item => <ActualEditItemPage auth={props.auth} item={item} />}
+            predicate={predicate} />
+    )
 
-    if ( typeof state === 'object' && state !== null && 'item' in state && state.item instanceof Item )
-    {
-        const item = state.item;
 
-        return (
-            <ActualEditItemPage auth={props.auth} item={item} />
-        )
-    }
-    else
+    function predicate(state: unknown): state is Item
     {
-        return (
-            <>
-                Error
-            </>
-        );
+        return state instanceof Item;
     }
 }
 
 
-function ActualEditItemPage(props: { auth: AuthenticatedSeller, item?: Item }): JSX.Element
+function ActualEditItemPage(props: { auth: AuthenticatedSeller, item: Item }): JSX.Element
 {
-    const [ description, setDescription ] = useState<string>(props.item?.description ?? '');
-    const [ price, setPrice ] = useState<number>(props.item?.price.totalCents ?? 0);
+    const [ description, setDescription ] = useState<string>(props.item.description);
+    const [ price, setPrice ] = useState<number>(props.item.price.totalCents);
 
     return (
         <>

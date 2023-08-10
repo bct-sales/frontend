@@ -118,8 +118,6 @@ function ItemViewer({ item } : { item: Item }): JSX.Element
 
     function onEdit()
     {
-        const state = { item };
-
-        navigate(`/edit-item`, { state });
+        navigate(`/edit-item`, { state: item });
     }
 }

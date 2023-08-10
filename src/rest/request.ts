@@ -41,7 +41,7 @@ export function failure<E>(error: E): FailedRequest<E>
     return { ready: true, success: false, error };
 }
 
-export function useRequest<T, E>(requester: Requester<T, E>): [RequestResult<T, E>, (result: RequestResult<T, E>) => void]
+export function useRequest<T, E>(requester: Requester<T, E>): RequestResult<T, E>
 {
     const [result, setResult] = useState<RequestResult<T, E>>(inProgress());
 
@@ -60,5 +60,5 @@ export function useRequest<T, E>(requester: Requester<T, E>): [RequestResult<T, 
         })();
     }, [requester]);
 
-    return [result, setResult];
+    return result;
 }

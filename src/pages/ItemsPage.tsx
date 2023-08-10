@@ -21,7 +21,7 @@ export default function ItemsPage(props: ItemsPageProps): JSX.Element
     const { auth } = props;
     const { accessToken } = auth;
     const requester = useCallback(async () => listItems(accessToken, eventId), [accessToken, eventId]);
-    const [items, setItems] = useRequest(requester);
+    const items = useRequest(requester);
 
     return (
         <>

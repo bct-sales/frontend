@@ -19,7 +19,7 @@ export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 {
     const accessToken = auth.accessToken;
     const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
-    const [request] = useRequest(requester);
+    const request = useRequest(requester);
 
     return (
         <RequestWrapper<SalesEvent[], string>

@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
-import { RawSalesEvent, RawSalesEvents } from './raw-models';
+import axios from 'axios';
 import { extractDetailFromException } from './error-handling';
 import { SalesEvent } from './models';
+import { RawSalesEvents } from './raw-models';
+import { restUrl } from './url';
 
 
 export async function listEvents(accessToken: string | undefined): Promise<Result<SalesEvent[], string>>

@@ -4,6 +4,7 @@ import { MoneyAmount } from "@/money-amount";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
+import { restUrl } from "@/rest/url";
 import { Box, Button, Card, Group, Header, NumberInput, Paper, Stack, Text, Title } from "@mantine/core";
 import Immutable from "immutable";
 import { ChangeEvent, useCallback, useState } from "react";
@@ -29,19 +30,19 @@ export default function ItemsPage(props: ItemsPageProps): JSX.Element
         <>
             <RequestWrapper
                 requestResult={items}
-                success={items => <ActualItemsPage auth={auth} initialItems={items} />}
+                success={items => <ActualItemsPage auth={auth} items={items} />}
             />
         </>
     );
 }
 
 
-function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[] }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[] }): JSX.Element
 {
+    const { items } = props;
     const params = useParams();
     const eventId = params.eventId ? parseInt(params.eventId) : undefined;
     const navigate = useNavigate();
-    const [ items, setItems ] = useState(Immutable.List<Item>(props.initialItems));
 
     return (
         <>
@@ -73,11 +74,6 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[
         navigate('/events');
     }
 
-    function updateItem(index: number, item: Item)
-    {
-        setItems(items.set(index, item));
-    }
-
     function onAddItem()
     {
         // NOP
@@ -87,6 +83,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[
 
 function ItemViewer({ item } : { item: Item }): JSX.Element
 {
+    const navigate = useNavigate();
     const { price, description } = item;
 
     return (
@@ -96,11 +93,24 @@ function ItemViewer({ item } : { item: Item }): JSX.Element
                     <Text w='82%'>
                         {description}
                     </Text>
-                    <Text>
-                        {price.format()}
-                    </Text>
+                    <Group>
+                        <Text>
+                            {price.format()}
+                        </Text>
+                        <Button onClick={onEdit}>
+                            Edit
+                        </Button>
+                    </Group>
                 </Group>
             </Card>
         </>
     );
+
+
+    function onEdit()
+    {
+        const state = { item };
+
+        navigate(`/edit-item`, { state });
+    }
 }

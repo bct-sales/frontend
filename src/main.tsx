@@ -31,11 +31,15 @@ if ( root )
                 {
                     path: "events",
                     element: <AuthGuard role='seller' child={auth => <pages.EventsPage auth={auth} />} />,
-                }
+                },
+                {
+                    path: "edit-item",
+                    element: <AuthGuard role='seller' child={auth => <pages.EditItemPage auth={auth} />} />,
+                },
             ]
         },
     ]);
-    
+
     ReactDOM.createRoot(root).render(
         <React.StrictMode>
             <RouterProvider router={router} />

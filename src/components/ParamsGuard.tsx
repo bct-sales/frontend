@@ -8,8 +8,9 @@ interface Props<T, E>
 
     child: (param: T) => JSX.Element;
 
-    error: (error: E) => JSX.Element;
+    error?: (error: E) => JSX.Element;
 }
+
 
 export default function ParamsGuard<T, E>(props: Props<T, E>)
 {
@@ -22,6 +23,18 @@ export default function ParamsGuard<T, E>(props: Props<T, E>)
     }
     else
     {
-        return props.error(result.error);
+        const error = props.error ?? defaultError;
+
+        return error(result.error);
+    }
+
+
+    function defaultError()
+    {
+        return (
+            <p>
+                An error occurred
+            </p>
+        )
     }
 }

@@ -2,7 +2,7 @@ import { AuthenticatedSeller } from "@/auth/types";
 import ItemEditor from "@/components/ItemEditor";
 import StateGuard from "@/components/StateGuard";
 import { Item } from "@/rest/models";
-import { Button } from "@mantine/core";
+import { Button, Card, Group } from "@mantine/core";
 import { useState } from "react";
 
 
@@ -34,20 +34,17 @@ function ActualEditItemPage(props: { auth: AuthenticatedSeller, item: Item }): J
 
     return (
         <>
-            <ItemEditor description={description} priceInCents={price} onChange={onChange} />
-            {createButton()}
+            <Card maw={500} mx='auto' m='xl'>
+                <ItemEditor description={description} priceInCents={price} onChange={onChange} />
+                <Group position="right" mt='xl'>
+                    <Button onClick={onUpdateItem}>
+                        Update
+                    </Button>
+                </Group>
+            </Card>
         </>
     );
 
-
-    function createButton(): JSX.Element
-    {
-        return (
-            <Button onClick={onUpdateItem}>
-                Update
-            </Button>
-        );
-    }
 
     function onUpdateItem()
     {

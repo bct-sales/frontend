@@ -17,7 +17,7 @@ export default function DefaultLoadingScreen()
                 <Center m='xl'>
                     <Stack align="center">
                         <Loader />
-                        <Text>Loading</Text>
+                        <Text fw='bold'>Loading</Text>
                     </Stack>
                 </Center>
             </>

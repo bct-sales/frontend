@@ -29,7 +29,7 @@ export async function listItems(accessToken: string | undefined, salesEventId: n
         const response = await axios.get<unknown>( url, { headers } );
         const data = RawItems.parse(response.data);
 
-        return success(data.map(x => new Item(x)));
+        return success(data.items.map(x => new Item(x)));
     }
     catch ( error: unknown )
     {

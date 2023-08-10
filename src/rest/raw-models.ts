@@ -23,9 +23,17 @@ export const RawItem = z.object({
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),
     owner_id: z.number().nonnegative(),
+    links: z.object({
+        edit: z.string(),
+    })
 });
 
-export const RawItems = z.array(RawItem);
+export const RawItems = z.object({
+    items: z.array(RawItem),
+    links: z.object({
+        add: z.string(),
+    })
+});
 
 export type RawItem = z.infer<typeof RawItem>;
 

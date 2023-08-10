@@ -26,7 +26,7 @@ if ( root )
                 },
                 {
                     path: "events/:eventId/items",
-                    element: <pages.ItemsPage />
+                    element: <AuthGuard child={auth => <pages.ItemsPage auth={auth} />} />
                 },
                 {
                     path: "events",

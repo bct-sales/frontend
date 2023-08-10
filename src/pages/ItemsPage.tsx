@@ -1,74 +1,71 @@
-import { useAuth } from "@/auth/context";
+import { Authenticated } from "@/auth/context";
+import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Group, Header, NumberInput, Paper, SimpleGrid, Stack, TextInput, Title } from "@mantine/core";
-import { useCallback, useEffect, useState } from "react";
+import { Box, Button, Card, Group, Header, NumberInput, Paper, Stack, TextInput, Title } from "@mantine/core";
+import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 
-export default function ItemsPage(): JSX.Element
+interface ItemsPageProps
+{
+    auth: Authenticated;
+}
+
+
+export default function ItemsPage(props: ItemsPageProps): JSX.Element
+{
+    const params = useParams();
+    const eventId = params.eventId ? parseInt(params.eventId) : undefined;
+    const { auth } = props;
+    const { accessToken } = auth;
+    const requester = useCallback(async () => listItems(accessToken, eventId), [accessToken, eventId]);
+    const [items, setItems] = useRequest(requester);
+
+    return (
+        <>
+            <RequestWrapper
+                requestResult={items}
+                success={items => <ActualItemsPage auth={auth} items={items} />}
+            />
+        </>
+    );
+}
+
+
+function ActualItemsPage(props: { auth: Authenticated, items: Item[] }): JSX.Element
 {
     const params = useParams();
     const eventId = params.eventId ? parseInt(params.eventId) : undefined;
     const navigate = useNavigate();
-    const auth = useAuth();
-    const accessToken = auth.authenticated ? auth.accessToken : undefined;
-    const requester = useCallback(async () => listItems(accessToken, eventId), [accessToken, eventId]);
-    const [items, setItems] = useRequest(requester);
+    const { items } = props;
 
-    if ( !auth.authenticated )
-    {
-        console.error('Unauthenticated user should not be able to get here');
-        navigate('/login');
-        return <></>;
-    }
-    else if ( items.ready )
-    {
-        if ( items.success )
-        {
-            return (
-                <>
-                    <Header height={80} p='sm'>
-                        <Group position="apart">
-                            <Title order={2} p={10}>
-                                Sale Event {eventId} Items
-                            </Title>
-                            <Group position="right">
-                                <Button onClick={onClickBack}>
-                                    Back
-                                </Button>
-                            </Group>
-                        </Group>
-                    </Header>
-                    <Paper maw={800} mx='auto' p="md">
-                        <Box my={50}>
-                            <Stack>
-                                {items.payload.map(item => <ItemViewer key={item.id} item={item} />)}
-                                <Button>Add</Button>
-                            </Stack>
-                        </Box>
-                    </Paper>
-                </>
-            );
-        }
-        else
-        {
-            return (
-                <>
-                    An error occurred: {items.error}
-                </>
-            );
-        }
-    }
-    else
-    {
-        return (
-            <p>
-                Loading
-            </p>
-        );
-    }
+    return (
+        <>
+            <Header height={80} p='sm'>
+                <Group position="apart">
+                    <Title order={2} p={10}>
+                        Sale Event {eventId} Items
+                    </Title>
+                    <Group position="right">
+                        <Button onClick={onClickBack}>
+                            Back
+                        </Button>
+                    </Group>
+                </Group>
+            </Header>
+            <Paper maw={800} mx='auto' p="md">
+                <Box my={50}>
+                    <Stack>
+                        {items.map(item => <ItemViewer key={item.id} item={item} />)}
+                        <Button>Add</Button>
+                    </Stack>
+                </Box>
+            </Paper>
+        </>
+    );
+
 
     function onClickBack()
     {

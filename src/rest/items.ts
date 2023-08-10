@@ -6,13 +6,8 @@ import { RawItems } from './raw-models';
 import { restUrl } from './url';
 
 
-export async function listItems(accessToken: string, salesEventId: number | undefined): Promise<Result<Item[], string>>
+export async function listItems(accessToken: string, salesEventId: number): Promise<Result<Item[], string>>
 {
-    if ( salesEventId === undefined )
-    {
-        return failure('No sales event specified');
-    }
-
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };

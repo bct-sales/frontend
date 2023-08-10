@@ -42,14 +42,14 @@ export default function AuthGuard(props: Props): JSX.Element
 
     const error = props.error ?? defaultError;
     return error();
+}
 
 
-    function defaultError(): JSX.Element
-    {
-        return (
-            <p>
-                Authentication missing
-            </p>
-        )
-    }
+function defaultError(): JSX.Element
+{
+    return (
+        <p>
+            Authentication missing
+        </p>
+    )
 }

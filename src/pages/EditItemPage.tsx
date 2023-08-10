@@ -40,6 +40,9 @@ function ActualEditItemPage(props: { auth: AuthenticatedSeller, item: Item }): J
                     <Button onClick={onUpdateItem}>
                         Update
                     </Button>
+                    <Button onClick={onCancel}>
+                        Cancel
+                    </Button>
                 </Group>
             </Card>
         </>
@@ -49,6 +52,11 @@ function ActualEditItemPage(props: { auth: AuthenticatedSeller, item: Item }): J
     function onUpdateItem()
     {
         // NOP
+    }
+
+    function onCancel()
+    {
+        history.back();
     }
 
     function onChange(description: string, priceInCents: number)

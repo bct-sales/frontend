@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AuthContext, Authenticated, AuthenticationStatus, Role, Unauthenticated } from './context';
+import { AuthContext, AuthenticatedUser, AuthenticationStatus, Role, Unauthenticated } from './context';
 import { createInitialAuthentication } from '@/settings';
 
 
@@ -28,7 +28,7 @@ export function AuthProvider( { children }: { children: React.ReactNode; } ): JS
         }
     }
 
-    function createAuthenticatedStatus(data: { emailAddress: string, role: Role, accessToken: string }): Authenticated
+    function createAuthenticatedStatus(data: { emailAddress: string, role: Role, accessToken: string }): AuthenticatedUser
     {
         return {
             ...data,

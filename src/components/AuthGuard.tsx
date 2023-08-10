@@ -1,9 +1,9 @@
-import { Authenticated, useAuth } from "@/auth/context";
+import { AuthenticatedUser, useAuth } from "@/auth/context";
 
 
 interface AuthGuardProps
 {
-    child: (auth: Authenticated) => JSX.Element;
+    child: (auth: AuthenticatedUser) => JSX.Element;
 
     error?: () => JSX.Element;
 }

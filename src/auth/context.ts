@@ -4,7 +4,7 @@ import React from 'react';
 export type Role = "seller" | "admin";
 
 
-export interface Authenticated
+interface AuthenticatedBase
 {
     authenticated: true;
 
@@ -12,10 +12,20 @@ export interface Authenticated
 
     accessToken: string;
 
-    role: Role;
-
     logout: () => void;
 }
+
+export interface AuthenticatedSeller extends AuthenticatedBase
+{
+    role: 'seller';
+}
+
+export interface AuthenticatedAdmin extends AuthenticatedBase
+{
+    role: 'admin';
+}
+
+export type AuthenticatedUser = AuthenticatedSeller | AuthenticatedAdmin;
 
 export interface Unauthenticated
 {
@@ -24,7 +34,7 @@ export interface Unauthenticated
     login: (emailAddress: string, role: Role, accessToken: string) => void;
 }
 
-export type AuthenticationStatus = Authenticated | Unauthenticated;
+export type AuthenticationStatus = AuthenticatedUser | Unauthenticated;
 
 export const AuthContext = React.createContext<AuthenticationStatus | null>(null);
 

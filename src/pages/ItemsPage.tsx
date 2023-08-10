@@ -1,4 +1,4 @@
-import { Authenticated } from "@/auth/context";
+import { AuthenticatedUser } from "@/auth/context";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 interface ItemsPageProps
 {
-    auth: Authenticated;
+    auth: AuthenticatedUser;
 }
 
 
@@ -34,7 +34,7 @@ export default function ItemsPage(props: ItemsPageProps): JSX.Element
 }
 
 
-function ActualItemsPage(props: { auth: Authenticated, items: Item[] }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedUser, items: Item[] }): JSX.Element
 {
     const params = useParams();
     const eventId = params.eventId ? parseInt(params.eventId) : undefined;

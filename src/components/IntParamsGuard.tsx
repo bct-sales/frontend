@@ -9,14 +9,14 @@ interface Props
 
     child: (value: number) => JSX.Element;
 
-    error: () => JSX.Element;
+    error?: () => JSX.Element;
 }
 
 
 export default function IntParamsGuard(props: Props): JSX.Element
 {
     return (
-        <ParamsGuard extractor={extractor} child={props.child} error={() => props.error()} />
+        <ParamsGuard extractor={extractor} child={props.child} error={props.error} />
     );
 
 

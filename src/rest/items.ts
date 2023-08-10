@@ -1,18 +1,13 @@
-import axios from 'axios';
-import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
-import { RawItem, RawItems } from './raw-models';
+import axios from 'axios';
 import { extractDetailFromException } from './error-handling';
 import { Item } from './models';
+import { RawItems } from './raw-models';
+import { restUrl } from './url';
 
 
-export async function listItems(accessToken: string | undefined, salesEventId: number | undefined): Promise<Result<Item[], string>>
+export async function listItems(accessToken: string, salesEventId: number | undefined): Promise<Result<Item[], string>>
 {
-    if ( accessToken === undefined )
-    {
-        return failure('Not authenticated');
-    }
-
     if ( salesEventId === undefined )
     {
         return failure('No sales event specified');

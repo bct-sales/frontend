@@ -1,6 +1,5 @@
 import { RequestResult } from "@/rest/request";
-import { Center, Flex, Group, Loader, Stack, Text } from "@mantine/core";
-import { useEffect, useState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 
 
 interface RequestWrapperProps<T, E>
@@ -43,7 +42,7 @@ export default function RequestWrapper<T, E>(props: RequestWrapperProps<T, E>): 
     function defaultLoading()
     {
         return (
-            <DefaultLoadingScreen />
+            <LoadingScreen />
         );
     }
 
@@ -54,35 +53,5 @@ export default function RequestWrapper<T, E>(props: RequestWrapperProps<T, E>): 
                 Error: {error}
             </>
         )
-    }
-}
-
-
-function DefaultLoadingScreen()
-{
-    const [show, setShow] = useState(false);
-
-    useEffect(() => {
-        setTimeout(() => { setShow(true) }, 100);
-    }, []);
-
-    if ( show )
-    {
-        return (
-            <>
-                <Center m='xl'>
-                    <Stack align="center">
-                        <Loader />
-                        <Text>Loading</Text>
-                    </Stack>
-                </Center>
-            </>
-        );
-    }
-    else
-    {
-        return (
-            <></>
-        );
     }
 }

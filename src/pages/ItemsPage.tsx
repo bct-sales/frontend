@@ -4,6 +4,7 @@ import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { Box, Button, Card, Group, Header, NumberInput, Paper, Stack, TextInput, Title } from "@mantine/core";
+import Immutable from "immutable";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -39,7 +40,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[
     const params = useParams();
     const eventId = params.eventId ? parseInt(params.eventId) : undefined;
     const navigate = useNavigate();
-    const [ items, setItems ] = useState(props.initialItems);
+    const [ items, setItems ] = useState(Immutable.List<Item>(props.initialItems));
 
     return (
         <>

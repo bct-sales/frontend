@@ -1,11 +1,10 @@
-import { Box, Button, Center, Group, PasswordInput, TextInput, Text, Title, Modal } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { notifications } from '@mantine/notifications';
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import * as rest from '@/rest';
-import { useDisclosure } from "@mantine/hooks";
 import { useAuth } from "@/auth/context";
+import * as rest from '@/rest';
+import { Box, Button, Center, Group, Modal, PasswordInput, Text, TextInput, Title } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 
 interface FormFields

@@ -1,4 +1,5 @@
 import { AuthenticatedSeller } from "@/auth/types";
+import IntParamsGuard from "@/components/IntParamsGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
@@ -16,9 +17,23 @@ interface ItemsPageProps
 
 export default function ItemsPage(props: ItemsPageProps): JSX.Element
 {
-    const params = useParams();
-    const eventId = params.eventId ? parseInt(params.eventId) : undefined;
-    const { auth } = props;
+    return (
+        <IntParamsGuard child={createPage} paramName="eventId" />
+    )
+
+
+    function createPage(eventId: number): JSX.Element
+    {
+        return (
+            <ItemsPageWithEventId auth={props.auth} eventId={eventId} />
+        )
+    }
+}
+
+
+function ItemsPageWithEventId(props: { eventId: number, auth: AuthenticatedSeller }): JSX.Element
+{
+    const { auth, eventId } = props;
     const { accessToken } = auth;
     const requester = useCallback(async () => listItems(accessToken, eventId), [accessToken, eventId]);
     const items = useRequest(requester);
@@ -32,7 +47,6 @@ export default function ItemsPage(props: ItemsPageProps): JSX.Element
         </>
     );
 }
-
 
 function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[] }): JSX.Element
 {

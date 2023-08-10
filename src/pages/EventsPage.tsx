@@ -1,10 +1,9 @@
-import { Authenticated, useAuth } from "@/auth/context";
-import AuthGuard from "@/components/AuthGuard";
+import { Authenticated } from "@/auth/context";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Flex, Paper, SimpleGrid, Text, Title } from "@mantine/core";
+import { Box, Button, Card, Flex, Paper, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 

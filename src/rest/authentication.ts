@@ -2,7 +2,7 @@ import axios from 'axios';
 import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
 import { z } from 'zod';
-import { Role } from '@/auth/context';
+import { Role } from '@/auth/types';
 
 
 const AuthenticationData = z.object({

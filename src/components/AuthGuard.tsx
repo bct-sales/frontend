@@ -1,4 +1,5 @@
-import { AuthenticatedUser, useAuth } from "@/auth/context";
+import { useAuth } from "@/auth/context";
+import { AuthenticatedUser } from "@/auth/types";
 
 
 interface AuthGuardProps

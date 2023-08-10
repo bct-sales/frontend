@@ -1,4 +1,5 @@
-import { Role } from "./auth/context";
+import { Role } from "./auth/types";
+
 
 export function createInitialAuthentication(): { emailAddress: string, role: Role, accessToken: string } | undefined
 {

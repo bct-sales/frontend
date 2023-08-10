@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { AuthContext, AuthenticatedUser, AuthenticationStatus, Role, Unauthenticated } from './context';
+import { AuthContext } from './context';
+import { AuthenticatedUser, AuthenticationStatus, Role, Unauthenticated } from './types';
 import { createInitialAuthentication } from '@/settings';
 
 

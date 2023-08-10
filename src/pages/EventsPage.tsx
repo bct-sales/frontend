@@ -1,4 +1,4 @@
-import { AuthenticatedUser } from "@/auth/context";
+import { AuthenticatedUser } from "@/auth/types";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";

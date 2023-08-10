@@ -1,5 +1,6 @@
 import { Authenticated, useAuth } from "@/auth/context";
 import AuthGuard from "@/components/AuthGuard";
+import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
@@ -17,55 +18,37 @@ interface EventsPageProps
 
 export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 {
-    const navigate = useNavigate();
-    const accessToken = auth.authenticated ? auth.accessToken : undefined;
+    const accessToken = auth.accessToken;
     const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
-    const [events, setEvents] = useRequest(requester);
+    const [request] = useRequest(requester);
 
-    if ( !auth.authenticated )
-    {
-        console.error('Unauthenticated user should not be able to get here');
-        navigate('/login');
-        return <></>;
-    }
-    else if ( events.ready )
-    {
-        if ( events.success )
-        {
-            const evts = events.payload;
+    return (
+        <RequestWrapper<SalesEvent[], string>
+            requestResult={request}
+            success={events => <ActualEventsPage events={events} auth={auth} />}
+        />
+    );
+}
 
-            return (
-                <>
-                    <Paper mx='auto' p="md">
-                        <Title>
-                            Upcoming Sale Events
-                        </Title>
-                        <Box my={50}>
-                            <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
-                                {evts.map(event => <EventViewer key={event.id} event={event} />)}
-                            </Flex>
-                        </Box>
-                    </Paper>
-                </>
-            );
-        }
-        else
-        {
-            return (
-                <>
-                    An error occurred
-                </>
-            );
-        }
-    }
-    else
-    {
-        return (
-            <p>
-                Loading
-            </p>
-        );
-    }
+
+function ActualEventsPage(props: { auth: Authenticated, events: SalesEvent[] }): JSX.Element
+{
+    const { events } = props;
+
+    return (
+        <>
+            <Paper mx='auto' p="md">
+                <Title>
+                    Upcoming Sale Events
+                </Title>
+                <Box my={50}>
+                    <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
+                        {events.map(event => <EventViewer key={event.id} event={event} />)}
+                    </Flex>
+                </Box>
+            </Paper>
+        </>
+    );
 }
 
 

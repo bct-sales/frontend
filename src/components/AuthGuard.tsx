@@ -1,31 +1,47 @@
 import { useAuth } from "@/auth/context";
-import { AuthenticatedUser, Role } from "@/auth/types";
+import { AuthenticatedAdmin, AuthenticatedSeller } from "@/auth/types";
 
 
-interface AuthGuardProps
+interface BaseProps
 {
-    child: (auth: AuthenticatedUser) => JSX.Element;
-
-    role: Role;
-
     error?: () => JSX.Element;
 }
 
+interface SellerProps extends BaseProps
+{
+    child: (auth: AuthenticatedSeller) => JSX.Element;
 
-export default function AuthGuard(props: AuthGuardProps): JSX.Element
+    role: 'seller';
+}
+
+interface AdminProps extends BaseProps
+{
+    child: (auth: AuthenticatedAdmin) => JSX.Element;
+
+    role: 'admin';
+}
+
+type Props = SellerProps | AdminProps;
+
+
+export default function AuthGuard(props: Props): JSX.Element
 {
     const auth = useAuth();
 
-    if ( auth.authenticated && auth.role === props.role )
+    if ( auth.authenticated )
     {
-        return props.child(auth);
+        if ( props.role === 'seller' && auth.role === 'seller' )
+        {
+            return props.child(auth);
+        }
+        else if ( props.role === 'admin' && auth.role === 'admin' )
+        {
+            return props.child(auth);
+        }
     }
-    else
-    {
-        const error = props.error ?? defaultError;
 
-        return error();
-    }
+    const error = props.error ?? defaultError;
+    return error();
 
 
     function defaultError(): JSX.Element

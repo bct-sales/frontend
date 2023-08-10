@@ -42,17 +42,15 @@ function ItemsPageWithEventId(props: { eventId: number, auth: AuthenticatedSelle
         <>
             <RequestWrapper
                 requestResult={items}
-                success={items => <ActualItemsPage auth={auth} items={items} />}
+                success={items => <ActualItemsPage auth={auth} items={items} eventId={eventId} />}
             />
         </>
     );
 }
 
-function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[] }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], eventId: number }): JSX.Element
 {
-    const { items } = props;
-    const params = useParams();
-    const eventId = params.eventId ? parseInt(params.eventId) : undefined;
+    const { items, eventId } = props;
     const navigate = useNavigate();
 
     return (

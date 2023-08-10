@@ -6,7 +6,14 @@ import { RawItems } from './raw-models';
 import { restUrl } from './url';
 
 
-export async function listItems(accessToken: string, salesEventId: number): Promise<Result<Item[], string>>
+interface ListItemsResult
+{
+    items: Item[];
+
+    addItemUrl: string;
+}
+
+export async function listItems(accessToken: string, salesEventId: number): Promise<Result<ListItemsResult, string>>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
@@ -18,8 +25,10 @@ export async function listItems(accessToken: string, salesEventId: number): Prom
     {
         const response = await axios.get<unknown>( url, { headers } );
         const data = RawItems.parse(response.data);
+        const items = data.items.map(x => new Item(x));
+        const addItemUrl = data.links.add;
 
-        return success(data.items.map(x => new Item(x)));
+        return success({ items, addItemUrl });
     }
     catch ( error: unknown )
     {
@@ -52,7 +61,23 @@ export async function updateItem(accessToken: string, item: Item): Promise<void>
         sales_event_id: item.salesEventId,
     };
 
-    console.log(url);
-
     await axios.put<unknown>( restUrl(url), data, { headers } );
+}
+
+
+export interface AddItemPayload
+{
+    description: string;
+    price_in_cents: number;
+    recipient_id: number;
+    sales_event_id: number;
+};
+
+export async function addItem(accessToken: string, data: AddItemPayload, url: string): Promise<void>
+{
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    };
+
+    await axios.post<unknown>( restUrl(url), data, { headers } );
 }

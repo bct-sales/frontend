@@ -1,13 +1,20 @@
 export type Role = "seller" | "admin";
 
 
-interface AuthenticatedBase
+export interface AuthenticationData
 {
-    authenticated: true;
-
     emailAddress: string;
 
     accessToken: string;
+
+    role: Role;
+
+    userId: number;
+}
+
+interface AuthenticatedBase extends AuthenticationData
+{
+    authenticated: true;
 
     logout: () => void;
 }
@@ -28,7 +35,7 @@ export interface Unauthenticated
 {
     authenticated: false;
 
-    login: (emailAddress: string, role: Role, accessToken: string) => void;
+    login: (data: AuthenticationData) => void;
 }
 
 export type AuthenticationStatus = AuthenticatedUser | Unauthenticated;

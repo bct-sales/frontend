@@ -7,6 +7,7 @@ import { useRequest } from "@/rest/request";
 import { Box, Button, Card, Group, Header, Paper, Stack, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AddItemState } from "./AddItemPage";
 
 
 interface ItemsPageProps
@@ -36,19 +37,19 @@ function ItemsPageWithEventId(props: { eventId: number, auth: AuthenticatedSelle
     const { auth, eventId } = props;
     const { accessToken } = auth;
     const requester = useCallback(async () => listItems(accessToken, eventId), [accessToken, eventId]);
-    const items = useRequest(requester);
+    const response = useRequest(requester);
 
     return (
         <>
             <RequestWrapper
-                requestResult={items}
-                success={items => <ActualItemsPage auth={auth} items={items} eventId={eventId} />}
+                requestResult={response}
+                success={response => <ActualItemsPage auth={auth} items={response.items} addItemUrl={response.addItemUrl} eventId={eventId} />}
             />
         </>
     );
 }
 
-function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], eventId: number }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], addItemUrl: string, eventId: number }): JSX.Element
 {
     const { items, eventId } = props;
     const navigate = useNavigate();
@@ -85,7 +86,9 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], even
 
     function onAddItem()
     {
-        // NOP
+        const state = new AddItemState(props.addItemUrl, props.eventId);
+
+        navigate('/add-item', { state });
     }
 }
 

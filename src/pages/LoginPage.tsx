@@ -1,6 +1,6 @@
 import { useAuth } from "@/auth/context";
 import * as rest from '@/rest';
-import { Box, Button, Center, Group, Modal, NavLink, PasswordInput, Text, TextInput, Title, UnstyledButton } from "@mantine/core";
+import { Box, Button, Center, Modal, PasswordInput, Text, TextInput, Title, UnstyledButton } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";
@@ -75,12 +75,12 @@ export default function LoginPage()
 
             if ( result.success )
             {
-                const {role, accessToken} = result.value;
+                const { userId, role, accessToken } = result.value;
                 const emailAddress = formFields.emailAddress;
 
                 if ( !auth.authenticated )
                 {
-                    auth.login(emailAddress, role, accessToken);
+                    auth.login({ emailAddress, role, accessToken,  userId });
                     navigate('/events');
                 }
                 else

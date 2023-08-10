@@ -14,6 +14,7 @@ export type AuthenticationData = z.infer<typeof AuthenticationData>;
 
 
 const LoginResponse = z.object({
+    user_id: z.number().nonnegative(),
     access_token: z.string(),
     role: z.union([z.literal('seller'), z.literal('admin')]),
     token_type: z.string(),
@@ -22,7 +23,7 @@ const LoginResponse = z.object({
 type LoginResponse = z.infer<typeof LoginResponse>;
 
 
-export async function authenticateUser( data: AuthenticationData ): Promise<Result<{role: Role, accessToken: string}, string>>
+export async function authenticateUser( data: AuthenticationData ): Promise<Result<{role: Role, accessToken: string, userId: number}, string>>
 {
     const payload = {
         grant_type: 'password',
@@ -41,8 +42,9 @@ export async function authenticateUser( data: AuthenticationData ): Promise<Resu
         const data = LoginResponse.parse(response.data);
         const accessToken = data.access_token;
         const role = data.role;
+        const userId = data.user_id;
 
-        return success({ role, accessToken });
+        return success({ role, accessToken, userId });
     }
     catch ( error: unknown )
     {

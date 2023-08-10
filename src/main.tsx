@@ -36,6 +36,10 @@ if ( root )
                     path: "edit-item",
                     element: <AuthGuard role='seller' child={auth => <pages.EditItemPage auth={auth} />} />,
                 },
+                {
+                    path: "add-item",
+                    element: <AuthGuard role='seller' child={auth => <pages.AddItemPage auth={auth} />} />,
+                },
             ]
         },
     ]);

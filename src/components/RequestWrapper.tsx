@@ -1,5 +1,6 @@
 import { RequestResult } from "@/rest/request";
 import { Flex, Loader } from "@mantine/core";
+import { useEffect, useState } from "react";
 
 
 interface RequestWrapperProps<T, E>
@@ -39,14 +40,10 @@ export default function RequestWrapper<T, E>(props: RequestWrapperProps<T, E>): 
     }
 
 
-    function defaultLoading(): JSX.Element
+    function defaultLoading()
     {
         return (
-            <>
-                <Flex w='100%' justify='center' align='center' h='100px'>
-                    <Loader />
-                </Flex>
-            </>
+            <DefaultLoadingScreen />
         );
     }
 
@@ -57,5 +54,32 @@ export default function RequestWrapper<T, E>(props: RequestWrapperProps<T, E>): 
                 Error: {error}
             </>
         )
+    }
+}
+
+
+function DefaultLoadingScreen()
+{
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => { setShow(true) }, 100);
+    }, []);
+
+    if ( show )
+    {
+        return (
+            <>
+                <Flex w='100%' justify='center' align='center' h='100px'>
+                    <Loader />
+                </Flex>
+            </>
+        );
+    }
+    else
+    {
+        return (
+            <></>
+        );
     }
 }

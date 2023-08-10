@@ -1,13 +1,10 @@
 import { AuthenticatedSeller } from "@/auth/types";
 import RequestWrapper from "@/components/RequestWrapper";
-import { MoneyAmount } from "@/money-amount";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { restUrl } from "@/rest/url";
-import { Box, Button, Card, Group, Header, NumberInput, Paper, Stack, Text, Title } from "@mantine/core";
-import Immutable from "immutable";
-import { ChangeEvent, useCallback, useState } from "react";
+import { Box, Button, Card, Group, Header, Paper, Stack, Text, Title } from "@mantine/core";
+import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 

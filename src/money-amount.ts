@@ -17,6 +17,7 @@ export class MoneyAmount
 
     public format(): string
     {
-        return `${this.euro}.${this.cents}`;
+        const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR'});
+        return formatter.format(this.totalCents / 100);
     }
 }

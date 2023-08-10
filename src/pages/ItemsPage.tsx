@@ -4,7 +4,7 @@ import { MoneyAmount } from "@/money-amount";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Group, Header, NumberInput, Paper, Stack, TextInput, Title } from "@mantine/core";
+import { Box, Button, Card, Group, Header, NumberInput, Paper, Stack, Text, Title } from "@mantine/core";
 import Immutable from "immutable";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -61,7 +61,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[
                 <Box my={50}>
                     <Stack>
                         <Button onClick={onAddItem}>Add Item</Button>
-                        {items.map((item, index) => <ItemViewer key={item.id} item={item} onChange={item => { updateItem(index, item) } } />)}
+                        {items.map(item => <ItemViewer key={item.id} item={item} />)}
                     </Stack>
                 </Box>
             </Paper>
@@ -85,7 +85,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[
 }
 
 
-function ItemViewer({ item, onChange } : { item: Item, onChange: (item: Item) => void }): JSX.Element
+function ItemViewer({ item } : { item: Item }): JSX.Element
 {
     const { price, description } = item;
 
@@ -93,40 +93,14 @@ function ItemViewer({ item, onChange } : { item: Item, onChange: (item: Item) =>
         <>
             <Card withBorder p='md'>
                 <Group position="apart">
-                    <TextInput placeholder="Description" w='82%' value={description} onChange={onChangeDescription} />
-                    <NumberInput value={price.cents / 100} step={0.5} precision={2} min={0} formatter={formatter} onChange={onChangePrice} placeholder="Price" w='15%' miw='100px' />
+                    <Text w='82%'>
+                        {description}
+                    </Text>
+                    <Text>
+                        {price.format()}
+                    </Text>
                 </Group>
             </Card>
         </>
     );
-
-
-    function onChangeDescription(event: ChangeEvent<HTMLInputElement>)
-    {
-        const description = event.target.value;
-        const updatedItem = item.updateDescription(description);
-        onChange(updatedItem);
-    }
-
-    function onChangePrice(value: number | '')
-    {
-        const newPrice = value === '' ? 0 : value;
-        const updatedItem = item.updatePrice(new MoneyAmount(newPrice * 100));
-        onChange(updatedItem);
-    }
-
-    function formatter(str: string): string
-    {
-        const value = parseFloat(str);
-
-        if ( Number.isNaN(value) )
-        {
-            return str;
-        }
-        else
-        {
-            const euro = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR'});
-            return euro.format(value);
-        }
-    }
 }

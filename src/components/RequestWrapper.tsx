@@ -1,5 +1,5 @@
 import { RequestResult } from "@/rest/request";
-import { Flex, Loader } from "@mantine/core";
+import { Center, Flex, Group, Loader, Stack, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 
@@ -70,9 +70,12 @@ function DefaultLoadingScreen()
     {
         return (
             <>
-                <Flex w='100%' justify='center' align='center' h='100px'>
-                    <Loader />
-                </Flex>
+                <Center m='xl'>
+                    <Stack align="center">
+                        <Loader />
+                        <Text>Loading</Text>
+                    </Stack>
+                </Center>
             </>
         );
     }

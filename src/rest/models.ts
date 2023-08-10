@@ -89,4 +89,20 @@ export class Item
     {
         return this.data.sales_event_id;
     }
+
+    public updatePrice(price: MoneyAmount): Item
+    {
+        return new Item({
+            ...this.data,
+            price_in_cents: price.totalCents,
+        });
+    }
+
+    public updateDescription(description: string): Item
+    {
+        return new Item({
+            ...this.data,
+            description,
+        })
+    }
 }

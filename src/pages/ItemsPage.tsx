@@ -1,5 +1,6 @@
 import { AuthenticatedSeller } from "@/auth/types";
 import RequestWrapper from "@/components/RequestWrapper";
+import { MoneyAmount } from "@/money-amount";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
@@ -60,17 +61,21 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[
                 <Box my={50}>
                     <Stack>
                         <Button onClick={onAddItem}>Add Item</Button>
-                        {items.map(item => <ItemViewer key={item.id} item={item} />)}
+                        {items.map((item, index) => <ItemViewer key={item.id} item={item} onChange={item => { updateItem(index, item) } } />)}
                     </Stack>
                 </Box>
             </Paper>
         </>
     );
 
-
     function onBackToEventsPage()
     {
         navigate('/events');
+    }
+
+    function updateItem(index: number, item: Item)
+    {
+        setItems(items.set(index, item));
     }
 
     function onAddItem()
@@ -80,17 +85,16 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[
 }
 
 
-function ItemViewer({ item } : { item: Item }): JSX.Element
+function ItemViewer({ item, onChange } : { item: Item, onChange: (item: Item) => void }): JSX.Element
 {
-    const [description, setDescription] = useState<string>(item.description);
-    const [price, setPrice] = useState<number>(item.price.totalCents);
+    const { price, description } = item;
 
     return (
         <>
             <Card withBorder p='md'>
                 <Group position="apart">
                     <TextInput placeholder="Description" w='82%' value={description} onChange={onChangeDescription} />
-                    <NumberInput value={price / 100} step={0.5} precision={2} min={0} formatter={formatter} onChange={onChangePrice} placeholder="Price" w='15%' miw='100px' />
+                    <NumberInput value={price.cents / 100} step={0.5} precision={2} min={0} formatter={formatter} onChange={onChangePrice} placeholder="Price" w='15%' miw='100px' />
                 </Group>
             </Card>
         </>
@@ -99,14 +103,18 @@ function ItemViewer({ item } : { item: Item }): JSX.Element
 
     function onChangeDescription(event: ChangeEvent<HTMLInputElement>)
     {
-        setDescription(event.currentTarget.value);
+        const description = event.target.value;
+        const updatedItem = item.updateDescription(description);
+        onChange(updatedItem);
+
+        console.log('updated description')
     }
 
     function onChangePrice(value: number | '')
     {
         const newPrice = value === '' ? 0 : value;
-
-        setPrice(newPrice * 100);
+        const updatedItem = item.updatePrice(new MoneyAmount(newPrice * 100));
+        onChange(updatedItem);
     }
 
     function formatter(str: string): string

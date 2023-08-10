@@ -36,3 +36,23 @@ export async function listItems(accessToken: string, salesEventId: number): Prom
         }
     }
 }
+
+
+export async function updateItem(accessToken: string, item: Item): Promise<void>
+{
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    };
+
+    const url = item.links.edit;
+    const data = {
+        description: item.description,
+        price_in_cents: item.price.totalCents,
+        recipient_id: item.recipientId,
+        sales_event_id: item.salesEventId,
+    };
+
+    console.log(url);
+
+    await axios.put<unknown>( restUrl(url), data, { headers } );
+}

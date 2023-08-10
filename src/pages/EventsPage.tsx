@@ -1,4 +1,4 @@
-import { AuthenticatedUser } from "@/auth/types";
+import { AuthenticatedSeller } from "@/auth/types";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 interface EventsPageProps
 {
-    auth: AuthenticatedUser;
+    auth: AuthenticatedSeller;
 }
 
 
@@ -30,7 +30,7 @@ export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 }
 
 
-function ActualEventsPage(props: { auth: AuthenticatedUser, events: SalesEvent[] }): JSX.Element
+function ActualEventsPage(props: { auth: AuthenticatedSeller, events: SalesEvent[] }): JSX.Element
 {
     const { events } = props;
 

@@ -22,9 +22,7 @@ export interface AuthenticatedAdmin extends AuthenticatedBase
     role: 'admin';
 }
 
-
 export type AuthenticatedUser = AuthenticatedSeller | AuthenticatedAdmin;
-
 
 export interface Unauthenticated
 {
@@ -33,7 +31,6 @@ export interface Unauthenticated
     login: (emailAddress: string, role: Role, accessToken: string) => void;
 }
 
-
 export type AuthenticationStatus = AuthenticatedUser | Unauthenticated;
 
 
@@ -41,6 +38,7 @@ export function isSeller(auth: AuthenticatedUser): auth is AuthenticatedSeller
 {
     return auth.role == 'seller';
 }
+
 
 export function isAdmin(auth: AuthenticatedUser): auth is AuthenticatedAdmin
 {

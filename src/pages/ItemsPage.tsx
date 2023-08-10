@@ -4,7 +4,7 @@ import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { Box, Button, Card, Group, Header, NumberInput, Paper, Stack, TextInput, Title } from "@mantine/core";
-import { useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 
@@ -27,19 +27,19 @@ export default function ItemsPage(props: ItemsPageProps): JSX.Element
         <>
             <RequestWrapper
                 requestResult={items}
-                success={items => <ActualItemsPage auth={auth} items={items} />}
+                success={items => <ActualItemsPage auth={auth} initialItems={items} />}
             />
         </>
     );
 }
 
 
-function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[] }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedSeller, initialItems: Item[] }): JSX.Element
 {
     const params = useParams();
     const eventId = params.eventId ? parseInt(params.eventId) : undefined;
     const navigate = useNavigate();
-    const { items } = props;
+    const [ items, setItems ] = useState(props.initialItems);
 
     return (
         <>
@@ -49,7 +49,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[] }): J
                         Sale Event {eventId} Items
                     </Title>
                     <Group position="right">
-                        <Button onClick={onClickBack}>
+                        <Button onClick={onBackToEventsPage}>
                             Back
                         </Button>
                     </Group>
@@ -58,8 +58,8 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[] }): J
             <Paper maw={800} mx='auto' p="md">
                 <Box my={50}>
                     <Stack>
+                        <Button onClick={onAddItem}>Add Item</Button>
                         {items.map(item => <ItemViewer key={item.id} item={item} />)}
-                        <Button>Add</Button>
                     </Stack>
                 </Box>
             </Paper>
@@ -67,34 +67,45 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[] }): J
     );
 
 
-    function onClickBack()
+    function onBackToEventsPage()
     {
         navigate('/events');
+    }
+
+    function onAddItem()
+    {
+        // NOP
     }
 }
 
 
 function ItemViewer({ item } : { item: Item }): JSX.Element
 {
-    const [price, setPrice] = useState<number>(0);
+    const [description, setDescription] = useState<string>(item.description);
+    const [price, setPrice] = useState<number>(item.price.totalCents);
 
     return (
         <>
             <Card withBorder p='md'>
                 <Group position="apart">
-                    <TextInput value={item.description} placeholder="Description" w='82%' />
-                    <NumberInput value={price} step={0.5} precision={2} min={0} formatter={formatter} onChange={onChangePrice} placeholder="Price" w='15%' miw='100px' />
+                    <TextInput placeholder="Description" w='82%' value={description} onChange={onChangeDescription} />
+                    <NumberInput value={price / 100} step={0.5} precision={2} min={0} formatter={formatter} onChange={onChangePrice} placeholder="Price" w='15%' miw='100px' />
                 </Group>
             </Card>
         </>
     );
 
 
+    function onChangeDescription(event: ChangeEvent<HTMLInputElement>)
+    {
+        setDescription(event.currentTarget.value);
+    }
+
     function onChangePrice(value: number | '')
     {
         const newPrice = value === '' ? 0 : value;
 
-        setPrice(newPrice);
+        setPrice(newPrice * 100);
     }
 
     function formatter(str: string): string

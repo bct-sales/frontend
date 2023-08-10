@@ -1,4 +1,5 @@
 import { RequestResult } from "@/rest/request";
+import { Flex, Loader } from "@mantine/core";
 
 
 interface RequestWrapperProps<T, E>
@@ -42,7 +43,9 @@ export default function RequestWrapper<T, E>(props: RequestWrapperProps<T, E>): 
     {
         return (
             <>
-                Loading!
+                <Flex w='100%' justify='center' align='center' h='100px'>
+                    <Loader />
+                </Flex>
             </>
         );
     }

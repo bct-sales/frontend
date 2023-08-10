@@ -37,9 +37,10 @@ export async function authenticateUser( data: AuthenticationData ): Promise<Resu
 
     try
     {
-        const response = await axios.post<LoginResponse>( url, payload, { headers } );
-        const accessToken = response.data.access_token;
-        const role = response.data.role;
+        const response = await axios.post<unknown>( url, payload, { headers } );
+        const data = LoginResponse.parse(response.data);
+        const accessToken = data.access_token;
+        const role = data.role;
 
         return success({ role, accessToken });
     }

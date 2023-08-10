@@ -1,6 +1,6 @@
 import { useAuth } from "@/auth/context";
 import * as rest from '@/rest';
-import { Box, Button, Center, Group, Modal, PasswordInput, Text, TextInput, Title } from "@mantine/core";
+import { Box, Button, Center, Group, Modal, NavLink, PasswordInput, Text, TextInput, Title, UnstyledButton } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";
@@ -38,12 +38,13 @@ export default function LoginPage()
             <Center mih='100vh'>
                 <Box maw={320} mx="auto" w='40%'>
                     <form onSubmit={form.onSubmit(onSubmit)}>
-                        <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
-                        <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
+                        <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} p='sm' />
+                        <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} p='sm' />
 
-                        <Group position="right" mt="md">
-                            <Button type="submit" disabled={!nonemptyInputs()}>Login</Button>
-                        </Group>
+                        <Button fullWidth mt='xl' type="submit" disabled={!nonemptyInputs()}>Login</Button>
+                        <Text>
+                            No account? Click <UnstyledButton p='xs' onClick={goToRegistrationPage}>here</UnstyledButton> to register.
+                        </Text>
                     </form>
                 </Box>
             </Center>
@@ -54,6 +55,11 @@ export default function LoginPage()
         </>
     );
 
+
+    function goToRegistrationPage()
+    {
+        navigate('/register');
+    }
 
     function nonemptyInputs()
     {

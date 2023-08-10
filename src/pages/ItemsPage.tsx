@@ -2,8 +2,8 @@ import { useAuth } from "@/auth/context";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Card, Group, Header, NumberInput, Paper, SimpleGrid, Stack, TextInput, Title } from "@mantine/core";
-import { useCallback, useState } from "react";
+import { Box, Button, Card, Group, Header, NumberInput, Paper, SimpleGrid, Stack, TextInput, Title } from "@mantine/core";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 
@@ -15,7 +15,7 @@ export default function ItemsPage(): JSX.Element
     const auth = useAuth();
     const accessToken = auth.authenticated ? auth.accessToken : undefined;
     const requester = useCallback(async () => listItems(accessToken, eventId), [accessToken, eventId]);
-    const response = useRequest(requester);
+    const [items, setItems] = useRequest(requester);
 
     if ( !auth.authenticated )
     {
@@ -23,23 +23,29 @@ export default function ItemsPage(): JSX.Element
         navigate('/login');
         return <></>;
     }
-    else if ( response.ready )
+    else if ( items.ready )
     {
-        if ( response.payload.success )
+        if ( items.success )
         {
-            const events = response.payload.value;
-
             return (
                 <>
-                    <Header height={60}>
-                        <Title p={10}>
-                            Sale Event {eventId} Items
-                        </Title>
+                    <Header height={80} p='sm'>
+                        <Group position="apart">
+                            <Title order={2} p={10}>
+                                Sale Event {eventId} Items
+                            </Title>
+                            <Group position="right">
+                                <Button onClick={onClickBack}>
+                                    Back
+                                </Button>
+                            </Group>
+                        </Group>
                     </Header>
                     <Paper maw={800} mx='auto' p="md">
                         <Box my={50}>
                             <Stack>
-                                {events.map(item => <ItemViewer key={item.id} item={item} />)}
+                                {items.payload.map(item => <ItemViewer key={item.id} item={item} />)}
+                                <Button>Add</Button>
                             </Stack>
                         </Box>
                     </Paper>
@@ -50,7 +56,7 @@ export default function ItemsPage(): JSX.Element
         {
             return (
                 <>
-                    An error occurred: {response.payload.error}
+                    An error occurred: {items.error}
                 </>
             );
         }
@@ -62,6 +68,11 @@ export default function ItemsPage(): JSX.Element
                 Loading
             </p>
         );
+    }
+
+    function onClickBack()
+    {
+        navigate('/events');
     }
 }
 

@@ -1,46 +1,64 @@
+import { Result } from "@/result";
 import { useEffect, useState } from "react";
 
 
-export interface InProgress
+export interface RequestInProgress
 {
     ready: false;
 }
 
-export interface Ready<T>
+export interface SuccessfulRequest<T>
 {
     ready: true;
-
+    success: true;
     payload: T;
 }
 
-export type RequestResponse<T> = InProgress | Ready<T>;
+export interface FailedRequest<E>
+{
+    ready: true;
+    success: false;
+    error: E;
+}
 
-export type Requester<T> = () => Promise<T>;
+export type RequestResult<T, E> = RequestInProgress | SuccessfulRequest<T> | FailedRequest<E>;
+
+export type Requester<T, E> = () => Promise<Result<T, E>>;
 
 
-export function inProgress(): InProgress
+export function inProgress(): RequestInProgress
 {
     return { ready: false };
 }
 
-
-export function ready<T>(payload: T): Ready<T>
+export function success<T>(payload: T): SuccessfulRequest<T>
 {
-    return { ready: true, payload };
+    return { ready: true, success: true, payload };
 }
 
-
-export function useRequest<T>(requester: Requester<T>): RequestResponse<T>
+export function failure<E>(error: E): FailedRequest<E>
 {
-    const [response, setResponse] = useState<RequestResponse<T>>(inProgress());
+    return { ready: true, success: false, error };
+}
+
+export function useRequest<T, E>(requester: Requester<T, E>): [RequestResult<T, E>, (result: RequestResult<T, E>) => void]
+{
+    const [result, setResult] = useState<RequestResult<T, E>>(inProgress());
 
     useEffect(() => {
         void (async () => {
             const response = await requester();
 
-            setResponse(ready<T>(response));
+            if ( response.success )
+            {
+                setResult(success(response.value));
+            }
+            else
+            {
+                setResult(failure<E>(response.error));
+            }
         })();
     }, [requester]);
 
-    return response;
+    return [result, setResult];
 }

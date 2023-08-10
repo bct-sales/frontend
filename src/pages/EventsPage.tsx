@@ -13,7 +13,7 @@ export default function EventsPage(): JSX.Element
     const auth = useAuth();
     const accessToken = auth.authenticated ? auth.accessToken : undefined;
     const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
-    const response = useRequest(requester);
+    const [events, setEvents] = useRequest(requester);
 
     if ( !auth.authenticated )
     {
@@ -21,11 +21,11 @@ export default function EventsPage(): JSX.Element
         navigate('/login');
         return <></>;
     }
-    else if ( response.ready )
+    else if ( events.ready )
     {
-        if ( response.payload.success )
+        if ( events.success )
         {
-            const events = response.payload.value;
+            const evts = events.payload;
 
             return (
                 <>
@@ -35,7 +35,7 @@ export default function EventsPage(): JSX.Element
                         </Title>
                         <Box my={50}>
                             <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
-                                {events.map(event => <EventViewer key={event.id} event={event} />)}
+                                {evts.map(event => <EventViewer key={event.id} event={event} />)}
                             </Flex>
                         </Box>
                     </Paper>

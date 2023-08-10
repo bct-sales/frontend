@@ -106,8 +106,6 @@ function ItemViewer({ item, onChange } : { item: Item, onChange: (item: Item) =>
         const description = event.target.value;
         const updatedItem = item.updateDescription(description);
         onChange(updatedItem);
-
-        console.log('updated description')
     }
 
     function onChangePrice(value: number | '')

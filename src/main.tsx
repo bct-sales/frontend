@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import * as pages from '@/pages';
+import AuthGuard from './components/AuthGuard.tsx';
 
 
 const root = document.getElementById('root');
@@ -29,7 +30,7 @@ if ( root )
                 },
                 {
                     path: "events",
-                    element: <pages.EventsPage />,
+                    element: <AuthGuard child={auth => <pages.EventsPage auth={auth} />} />,
                 }
             ]
         },

@@ -1,4 +1,5 @@
-import { useAuth } from "@/auth/context";
+import { Authenticated, useAuth } from "@/auth/context";
+import AuthGuard from "@/components/AuthGuard";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
@@ -7,10 +8,16 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-export default function EventsPage(): JSX.Element
+
+interface EventsPageProps
+{
+    auth: Authenticated;
+}
+
+
+export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 {
     const navigate = useNavigate();
-    const auth = useAuth();
     const accessToken = auth.authenticated ? auth.accessToken : undefined;
     const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
     const [events, setEvents] = useRequest(requester);

@@ -1,10 +1,12 @@
 import { useAuth } from "@/auth/context";
-import { AuthenticatedUser } from "@/auth/types";
+import { AuthenticatedUser, Role } from "@/auth/types";
 
 
 interface AuthGuardProps
 {
     child: (auth: AuthenticatedUser) => JSX.Element;
+
+    role: Role;
 
     error?: () => JSX.Element;
 }
@@ -14,7 +16,7 @@ export default function AuthGuard(props: AuthGuardProps): JSX.Element
 {
     const auth = useAuth();
 
-    if ( auth.authenticated )
+    if ( auth.authenticated && auth.role === props.role )
     {
         return props.child(auth);
     }

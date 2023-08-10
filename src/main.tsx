@@ -26,11 +26,11 @@ if ( root )
                 },
                 {
                     path: "events/:eventId/items",
-                    element: <AuthGuard child={auth => <pages.ItemsPage auth={auth} />} />
+                    element: <AuthGuard role='seller' child={auth => <pages.ItemsPage auth={auth} />} />
                 },
                 {
                     path: "events",
-                    element: <AuthGuard child={auth => <pages.EventsPage auth={auth} />} />,
+                    element: <AuthGuard role='seller' child={auth => <pages.EventsPage auth={auth} />} />,
                 }
             ]
         },

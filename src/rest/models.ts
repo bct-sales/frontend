@@ -90,6 +90,11 @@ export class Item
         return this.data.sales_event_id;
     }
 
+    public get links(): { edit: string }
+    {
+        return this.data.links;
+    }
+
     public updatePrice(price: MoneyAmount): Item
     {
         return new Item({

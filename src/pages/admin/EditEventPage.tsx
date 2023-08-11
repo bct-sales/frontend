@@ -1,5 +1,5 @@
 import { AuthenticatedAdmin } from "@/auth/types";
-import EventEditor from "@/components/EventEditor";
+import EventEditor, { EventData } from "@/components/EventEditor";
 import StateGuard from "@/components/StateGuard";
 import { SalesEvent } from "@/rest/models";
 import { useState } from "react";
@@ -32,18 +32,24 @@ export default function EditEventPage(props: { auth: AuthenticatedAdmin }): Reac
 
 function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEvent }): React.ReactNode
 {
-    const [ editedEvent, setEditedEvent ] = useState<SalesEvent>(props.event);
+    const [ eventDate, setEventData ] = useState<EventData>({
+        date: props.event.date,
+        startTime: props.event.startTime,
+        endTime: props.event.endTime,
+        location: props.event.location,
+        description: props.event.description,
+    });
 
     return (
         <EventEditor
-            event={editedEvent}
+            event={eventDate}
             onChange={onChange}
         />
     );
 
 
-    function onChange(event: SalesEvent)
+    function onChange(event: EventData)
     {
-        setEditedEvent(event);
+        setEventData(event);
     }
 }

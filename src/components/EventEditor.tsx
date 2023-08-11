@@ -1,13 +1,27 @@
 import { BCTDate } from "@/date";
-import { SalesEvent } from "@/rest/models";
-import { DateInput } from "@mantine/dates";
+import { BCTTime } from "@/time";
+import DatePicker from "./DatePicker";
 
 
 interface Props
 {
-    event: SalesEvent;
+    event: EventData;
 
-    onChange: (event: SalesEvent) => void;
+    onChange: (event: EventData) => void;
+}
+
+
+export interface EventData
+{
+    date: BCTDate;
+
+    startTime: BCTTime;
+
+    endTime: BCTTime;
+
+    location: string;
+
+    description: string;
 }
 
 
@@ -19,17 +33,16 @@ export default function EventEditor(props: Props): React.ReactNode
 
     return (
         <>
-            <DateInput label="Date" value={event.date.toDate()} onChange={onChangeDate} />
+            <DatePicker date={event.date} onChange={onChangeDate} />
         </>
     );
 
 
-    function onChangeDate(date: Date)
+    function onChangeDate(date: BCTDate)
     {
-        const bctDate = BCTDate.fromDate(date);
-        console.log(bctDate);
-        const updatedEvent = event.updateDate(bctDate);
-
-        props.onChange(updatedEvent);
+        props.onChange({
+            ...props.event,
+            date,
+        });
     }
 }

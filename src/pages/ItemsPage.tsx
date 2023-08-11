@@ -9,6 +9,7 @@ import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
+import { EditButton } from "@/components/EditButton";
 
 interface ItemsPageProps
 {
@@ -133,9 +134,7 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
         if ( !showDelete )
         {
             return (
-                <ActionIcon variant="outline" onClick={onEdit} w='2rem' h='2rem'>
-                    <IconPencil />
-                </ActionIcon>
+                <EditButton onClick={onEdit} />
             );
         }
         else

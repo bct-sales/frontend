@@ -1,12 +1,12 @@
 import { AuthenticatedAdmin } from "@/auth/types";
+import { EditButton } from "@/components/EditButton";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Flex, Paper, Text, Title } from "@mantine/core";
+import { Box, Button, Card, Flex, Group, Paper, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-
 
 
 export default function AdminEventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.Element
@@ -52,22 +52,25 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
     return (
         <>
             <Card withBorder p='md' miw={300}>
-                <Button fullWidth fz='xl' mb='lg' onClick={onClick}>
+                <Title>
                     {event.date.format()}
-                </Button>
+                </Title>
                 <Text>
                     {event.startTime.format()} - {event.endTime.format()} ({event.location})
                 </Text>
                 <Text>
                     {event.description}
                 </Text>
+                <Group position="right">
+                    <EditButton onClick={onEditEvent} />
+                </Group>
             </Card>
         </>
     );
 
 
-    function onClick()
+    function onEditEvent()
     {
-        navigate(`/events/${event.id}/items`);
+        // NOP
     }
 }

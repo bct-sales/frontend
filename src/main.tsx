@@ -26,19 +26,19 @@ if ( root )
                 },
                 {
                     path: "events/:eventId/items",
-                    element: <AuthGuard role='seller' child={auth => <pages.ItemsPage auth={auth} />} />
+                    element: <AuthGuard role='seller' child={auth => <pages.seller.ItemsPage auth={auth} />} />
                 },
                 {
                     path: "events",
-                    element: <AuthGuard role='seller' child={auth => <pages.EventsPage auth={auth} />} />,
+                    element: <AuthGuard role='seller' child={auth => <pages.seller.EventsPage auth={auth} />} />,
                 },
                 {
                     path: "edit-item",
-                    element: <AuthGuard role='seller' child={auth => <pages.EditItemPage auth={auth} />} />,
+                    element: <AuthGuard role='seller' child={auth => <pages.seller.EditItemPage auth={auth} />} />,
                 },
                 {
                     path: "add-item",
-                    element: <AuthGuard role='seller' child={auth => <pages.AddItemPage auth={auth} />} />,
+                    element: <AuthGuard role='seller' child={auth => <pages.seller.AddItemPage auth={auth} />} />,
                 },
                 {
                     path: "admin/events",

@@ -1,15 +1,15 @@
 import { AuthenticatedSeller } from "@/auth/types";
+import { EditButton } from "@/components/EditButton";
 import IntParamsGuard from "@/components/IntParamsGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title } from "@mantine/core";
-import { IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react';
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
-import { EditButton } from "@/components/EditButton";
 
 interface ItemsPageProps
 {

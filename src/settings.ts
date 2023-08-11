@@ -8,7 +8,8 @@ export function createInitialAuthentication(): AuthenticationData | undefined
 
     // TODO Needs to be removed!
     // Seller
-    return createSellerAuthentication();
+    // return createSellerAuthentication();
+    return createAdminAuthentication();
 }
 
 

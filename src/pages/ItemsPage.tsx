@@ -4,11 +4,11 @@ import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Text, Title } from "@mantine/core";
-import { useCallback } from "react";
+import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title } from "@mantine/core";
+import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
-import { IconPencil } from '@tabler/icons-react';
+import { IconPencil, IconTrash } from '@tabler/icons-react';
 
 interface ItemsPageProps
 {
@@ -53,6 +53,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], addI
 {
     const { items, eventId } = props;
     const navigate = useNavigate();
+    const [ showDelete, setShowDelete ] = useState<boolean>(false);
 
     return (
         <>
@@ -62,6 +63,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], addI
                         Sale Event {eventId} Items
                     </Title>
                     <Group position="right">
+                        <Switch label="Show delete button" onChange={onToggleDeleteVisibility} />
                         <Button onClick={onBackToEventsPage}>
                             Back
                         </Button>
@@ -72,12 +74,20 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], addI
                 <Box my={50}>
                     <Stack>
                         <Button onClick={onAddItem}>Add Item</Button>
-                        {items.map(item => <ItemViewer key={item.id} item={item} />)}
+                        {items.map(item => <ItemViewer key={item.id} item={item} showDelete={showDelete} />)}
                     </Stack>
                 </Box>
             </Paper>
         </>
     );
+
+
+    function onToggleDeleteVisibility(event: ChangeEvent<HTMLInputElement>)
+    {
+        const checked = event.target.checked;
+
+        setShowDelete(checked);
+    }
 
     function onBackToEventsPage()
     {
@@ -93,7 +103,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], addI
 }
 
 
-function ItemViewer({ item } : { item: Item }): JSX.Element
+function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }): JSX.Element
 {
     const navigate = useNavigate();
     const { price, description } = item;
@@ -109,9 +119,10 @@ function ItemViewer({ item } : { item: Item }): JSX.Element
                         <Text>
                             {price.format()}
                         </Text>
-                        <ActionIcon onClick={onEdit}>
+                        <ActionIcon variant="outline" onClick={onEdit} w='2rem' h='2rem'>
                             <IconPencil />
                         </ActionIcon>
+                        {renderDeleteButton()}
                     </Group>
                 </Group>
             </Card>
@@ -119,8 +130,29 @@ function ItemViewer({ item } : { item: Item }): JSX.Element
     );
 
 
+    function renderDeleteButton()
+    {
+        if ( showDelete )
+        {
+            return (
+                <ActionIcon variant="outline" onClick={onDelete} w='2rem' h='2rem'>
+                    <IconTrash />
+                </ActionIcon>
+            );
+        }
+        else
+        {
+            return <></>;
+        }
+    }
+
     function onEdit()
     {
         navigate(`/edit-item`, { state: item });
+    }
+
+    function onDelete()
+    {
+        // NOP
     }
 }

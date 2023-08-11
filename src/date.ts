@@ -8,7 +8,7 @@ export class BCTDate
         // NOP
     }
 
-    public static parse(str: string): BCTDate
+    public static parseIso(str: string): BCTDate
     {
         const result = moment(str, ['YYYY-MM-DD']);
 

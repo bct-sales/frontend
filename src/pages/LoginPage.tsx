@@ -1,4 +1,5 @@
 import { useAuth } from "@/auth/context";
+import { Role } from "@/auth/types";
 import * as rest from '@/rest';
 import { Box, Button, Center, Modal, PasswordInput, Text, TextInput, Title, UnstyledButton } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -81,7 +82,8 @@ export default function LoginPage()
                 if ( !auth.authenticated )
                 {
                     auth.login({ emailAddress, role, accessToken,  userId });
-                    navigate('/events');
+
+                    navigateToMainPage(role);
                 }
                 else
                 {
@@ -96,5 +98,17 @@ export default function LoginPage()
                 openMessageBox();
             }
         })();
+    }
+
+    function navigateToMainPage(role: Role)
+    {
+        if ( role === 'seller' )
+        {
+            navigate('/events');
+        }
+        else
+        {
+            navigate('/admin/events');
+        }
     }
 }

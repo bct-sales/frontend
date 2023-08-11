@@ -8,7 +8,7 @@ export class BCTTime
         // NOP
     }
 
-    public static parse(str: string): BCTTime
+    public static parseIso(str: string): BCTTime
     {
         const result = moment(str, ['HH:mm:ss']);
 
@@ -18,5 +18,10 @@ export class BCTTime
     public format(): string
     {
         return this.moment.format('HH:mm');
+    }
+
+    public formatIso(): string
+    {
+        return this.moment.format('HH:mm:ss');
     }
 }

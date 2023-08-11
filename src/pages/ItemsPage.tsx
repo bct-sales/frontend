@@ -4,11 +4,11 @@ import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Group, Header, Paper, Stack, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
-
+import { IconPencil } from '@tabler/icons-react';
 
 interface ItemsPageProps
 {
@@ -102,16 +102,16 @@ function ItemViewer({ item } : { item: Item }): JSX.Element
         <>
             <Card withBorder p='md'>
                 <Group position="apart">
-                    <Text w='82%'>
+                    <Text w='75%'>
                         {description}
                     </Text>
                     <Group>
                         <Text>
                             {price.format()}
                         </Text>
-                        <Button onClick={onEdit}>
-                            Edit
-                        </Button>
+                        <ActionIcon onClick={onEdit}>
+                            <IconPencil />
+                        </ActionIcon>
                     </Group>
                 </Group>
             </Card>

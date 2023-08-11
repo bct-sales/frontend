@@ -24,7 +24,7 @@ export async function listEvents(accessToken: string | undefined): Promise<Resul
         const response = await axios.get<unknown>( url, { headers } );
         const data = RawSalesEvents.parse(response.data);
 
-        return success(data.map(x => new SalesEvent(x)));
+        return success(data.events.map(x => new SalesEvent(x)));
     }
     catch ( error: unknown )
     {

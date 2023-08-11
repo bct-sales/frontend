@@ -12,7 +12,9 @@ export const RawSalesEvent = z.object({
 
 export type RawSalesEvent = z.infer<typeof RawSalesEvent>;
 
-export const RawSalesEvents = z.array(RawSalesEvent);
+export const RawSalesEvents = z.object({
+    events: z.array(RawSalesEvent),
+})
 
 export type RawSalesEvents = z.infer<typeof RawSalesEvents>;
 

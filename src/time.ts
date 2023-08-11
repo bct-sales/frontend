@@ -8,6 +8,13 @@ export class BCTTime
         // NOP
     }
 
+    public static parse(str: string): BCTTime
+    {
+        const result = moment(str, ['HH:mm']);
+
+        return new BCTTime(result);
+    }
+
     public static parseIso(str: string): BCTTime
     {
         const result = moment(str, ['HH:mm:ss']);

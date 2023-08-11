@@ -58,6 +58,11 @@ export class SalesEvent
             date: date.formatIso(),
         });
     }
+
+    public get links(): { edit: string }
+    {
+        return this.data.links;
+    }
 }
 
 

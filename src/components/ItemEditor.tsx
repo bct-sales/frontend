@@ -17,7 +17,7 @@ export default function ItemEditor({ description, priceInCents, onChange }: Prop
     return (
         <>
             <TextInput value={description} label='Description' placeholder="Description" onChange={onChangeDescription} />
-            <NumberInput value={priceInCents / 100} label='Price' formatter={formatter} onChange={onChangePrice} />
+            <NumberInput value={priceInCents / 100} label='Price' formatter={formatter} onChange={onChangePrice} step={0.5} min={0} precision={2} />
         </>
     );
 

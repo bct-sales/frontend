@@ -8,6 +8,9 @@ export const RawSalesEvent = z.object({
     end_time: z.string(),
     location: z.string(),
     description: z.string(),
+    links: z.object({
+        edit: z.string(),
+    })
 });
 
 export type RawSalesEvent = z.infer<typeof RawSalesEvent>;

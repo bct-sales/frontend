@@ -18,17 +18,17 @@ export class SalesEvent
 
     public get date(): BCTDate
     {
-        return BCTDate.parse(this.data.date);
+        return BCTDate.parseIso(this.data.date);
     }
 
     public get startTime(): BCTTime
     {
-        return BCTTime.parse(this.data.start_time);
+        return BCTTime.parseIso(this.data.start_time);
     }
 
     public get endTime(): BCTTime
     {
-        return BCTTime.parse(this.data.end_time);
+        return BCTTime.parseIso(this.data.end_time);
     }
 
     public get location(): string

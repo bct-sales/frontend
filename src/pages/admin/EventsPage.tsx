@@ -4,12 +4,12 @@ import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Flex, Group, Paper, Text, Title } from "@mantine/core";
+import { Box, Card, Flex, Group, Paper, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-export default function AdminEventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.Element
+export default function EventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.Element
 {
     const accessToken = auth.accessToken;
     const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
@@ -18,13 +18,13 @@ export default function AdminEventsPage({ auth }: { auth: AuthenticatedAdmin }):
     return (
         <RequestWrapper<SalesEvent[], string>
             requestResult={request}
-            success={events => <ActualAdminEventsPage events={events} auth={auth} />}
+            success={events => <ActualEventsPage events={events} auth={auth} />}
         />
     );
 }
 
 
-function ActualAdminEventsPage(props: { auth: AuthenticatedAdmin, events: SalesEvent[] }): JSX.Element
+function ActualEventsPage(props: { auth: AuthenticatedAdmin, events: SalesEvent[] }): JSX.Element
 {
     const { events } = props;
 

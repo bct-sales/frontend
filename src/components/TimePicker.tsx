@@ -10,6 +10,8 @@ interface Props
     time: BCTTime;
 
     onChange: (time: BCTTime) => void;
+
+    label?: string;
 }
 
 export default function TimePicker(props: Props): React.ReactNode
@@ -17,7 +19,7 @@ export default function TimePicker(props: Props): React.ReactNode
     const ref = useRef<HTMLInputElement>(null);
 
     return (
-        <TimeInput value={props.time.format()} onChange={onChange} ref={ref} rightSection={
+        <TimeInput label={props.label} value={props.time.format()} onChange={onChange} ref={ref} rightSection={
             <ActionIcon onClick={() => { ref.current?.showPicker(); }}>
                 <IconClock size='1rem' />
             </ActionIcon>

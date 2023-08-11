@@ -58,7 +58,7 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
     return (
         <>
             <Card withBorder p='md' miw={300}>
-                <Button fullWidth fz='xl' mb='lg' onClick={onClick}>
+                <Button fullWidth fz='xl' mb='lg' onClick={goToItemsPage}>
                     {event.date.format()}
                 </Button>
                 <Text>
@@ -72,9 +72,8 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
     );
 
 
-    function onClick()
+    function goToItemsPage()
     {
-        console.log('Clicked!');
         navigate(`/events/${event.id}/items`);
     }
 }

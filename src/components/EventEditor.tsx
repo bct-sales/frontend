@@ -1,27 +1,35 @@
 import { BCTDate } from "@/date";
-import { BCTTime } from "@/time";
-import { Card } from "@mantine/core";
+import { SalesEvent } from "@/rest/models";
+import { DateInput } from "@mantine/dates";
 
 
 interface Props
 {
-    date: BCTDate;
+    event: SalesEvent;
 
-    startTime: BCTTime;
-
-    endTime: BCTTime;
-
-    location: string;
-
-    description: string;
+    onChange: (event: SalesEvent) => void;
 }
 
 
 export default function EventEditor(props: Props): React.ReactNode
 {
-    return (
-        <Card>
+    const event = props.event;
 
-        </Card>
+    console.log(event);
+
+    return (
+        <>
+            <DateInput label="Date" value={event.date.toDate()} onChange={onChangeDate} />
+        </>
     );
+
+
+    function onChangeDate(date: Date)
+    {
+        const bctDate = BCTDate.fromDate(date);
+        console.log(bctDate);
+        const updatedEvent = event.updateDate(bctDate);
+
+        props.onChange(updatedEvent);
+    }
 }

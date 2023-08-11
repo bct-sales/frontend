@@ -2,6 +2,7 @@ import { AuthenticatedAdmin } from "@/auth/types";
 import EventEditor, { EventData } from "@/components/EventEditor";
 import StateGuard from "@/components/StateGuard";
 import { SalesEvent } from "@/rest/models";
+import { Button, Stack } from "@mantine/core";
 import { useState } from "react";
 
 
@@ -41,10 +42,15 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEven
     });
 
     return (
-        <EventEditor
-            event={eventDate}
-            onChange={onChange}
-        />
+        <>
+            <Stack maw={500} m='auto'>
+                <EventEditor
+                    event={eventDate}
+                    onChange={onChange}
+                />
+                <Button>Update</Button>
+            </Stack>
+        </>
     );
 
 

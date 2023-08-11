@@ -35,7 +35,7 @@ export default function EventEditor(props: Props): React.ReactNode
 
     return (
         <>
-            <Stack maw={500} m='auto'>
+            <Stack>
                 <DatePicker label="Date" date={event.date} onChange={onChangeDate} />
                 <TimePicker label="Start time" time={event.startTime} onChange={onChangeStartTime} />
                 <TimePicker label="End time" time={event.endTime} onChange={onChangeEndTime} />

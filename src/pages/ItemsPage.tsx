@@ -5,10 +5,10 @@ import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title } from "@mantine/core";
-import { ChangeEvent, useCallback, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { AddItemState } from "./AddItemPage";
 import { IconPencil, IconTrash } from '@tabler/icons-react';
+import { ChangeEvent, useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AddItemState } from "./AddItemPage";
 
 interface ItemsPageProps
 {
@@ -63,7 +63,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], addI
                         Sale Event {eventId} Items
                     </Title>
                     <Group position="right">
-                        <Switch label="Show delete button" onChange={onToggleDeleteVisibility} />
+                        <Switch label="Delete mode" onChange={onToggleDeleteVisibility} />
                         <Button onClick={onBackToEventsPage}>
                             Back
                         </Button>
@@ -119,9 +119,7 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
                         <Text>
                             {price.format()}
                         </Text>
-                        <ActionIcon variant="outline" onClick={onEdit} w='2rem' h='2rem'>
-                            <IconPencil />
-                        </ActionIcon>
+                        {renderEditButton()}
                         {renderDeleteButton()}
                     </Group>
                 </Group>
@@ -129,6 +127,22 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
         </>
     );
 
+
+    function renderEditButton()
+    {
+        if ( !showDelete )
+        {
+            return (
+                <ActionIcon variant="outline" onClick={onEdit} w='2rem' h='2rem'>
+                    <IconPencil />
+                </ActionIcon>
+            );
+        }
+        else
+        {
+            return <></>;
+        }
+    }
 
     function renderDeleteButton()
     {

@@ -15,8 +15,23 @@ export class BCTDate
         return new BCTDate(result);
     }
 
+    public static fromDate(date: Date): BCTDate
+    {
+        return new BCTDate(moment(date));
+    }
+
     public format(): string
     {
         return this.moment.format('D MMM YYYY');
+    }
+
+    public formatIso(): string
+    {
+        return this.moment.format('YYYY-MM-DD');
+    }
+
+    public toDate(): Date
+    {
+        return this.moment.toDate();
     }
 }

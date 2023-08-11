@@ -5,12 +5,12 @@ import { z } from 'zod';
 import { Role } from '@/auth/types';
 
 
-const AuthenticationData = z.object({
+const AuthenticationParameters = z.object({
     emailAddress: z.string().email(),
     password: z.string(),
 });
 
-export type AuthenticationData = z.infer<typeof AuthenticationData>;
+export type AuthenticationParameters = z.infer<typeof AuthenticationParameters>;
 
 
 const LoginResponse = z.object({
@@ -23,7 +23,7 @@ const LoginResponse = z.object({
 type LoginResponse = z.infer<typeof LoginResponse>;
 
 
-export async function authenticateUser( data: AuthenticationData ): Promise<Result<{role: Role, accessToken: string, userId: number}, string>>
+export async function authenticateUser( data: AuthenticationParameters ): Promise<Result<{role: Role, accessToken: string, userId: number}, string>>
 {
     const payload = {
         grant_type: 'password',

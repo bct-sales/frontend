@@ -71,6 +71,6 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
 
     function onEditEvent()
     {
-        // NOP
+        navigate(`/admin/events/${event.id}`);
     }
 }

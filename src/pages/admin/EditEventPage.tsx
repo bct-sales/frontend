@@ -4,7 +4,7 @@ import StateGuard from "@/components/StateGuard";
 import { SalesEvent } from "@/rest/models";
 
 
-class EditEventState
+export class EditEventState
 {
     public constructor(public readonly event: SalesEvent)
     {

@@ -7,6 +7,7 @@ import { useRequest } from "@/rest/request";
 import { Box, Card, Flex, Group, Paper, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { EditEventState } from "./EditEventPage";
 
 
 export default function EventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.Element
@@ -71,6 +72,8 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
 
     function onEditEvent()
     {
-        navigate(`/admin/events/${event.id}`);
+        const state = new EditEventState(event);
+
+        navigate(`/admin/events/${event.id}`, { state });
     }
 }

@@ -50,6 +50,14 @@ export class SalesEvent
     {
         return this.data;
     }
+
+    public updateDate(date: BCTDate): SalesEvent
+    {
+        return new SalesEvent({
+            ...this.data,
+            date: date.formatIso(),
+        });
+    }
 }
 
 

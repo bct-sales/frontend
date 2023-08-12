@@ -72,8 +72,9 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
 
     function onEditEvent()
     {
+        const url = `/admin/events/${event.id}`;
         const state = new EditEventState(event);
 
-        navigate(`/admin/events/${event.id}`, { state });
+        navigate(url, { state });
     }
 }

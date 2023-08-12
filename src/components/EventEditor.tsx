@@ -32,8 +32,6 @@ export default function EventEditor(props: Props): React.ReactNode
 {
     const event = props.event;
 
-    console.log(event);
-
     return (
         <>
             <Stack>

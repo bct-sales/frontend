@@ -32,6 +32,8 @@ function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, eve
     const navigate = useNavigate();
     const { events } = props;
 
+    const orderedEvents = [...events].sort((x, y) => x.date.compare(y.date));
+
     return (
         <>
             <Paper mx='auto' p="md" maw={1000}>
@@ -46,7 +48,7 @@ function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, eve
                 <Box my={50}>
                     <Stack>
                         <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
-                            {events.map(event => <EventViewer key={event.id} event={event} />)}
+                            {orderedEvents.map(event => <EventViewer key={event.id} event={event} />)}
                         </Flex>
                     </Stack>
                 </Box>

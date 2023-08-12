@@ -29,7 +29,7 @@ export default function TimePicker(props: Props): React.ReactNode
 
     function onChange(event: ChangeEvent<HTMLInputElement>): void
     {
-        const time = BCTTime.parse(event.target.value);
+        const time = BCTTime.fromIsoString(event.target.value);
 
         props.onChange(time);
     }

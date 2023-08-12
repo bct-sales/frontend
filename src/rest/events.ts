@@ -6,13 +6,8 @@ import { RawSalesEvents } from './raw-models';
 import { restUrl } from './url';
 
 
-export async function listEvents(accessToken: string | undefined): Promise<Result<SalesEvent[], string>>
+export async function listEvents(accessToken: string): Promise<Result<SalesEvent[], string>>
 {
-    if ( accessToken === undefined )
-    {
-        return failure('Not authenticated');
-    }
-
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };

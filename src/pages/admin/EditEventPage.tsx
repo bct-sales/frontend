@@ -1,8 +1,10 @@
 import { AuthenticatedAdmin } from "@/auth/types";
 import EventEditor, { EventData } from "@/components/EventEditor";
 import StateGuard from "@/components/StateGuard";
+import { updateEvent } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { Button, Group, Stack } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 
 
@@ -33,19 +35,13 @@ export default function EditEventPage(props: { auth: AuthenticatedAdmin }): Reac
 
 function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEvent }): React.ReactNode
 {
-    const [ eventDate, setEventData ] = useState<EventData>({
-        date: props.event.date,
-        startTime: props.event.startTime,
-        endTime: props.event.endTime,
-        location: props.event.location,
-        description: props.event.description,
-    });
+    const [ event, setEvent ] = useState<SalesEvent>(props.event);
 
     return (
         <>
             <Stack maw={500} m='auto'>
                 <EventEditor
-                    event={eventDate}
+                    event={event}
                     onChange={onChange}
                 />
                 <Group position="right">
@@ -57,15 +53,20 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEven
     );
 
 
-    function onChange(event: EventData)
+    function onChange(event: SalesEvent)
     {
-        setEventData(event);
+        setEvent(event);
     }
 
     function update()
     {
-
-        history.back();
+        updateEvent(props.auth.accessToken, event).then(() => {
+            notifications.show({ message: 'Event successfully updated' });
+            history.back();
+        }).catch(error => {
+            console.error(error);
+            notifications.show({ message: 'An error occurred' });
+        })
     }
 
     function cancel()

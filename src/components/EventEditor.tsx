@@ -4,27 +4,14 @@ import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
 import { Stack, TextInput } from "@mantine/core";
 import { ChangeEvent } from "react";
+import { SalesEvent } from "@/rest/models";
 
 
 interface Props
 {
-    event: EventData;
+    event: SalesEvent;
 
-    onChange: (event: EventData) => void;
-}
-
-
-export interface EventData
-{
-    date: BCTDate;
-
-    startTime: BCTTime;
-
-    endTime: BCTTime;
-
-    location: string;
-
-    description: string;
+    onChange: (event: SalesEvent) => void;
 }
 
 

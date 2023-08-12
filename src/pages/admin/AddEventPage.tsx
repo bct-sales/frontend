@@ -54,7 +54,7 @@ function ActualAddEventPage(props: { auth: AuthenticatedAdmin, url: string }): R
                     onChange={onChange}
                 />
                 <Group position="right">
-                    <ActionIcon onClick={update}>
+                    <ActionIcon onClick={add}>
                         <IconCirclePlus />
                     </ActionIcon>
                     <ActionIcon onClick={cancel}>
@@ -71,7 +71,7 @@ function ActualAddEventPage(props: { auth: AuthenticatedAdmin, url: string }): R
         setEvent(evt);
     }
 
-    function update()
+    function add()
     {
         addEvent(props.auth.accessToken, props.url, event).then(() => {
             notifications.show({ message: 'Event successfully updated' });

@@ -1,5 +1,5 @@
 import { AuthenticatedAdmin } from "@/auth/types";
-import EventEditor, { EventData } from "@/components/EventEditor";
+import EventEditor from "@/components/EventEditor";
 import StateGuard from "@/components/StateGuard";
 import { updateEvent } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";

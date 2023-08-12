@@ -3,35 +3,42 @@ import moment from "moment";
 
 export class BCTDate
 {
-    public constructor(private readonly moment: moment.Moment)
+    private constructor(private readonly isoRepresentation: string)
     {
         // NOP
     }
 
+    private static readonly isoFormattingString = 'YYYY-MM-DD';
+
     public static parseIso(str: string): BCTDate
     {
-        const result = moment(str, ['YYYY-MM-DD']);
+        const result = moment(str, [BCTDate.isoFormattingString]).format(BCTDate.isoFormattingString);
 
         return new BCTDate(result);
     }
 
     public static fromDate(date: Date): BCTDate
     {
-        return new BCTDate(moment(date));
+        return new BCTDate(moment(date).format(BCTDate.isoFormattingString));
+    }
+
+    public toMoment(): moment.Moment
+    {
+        return moment(this.isoRepresentation, BCTDate.isoFormattingString);
     }
 
     public format(): string
     {
-        return this.moment.format('D MMM YYYY');
+        return this.toMoment().format('D MMM YYYY');
     }
 
     public formatIso(): string
     {
-        return this.moment.format('YYYY-MM-DD');
+        return this.isoRepresentation;
     }
 
     public toDate(): Date
     {
-        return this.moment.toDate();
+        return this.toMoment().toDate();
     }
 }

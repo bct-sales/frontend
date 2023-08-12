@@ -48,6 +48,10 @@ if ( root )
                     path: "admin/events",
                     element:<AuthGuard role='admin' child={auth => <pages.admin.EventsPage auth={auth} />} />,
                 },
+                {
+                    path: "admin/add-event",
+                    element:<AuthGuard role='admin' child={auth => <pages.admin.AddEventPage auth={auth} />} />,
+                },
             ]
         },
     ]);

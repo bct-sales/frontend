@@ -1,46 +1,54 @@
 import { AuthenticatedAdmin } from "@/auth/types";
 import EventEditor from "@/components/EventEditor";
 import StateGuard from "@/components/StateGuard";
-import { updateEvent } from "@/rest/events";
+import { BCTDate } from "@/date";
+import { addEvent } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
+import { BCTTime } from "@/time";
 import { Button, Group, Stack } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 
 
-export class EditEventState
+export class AddEventState
 {
-    public constructor(public readonly event: SalesEvent)
+    public constructor(public readonly url: string)
     {
         // NOP
     }
 }
 
 
-export default function EditEventPage(props: { auth: AuthenticatedAdmin }): React.ReactNode
+export default function AddEventPage(props: { auth: AuthenticatedAdmin }): React.ReactNode
 {
     return (
         <StateGuard
-            child={state => <ActualEditEventPage auth={props.auth} event={state.event} />}
+            child={state => <ActualAddEventPage auth={props.auth} url={state.url} />}
             predicate={predicate} />
     );
 
 
-    function predicate(state: unknown) : state is EditEventState
+    function predicate(state: unknown) : state is AddEventState
     {
-        return state instanceof EditEventState;
+        return state instanceof AddEventState;
     }
 }
 
 
-function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEvent }): React.ReactNode
+function ActualAddEventPage(props: { auth: AuthenticatedAdmin, url: string }): React.ReactNode
 {
-    const [ event, setEvent ] = useState<SalesEvent>(props.event);
+    const [ event, setEvent ] = useState<Omit<SalesEvent, 'id' | 'links'>>({
+        date: BCTDate.today(),
+        startTime: BCTTime.fromIsoString('09:00'),
+        endTime: BCTTime.fromIsoString('18:00'),
+        location: '',
+        description: '',
+    });
 
     return (
         <>
             <Stack maw={500} m='auto'>
-                <EventEditor
+                <EventEditor<typeof event>
                     event={event}
                     onChange={onChange}
                 />
@@ -53,14 +61,14 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEven
     );
 
 
-    function onChange(event: SalesEvent)
+    function onChange(evt: typeof event)
     {
-        setEvent(event);
+        setEvent(evt);
     }
 
     function update()
     {
-        updateEvent(props.auth.accessToken, event).then(() => {
+        addEvent(props.auth.accessToken, props.url, event).then(() => {
             notifications.show({ message: 'Event successfully updated' });
             history.back();
         }).catch(error => {

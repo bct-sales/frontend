@@ -22,9 +22,9 @@ export default function EventsPage({ auth }: EventsPageProps): JSX.Element
     const request = useRequest(requester);
 
     return (
-        <RequestWrapper<SalesEvent[], string>
+        <RequestWrapper
             requestResult={request}
-            success={events => <ActualEventsPage events={events} auth={auth} />}
+            success={result => <ActualEventsPage events={result.events} auth={auth} />}
         />
     );
 }

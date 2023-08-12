@@ -4,9 +4,11 @@ import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { Box, Card, Flex, Group, Paper, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, Card, Flex, Group, Paper, Stack, Text, Title } from "@mantine/core";
+import { IconCirclePlus } from "@tabler/icons-react";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { AddEventState } from "./AddEventPage";
 import { EditEventState } from "./EditEventPage";
 
 
@@ -17,32 +19,48 @@ export default function EventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.
     const request = useRequest(requester);
 
     return (
-        <RequestWrapper<SalesEvent[], string>
+        <RequestWrapper
             requestResult={request}
-            success={events => <ActualEventsPage events={events} auth={auth} />}
+            success={result => <ActualEventsPage events={result.events} addUrl={result.addEventUrl} auth={auth} />}
         />
     );
 }
 
 
-function ActualEventsPage(props: { auth: AuthenticatedAdmin, events: SalesEvent[] }): JSX.Element
+function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, events: SalesEvent[] }): JSX.Element
 {
+    const navigate = useNavigate();
     const { events } = props;
 
     return (
         <>
-            <Paper mx='auto' p="md">
+            <Paper mx='auto' p="md" maw={1000}>
+                <Group position="apart">
                 <Title>
                     Upcoming Sale Events
                 </Title>
+                <ActionIcon w={50} h={50} onClick={onAddEvent}>
+                    <IconCirclePlus size={100} />
+                </ActionIcon>
+                </Group>
                 <Box my={50}>
-                    <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
-                        {events.map(event => <EventViewer key={event.id} event={event} />)}
-                    </Flex>
+                    <Stack>
+                        <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
+                            {events.map(event => <EventViewer key={event.id} event={event} />)}
+                        </Flex>
+                    </Stack>
                 </Box>
             </Paper>
         </>
     );
+
+
+    function onAddEvent()
+    {
+        const state = new AddEventState(props.addUrl);
+
+        navigate('/admin/add-event', { state });
+    }
 }
 
 

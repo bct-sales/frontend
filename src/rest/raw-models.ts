@@ -17,6 +17,9 @@ export type RawSalesEvent = z.infer<typeof RawSalesEvent>;
 
 export const RawSalesEvents = z.object({
     events: z.array(RawSalesEvent),
+    links: z.object({
+        add: z.string(),
+    }),
 })
 
 export type RawSalesEvents = z.infer<typeof RawSalesEvents>;

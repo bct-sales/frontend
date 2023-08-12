@@ -7,15 +7,15 @@ import { ChangeEvent } from "react";
 import { SalesEvent } from "@/rest/models";
 
 
-interface Props
+interface Props<T>
 {
-    event: SalesEvent;
+    event: T;
 
-    onChange: (event: SalesEvent) => void;
+    onChange: (event: T) => void;
 }
 
 
-export default function EventEditor(props: Props): React.ReactNode
+export default function EventEditor<T extends Omit<SalesEvent, 'id' | 'links'>>(props: Props<T>): React.ReactNode
 {
     const event = props.event;
 

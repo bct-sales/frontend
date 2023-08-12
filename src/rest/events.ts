@@ -6,7 +6,14 @@ import { RawSalesEvents } from './raw-models';
 import { restUrl } from './url';
 
 
-export async function listEvents(accessToken: string): Promise<Result<SalesEvent[], string>>
+
+interface ListEventsResult
+{
+    events: SalesEvent[];
+    addEventUrl: string;
+}
+
+export async function listEvents(accessToken: string): Promise<Result<ListEventsResult, string>>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
@@ -19,7 +26,10 @@ export async function listEvents(accessToken: string): Promise<Result<SalesEvent
         const response = await axios.get<unknown>( url, { headers } );
         const data = RawSalesEvents.parse(response.data);
 
-        return success(data.events.map(raw => fromRawSalesEvent(raw)));
+        return success({
+            events: data.events.map(raw => fromRawSalesEvent(raw)),
+            addEventUrl: data.links.add,
+        });
     }
     catch ( error: unknown )
     {
@@ -54,4 +64,22 @@ export async function updateEvent(accessToken: string, salesEvent: SalesEvent)
     };
 
     await axios.put<unknown>( restUrl(url), data, { headers } );
+}
+
+
+export async function addEvent(accessToken: string, url: string, salesEvent: Omit<SalesEvent, "id" | "links">)
+{
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    };
+
+    const data = {
+        date: salesEvent.date.toIsoString(),
+        start_time: salesEvent.startTime.toIsoString(),
+        end_time: salesEvent.endTime.toIsoString(),
+        location: salesEvent.location,
+        description: salesEvent.description,
+    };
+
+    await axios.post<unknown>( restUrl(url), data, { headers } );
 }

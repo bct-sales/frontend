@@ -12,11 +12,21 @@ export class BCTDate
 
     private static readonly humanReadableFormattingString = 'D MMM YYYY';
 
+    public static today(): BCTDate
+    {
+        return BCTDate.fromMoment(moment());
+    }
+
+    public static fromMoment(m: moment.Moment): BCTDate
+    {
+        return new BCTDate(m.format(BCTDate.isoFormattingString));
+    }
+
     public static fromIsoString(str: string): BCTDate
     {
-        const result = moment(str, [BCTDate.isoFormattingString]).format(BCTDate.isoFormattingString);
+        const m = moment(str, [BCTDate.isoFormattingString]);
 
-        return new BCTDate(result);
+        return BCTDate.fromMoment(m);
     }
 
     public static fromDate(date: Date): BCTDate

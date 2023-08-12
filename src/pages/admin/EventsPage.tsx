@@ -31,7 +31,6 @@ function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, eve
 {
     const navigate = useNavigate();
     const { events } = props;
-
     const orderedEvents = [...events].sort((x, y) => x.date.compare(y.date));
 
     return (

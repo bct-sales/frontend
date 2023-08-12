@@ -33,6 +33,7 @@ export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 function ActualEventsPage(props: { auth: AuthenticatedSeller, events: SalesEvent[] }): JSX.Element
 {
     const { events } = props;
+    const orderedEvents = [...events].sort((x, y) => x.date.compare(y.date));
 
     return (
         <>
@@ -42,7 +43,7 @@ function ActualEventsPage(props: { auth: AuthenticatedSeller, events: SalesEvent
                 </Title>
                 <Box my={50}>
                     <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
-                        {events.map(event => <EventViewer key={event.id} event={event} />)}
+                        {orderedEvents.map(event => <EventViewer key={event.id} event={event} />)}
                     </Flex>
                 </Box>
             </Paper>

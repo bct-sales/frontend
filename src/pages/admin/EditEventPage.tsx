@@ -2,7 +2,7 @@ import { AuthenticatedAdmin } from "@/auth/types";
 import EventEditor, { EventData } from "@/components/EventEditor";
 import StateGuard from "@/components/StateGuard";
 import { SalesEvent } from "@/rest/models";
-import { Button, Stack } from "@mantine/core";
+import { Button, Group, Stack } from "@mantine/core";
 import { useState } from "react";
 
 
@@ -48,7 +48,10 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEven
                     event={eventDate}
                     onChange={onChange}
                 />
-                <Button>Update</Button>
+                <Group position="right">
+                    <Button onClick={update}>Update</Button>
+                    <Button onClick={cancel}>Cancel</Button>
+                </Group>
             </Stack>
         </>
     );
@@ -57,5 +60,16 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEven
     function onChange(event: EventData)
     {
         setEventData(event);
+    }
+
+    function update()
+    {
+
+        history.back();
+    }
+
+    function cancel()
+    {
+        history.back();
     }
 }

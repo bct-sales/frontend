@@ -19,7 +19,7 @@ export default function TimePicker(props: Props): React.ReactNode
     const ref = useRef<HTMLInputElement>(null);
 
     return (
-        <TimeInput label={props.label} value={props.time.format()} onChange={onChange} ref={ref} rightSection={
+        <TimeInput label={props.label} value={props.time.toHumanReadableString()} onChange={onChange} ref={ref} rightSection={
             <ActionIcon onClick={() => { ref.current?.showPicker(); }}>
                 <IconClock size='1rem' />
             </ActionIcon>

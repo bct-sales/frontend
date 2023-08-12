@@ -57,7 +57,7 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
                     {event.date.toHumanReadableString()}
                 </Title>
                 <Text>
-                    {event.startTime.format()} - {event.endTime.format()} ({event.location})
+                    {event.startTime.toHumanReadableString()} - {event.endTime.toHumanReadableString()} ({event.location})
                 </Text>
                 <Text>
                     {event.description}

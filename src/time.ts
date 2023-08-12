@@ -10,14 +10,9 @@ export class BCTTime
 
     private static readonly isoFormattingString = 'HH:mm:ss';
 
-    public static parse(str: string): BCTTime
-    {
-        const result = moment(str, ['HH:mm']).format(BCTTime.isoFormattingString);
+    private static readonly humanReadableString = 'HH:mm';
 
-        return new BCTTime(result);
-    }
-
-    public static parseIso(str: string): BCTTime
+    public static fromIsoString(str: string): BCTTime
     {
         const result = moment(str, BCTTime.isoFormattingString).format(BCTTime.isoFormattingString);
 
@@ -29,12 +24,12 @@ export class BCTTime
         return moment(this.isoRepresentation, BCTTime.isoFormattingString);
     }
 
-    public format(): string
+    public toHumanReadableString(): string
     {
-        return this.toMoment().format('HH:mm');
+        return this.toMoment().format(BCTTime.humanReadableString);
     }
 
-    public formatIso(): string
+    public toIsoString(): string
     {
         return this.isoRepresentation;
     }

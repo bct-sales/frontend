@@ -53,4 +53,12 @@ export class BCTDate
     {
         return this.toMoment().toDate();
     }
+
+    public compare(other: BCTDate): number
+    {
+        const me = this.toMoment();
+        const he = other.toMoment();
+
+        return me.valueOf() - he.valueOf();
+    }
 }

@@ -5,7 +5,7 @@ import { BCTDate } from "@/date";
 import { addEvent } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { BCTTime } from "@/time";
-import { ActionIcon, Button, Group, Stack } from "@mantine/core";
+import { ActionIcon, Button, Group, Stack, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconCirclePlus, IconCircleX } from "@tabler/icons-react";
 import { useState } from "react";
@@ -54,12 +54,16 @@ function ActualAddEventPage(props: { auth: AuthenticatedAdmin, url: string }): R
                     onChange={onChange}
                 />
                 <Group position="right">
-                    <ActionIcon onClick={add}>
-                        <IconCirclePlus />
-                    </ActionIcon>
-                    <ActionIcon onClick={cancel}>
-                        <IconCircleX />
-                    </ActionIcon>
+                    <Tooltip label="Create new event" openDelay={500}>
+                        <ActionIcon onClick={add}>
+                            <IconCirclePlus />
+                        </ActionIcon>
+                    </Tooltip>
+                    <Tooltip label="Cancel" openDelay={500}>
+                        <ActionIcon onClick={cancel}>
+                            <IconCircleX />
+                        </ActionIcon>
+                    </Tooltip>
                 </Group>
             </Stack>
         </>

@@ -31,6 +31,6 @@ export default function StateGuard<T>(props: Props<T>): JSX.Element
 function defaultError()
 {
     return (
-        <p>An error occurred</p>
+        <p>An error occurred: Invalid state</p>
     );
 }

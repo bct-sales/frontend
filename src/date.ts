@@ -10,7 +10,9 @@ export class BCTDate
 
     private static readonly isoFormattingString = 'YYYY-MM-DD';
 
-    public static parseIso(str: string): BCTDate
+    private static readonly humanReadableFormattingString = 'D MMM YYYY';
+
+    public static fromIsoString(str: string): BCTDate
     {
         const result = moment(str, [BCTDate.isoFormattingString]).format(BCTDate.isoFormattingString);
 
@@ -27,12 +29,12 @@ export class BCTDate
         return moment(this.isoRepresentation, BCTDate.isoFormattingString);
     }
 
-    public format(): string
+    public toHumanReadableString(): string
     {
-        return this.toMoment().format('D MMM YYYY');
+        return this.toMoment().format(BCTDate.humanReadableFormattingString);
     }
 
-    public formatIso(): string
+    public toIsoString(): string
     {
         return this.isoRepresentation;
     }

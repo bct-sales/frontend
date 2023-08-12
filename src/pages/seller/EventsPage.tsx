@@ -59,7 +59,7 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
         <>
             <Card withBorder p='md' miw={300}>
                 <Button fullWidth fz='xl' mb='lg' onClick={goToItemsPage}>
-                    {event.date.format()}
+                    {event.date.toHumanReadableString()}
                 </Button>
                 <Text>
                     {event.startTime.format()} - {event.endTime.format()} ({event.location})

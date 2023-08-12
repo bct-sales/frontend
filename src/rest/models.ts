@@ -23,7 +23,7 @@ export function fromRawSalesEvent(raw: RawSalesEvent): SalesEvent
 {
     return {
         id: raw.sales_event_id,
-        date: BCTDate.parseIso(raw.date),
+        date: BCTDate.fromIsoString(raw.date),
         startTime: BCTTime.parseIso(raw.start_time),
         endTime: BCTTime.parseIso(raw.end_time),
         location: raw.location,

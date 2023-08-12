@@ -46,7 +46,7 @@ export async function updateEvent(accessToken: string, salesEvent: SalesEvent)
 
     const url = salesEvent.links.edit;
     const data = {
-        date: salesEvent.date.formatIso(),
+        date: salesEvent.date.toIsoString(),
         start_time: salesEvent.startTime.formatIso(),
         end_time: salesEvent.endTime.formatIso(),
         location: salesEvent.location,

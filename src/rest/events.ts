@@ -63,7 +63,7 @@ export async function updateEvent(accessToken: string, salesEvent: SalesEvent)
         description: salesEvent.description,
     };
 
-    await axios.put<unknown>( restUrl(url), data, { headers } );
+    await axios.put<unknown>( url, data, { headers } );
 }
 
 
@@ -81,5 +81,5 @@ export async function addEvent(accessToken: string, url: string, salesEvent: Omi
         description: salesEvent.description,
     };
 
-    await axios.post<unknown>( restUrl(url), data, { headers } );
+    await axios.post<unknown>( url, data, { headers } );
 }

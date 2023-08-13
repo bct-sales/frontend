@@ -61,7 +61,7 @@ export async function updateItem(accessToken: string, item: Item): Promise<void>
         sales_event_id: item.salesEventId,
     };
 
-    await axios.put<unknown>( restUrl(url), data, { headers } );
+    await axios.put<unknown>( url, data, { headers } );
 }
 
 

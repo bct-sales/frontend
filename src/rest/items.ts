@@ -19,7 +19,7 @@ export async function listItems(accessToken: string, salesEventId: number): Prom
         Authorization: `Bearer ${accessToken}`
     };
 
-    const url = restUrl(`/me/events/${salesEventId}/items`);
+    const url = restUrl(`/events/${salesEventId}/items`);
 
     try
     {

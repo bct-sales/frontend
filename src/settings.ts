@@ -3,13 +3,10 @@ import { AuthenticationData } from "./auth/types";
 
 export function createInitialAuthentication(): AuthenticationData | undefined
 {
-    // For production
-    // return undefined;
-
     // TODO Needs to be removed!
-    // Seller
-    // return createSellerAuthentication();
-    return createAdminAuthentication();
+    // return undefined;
+    return createSellerAuthentication();
+    // return createAdminAuthentication();
 }
 
 

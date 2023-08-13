@@ -1,3 +1,4 @@
+import ErrorPage from "@/pages/ErrorPage";
 import { useLocation } from "react-router-dom";
 
 interface Props<T>
@@ -31,6 +32,10 @@ export default function StateGuard<T>(props: Props<T>): JSX.Element
 function defaultError()
 {
     return (
-        <p>An error occurred: Invalid state</p>
+        <ErrorPage>
+            <p>
+                State lost
+            </p>
+        </ErrorPage>
     );
 }

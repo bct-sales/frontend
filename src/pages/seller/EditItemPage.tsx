@@ -72,11 +72,11 @@ function ActualEditItemPage(props: { auth: AuthenticatedSeller, item: Item }): J
 
         if ( detail !== null )
         {
-            notifications.show({message: detail});
+            notifications.show({title: 'Error', message: detail});
         }
         else
         {
-            notifications.show({message: "Something went wrong"});
+            notifications.show({title: 'Error', message: "Something went wrong"});
             console.log(error);
         }
     }

@@ -3,6 +3,7 @@ import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
 import { z } from 'zod';
 import { Role } from '@/auth/types';
+import { extractDetailFromException } from './error-handling';
 
 
 const AuthenticationParameters = z.object({
@@ -48,17 +49,16 @@ export async function authenticateUser( data: AuthenticationParameters ): Promis
     }
     catch ( error: unknown )
     {
-        if ( axios.isAxiosError(error) && error.response )
+        const detail = extractDetailFromException(error);
+
+        if ( detail !== null )
         {
-            const data = error.response.data as unknown;
-
-            if ( typeof data === 'object' && data !== null && 'detail' in data && typeof data.detail === 'string' )
-            {
-                return failure<string>(data.detail);
-            }
+            return failure<string>(detail);
         }
-
-        console.error(error);
-        return failure<string>('Unknown error');
+        else
+        {
+            console.error(error);
+            return failure<string>('Unknown error');
+        }
     }
 }

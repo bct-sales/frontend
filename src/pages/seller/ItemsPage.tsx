@@ -1,12 +1,12 @@
 import { AuthenticatedSeller } from "@/auth/types";
+import { DeleteButton } from "@/components/DeleteButton";
 import { EditButton } from "@/components/EditButton";
 import IntParamsGuard from "@/components/IntParamsGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title } from "@mantine/core";
-import { IconTrash } from '@tabler/icons-react';
+import { Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title } from "@mantine/core";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
@@ -148,9 +148,7 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
         if ( showDelete )
         {
             return (
-                <ActionIcon variant="outline" onClick={onDelete} w='2rem' h='2rem'>
-                    <IconTrash />
-                </ActionIcon>
+                <DeleteButton onClick={onDelete} />
             );
         }
         else

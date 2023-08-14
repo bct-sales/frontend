@@ -18,6 +18,9 @@ const LoginResponse = z.object({
     access_token: z.string(),
     role: z.union([z.literal('seller'), z.literal('admin')]),
     token_type: z.string(),
+    links: z.object({
+        events: z.string(),
+    }),
 });
 
 type LoginResponse = z.infer<typeof LoginResponse>;

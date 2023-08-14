@@ -10,7 +10,7 @@ export function AuthProvider( { children }: { children: React.ReactNode; } ): JS
 
     return (
         <AuthContext.Provider value={authenticationStatus}>
-            { children }
+            {children}
         </AuthContext.Provider>
     );
 

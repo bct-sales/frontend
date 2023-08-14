@@ -1,4 +1,4 @@
-import { Box, Button, Group, Modal, PasswordInput, TextInput, Text, Title, Center } from "@mantine/core";
+import { Box, Button, Group, Modal, PasswordInput, TextInput, Text, Title, Center, Anchor } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import * as rest from '@/rest';
@@ -35,13 +35,20 @@ export default function RegisterPage()
 
     return (
         <>
-            <Center mih='100vh'>
-                <Box maw={320} mx="auto" w='40%'>
+            <Center mih='50vh'>
+                <Box maw={500} mx="auto" w='40%'>
                     <form onSubmit={form.onSubmit(onSubmit)}>
-                        <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} />
-                        <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
+                        <Center>
+                            <Box miw='20em'>
+                                <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} p='sm' />
+                                <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} p='sm' />
+                            </Box>
+                        </Center>
 
-                        <Group position="right" mt="md">
+                        <Group position="apart" mt="md">
+                            <Text>
+                                Already an account? Click <Anchor href="/login">here</Anchor> to login.
+                            </Text>
                             <Button type="submit">Register</Button>
                         </Group>
                     </form>

@@ -2,7 +2,7 @@ import { Center, Loader, Stack, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 
-export default function DefaultLoadingScreen()
+export default function LoadingScreen()
 {
     const [show, setShow] = useState(false);
 

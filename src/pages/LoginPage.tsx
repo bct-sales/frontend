@@ -2,7 +2,7 @@ import { useAuth } from "@/auth/context";
 import { Role } from "@/auth/types";
 import * as rest from '@/rest';
 import { useRestApiRoot } from "@/rest/root";
-import { Box, Button, Center, Modal, PasswordInput, Text, TextInput, Title, UnstyledButton } from "@mantine/core";
+import { Anchor, Box, Button, Center, Group, Modal, PasswordInput, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";
@@ -38,16 +38,22 @@ export default function LoginPage()
 
     return (
         <>
-            <Center mih='100vh'>
-                <Box maw={320} mx="auto" w='40%'>
+            <Center mih='50vh'>
+                <Box maw={500} mx="auto" w='40%'>
                     <form onSubmit={form.onSubmit(onSubmit)}>
-                        <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} p='sm' />
-                        <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} p='sm' />
+                        <Center>
+                            <Box miw='20em'>
+                                <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} p='sm' />
+                                <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} p='sm' />
+                            </Box>
+                        </Center>
 
-                        <Button fullWidth mt='xl' type="submit" disabled={!nonemptyInputs()}>Login</Button>
-                        <Text>
-                            No account? Click <UnstyledButton p='xs' onClick={goToRegistrationPage}>here</UnstyledButton> to register.
-                        </Text>
+                        <Group position="apart" mt="md">
+                            <Text>
+                                No account? Click <Anchor href="/register">here</Anchor> to register.
+                            </Text>
+                            <Button type="submit" disabled={!nonemptyInputs()}>Login</Button>
+                        </Group>
                     </form>
                 </Box>
             </Center>
@@ -58,11 +64,6 @@ export default function LoginPage()
         </>
     );
 
-
-    function goToRegistrationPage()
-    {
-        navigate('/register');
-    }
 
     function nonemptyInputs()
     {

@@ -3,6 +3,7 @@ import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
+import { useRestApiRoot } from "@/rest/root";
 import { Box, Button, Card, Flex, Paper, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,8 +18,9 @@ interface EventsPageProps
 
 export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 {
+    const restRoot = useRestApiRoot();
     const accessToken = auth.accessToken;
-    const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
+    const requester = useCallback(async () => listEvents(restRoot.links.events, accessToken), [accessToken]);
     const request = useRequest(requester);
 
     return (

@@ -10,12 +10,14 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddEventState } from "./AddEventPage";
 import { EditEventState } from "./EditEventPage";
+import { useRestApiRoot } from "@/rest/root";
 
 
 export default function EventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.Element
 {
+    const restRoot = useRestApiRoot();
     const accessToken = auth.accessToken;
-    const requester = useCallback(async () => listEvents(accessToken), [accessToken]);
+    const requester = useCallback(async () => listEvents(restRoot.links.events, accessToken), [restRoot, accessToken]);
     const request = useRequest(requester);
 
     return (

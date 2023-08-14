@@ -13,13 +13,11 @@ interface ListEventsResult
     addEventUrl: string;
 }
 
-export async function listEvents(accessToken: string): Promise<Result<ListEventsResult, string>>
+export async function listEvents(url: string, accessToken: string): Promise<Result<ListEventsResult, string>>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };
-
-    const url = restUrl('/events');
 
     try
     {

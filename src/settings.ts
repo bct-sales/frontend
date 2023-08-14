@@ -4,8 +4,8 @@ import { AuthenticationData } from "./auth/types";
 export function createInitialAuthentication(): AuthenticationData | undefined
 {
     // TODO Needs to be removed!
-    return undefined;
-    // return createSellerAuthentication();
+    // return undefined;
+    return createSellerAuthentication();
     // return createAdminAuthentication();
 }
 

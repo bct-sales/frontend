@@ -3,6 +3,7 @@ import { Notifications } from '@mantine/notifications';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './auth/provider';
 import { useAuth } from './auth/context';
+import RestRootProvider from './rest/RestRootProvider';
 
 
 function AppHeader()
@@ -59,11 +60,13 @@ function AppHeader()
 export default function App() {
     return (
         <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
-            <AuthProvider>
-                <AppHeader />
-                <Notifications />
-                <Outlet />
-            </AuthProvider>
+            <RestRootProvider>
+                <AuthProvider>
+                    <AppHeader />
+                    <Notifications />
+                    <Outlet />
+                </AuthProvider>
+            </RestRootProvider>
         </MantineProvider>
     );
 }

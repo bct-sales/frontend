@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { restUrl } from './url';
 import { Result, failure, success } from '@/result';
 import { z } from 'zod';
 import { Role } from '@/auth/types';
@@ -24,7 +23,7 @@ const LoginResponse = z.object({
 type LoginResponse = z.infer<typeof LoginResponse>;
 
 
-export async function authenticateUser( data: AuthenticationParameters ): Promise<Result<{role: Role, accessToken: string, userId: number}, string>>
+export async function authenticateUser( url: string, data: AuthenticationParameters ): Promise<Result<{role: Role, accessToken: string, userId: number}, string>>
 {
     const payload = {
         grant_type: 'password',
@@ -34,8 +33,6 @@ export async function authenticateUser( data: AuthenticationParameters ): Promis
     const headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     };
-
-    const url = restUrl('/login');
 
     try
     {

@@ -1,6 +1,7 @@
 import { useAuth } from "@/auth/context";
 import { Role } from "@/auth/types";
 import * as rest from '@/rest';
+import { useRestApiRoot } from "@/rest/root";
 import { Box, Button, Center, Modal, PasswordInput, Text, TextInput, Title, UnstyledButton } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -18,6 +19,7 @@ export default function LoginPage()
 {
     const [messageBoxShowing, {open: openMessageBox, close: closeMessageBox}] = useDisclosure(false);
     const [message, setMessage] = React.useState('');
+    const restRoot = useRestApiRoot();
     const auth = useAuth();
     const navigate = useNavigate();
     const form = useForm<FormFields>({
@@ -72,7 +74,7 @@ export default function LoginPage()
     function onSubmit(formFields: FormFields)
     {
         void (async () => {
-            const result = await rest.authenticateUser(formFields);
+            const result = await rest.authenticateUser(restRoot.links.login, formFields);
 
             if ( result.success )
             {

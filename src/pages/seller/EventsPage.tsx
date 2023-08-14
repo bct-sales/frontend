@@ -20,7 +20,7 @@ export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 {
     const restRoot = useRestApiRoot();
     const accessToken = auth.accessToken;
-    const requester = useCallback(async () => listEvents(restRoot.links.events, accessToken), [accessToken]);
+    const requester = useCallback(async () => listEvents(restRoot.links.events, accessToken), [restRoot, accessToken]);
     const request = useRequest(requester);
 
     return (

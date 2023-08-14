@@ -11,14 +11,12 @@ export interface AccountRegistrationData
     password: string;
 }
 
-export async function registerUser( data: AccountRegistrationData ): Promise<Result<undefined, string>>
+export async function registerUser( url: string, data: AccountRegistrationData ): Promise<Result<undefined, string>>
 {
     const payload = {
         email_address: data.emailAddress,
         password: data.password
     };
-
-    const url = restUrl('/register');
 
     try
     {

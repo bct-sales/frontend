@@ -6,6 +6,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { isValidEmailAddress, isValidPassword } from "@/validation";
 import { notifications } from "@mantine/notifications";
+import { useRestApiRoot } from "@/rest/root";
 
 
 interface FormFields
@@ -17,6 +18,7 @@ interface FormFields
 
 export default function RegisterPage()
 {
+    const restRoot = useRestApiRoot();
     const [messageBoxShowing, {open: openMessageBox, close: closeMessageBox}] = useDisclosure(false);
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
@@ -80,7 +82,7 @@ export default function RegisterPage()
     function onSubmit(formFields: FormFields)
     {
         void (async () => {
-            const result = await rest.registerUser(formFields);
+            const result = await rest.registerUser(restRoot.links.registration, formFields);
 
             if ( result.success )
             {

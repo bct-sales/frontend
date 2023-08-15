@@ -3,7 +3,6 @@ import axios from 'axios';
 import { extractDetailFromException } from './error-handling';
 import { SalesEvent, fromRawSalesEvent } from './models';
 import { RawSalesEvents } from './raw-models';
-import { restUrl } from './url';
 
 
 
@@ -12,6 +11,7 @@ interface ListEventsResult
     events: SalesEvent[];
     addEventUrl: string;
 }
+
 
 export async function listEvents(url: string, accessToken: string): Promise<Result<ListEventsResult, string>>
 {

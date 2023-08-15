@@ -13,13 +13,11 @@ interface ListItemsResult
     addItemUrl: string;
 }
 
-export async function listItems(accessToken: string, salesEventId: number): Promise<Result<ListItemsResult, string>>
+export async function listItems(url: string, accessToken: string): Promise<Result<ListItemsResult, string>>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };
-
-    const url = restUrl(`/events/${salesEventId}/items`);
 
     try
     {

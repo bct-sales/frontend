@@ -1,8 +1,8 @@
 import { AuthenticatedSeller } from "@/auth/types";
 import { DeleteButton } from "@/components/DeleteButton";
 import { EditButton } from "@/components/EditButton";
-import IntParamsGuard from "@/components/IntParamsGuard";
 import RequestWrapper from "@/components/RequestWrapper";
+import StateGuard from "@/components/StateGuard";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
@@ -11,33 +11,49 @@ import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
 
+
 interface ItemsPageProps
 {
     auth: AuthenticatedSeller;
 }
 
 
-export default function ItemsPage(props: ItemsPageProps): JSX.Element
+export class ItemsPageState
 {
-    return (
-        <IntParamsGuard child={createPage} paramName="eventId" />
-    )
-
-
-    function createPage(eventId: number): JSX.Element
+    public constructor(public readonly url: string, public readonly eventId: number)
     {
-        return (
-            <ItemsPageWithEventId auth={props.auth} eventId={eventId} />
-        )
+        // NOP
     }
 }
 
 
-function ItemsPageWithEventId(props: { eventId: number, auth: AuthenticatedSeller }): JSX.Element
+export default function ItemsPage(props: ItemsPageProps): JSX.Element
 {
-    const { auth, eventId } = props;
+    return (
+        <StateGuard predicate={predicate} child={createPage} />
+    );
+
+
+    function predicate(state: unknown): state is ItemsPageState
+    {
+        return state instanceof ItemsPageState;
+    }
+
+    function createPage(state: ItemsPageState): JSX.Element
+    {
+        return (
+            <ItemsPageWithEventId auth={props.auth} url={state.url} eventId={state.eventId} />
+        );
+    }
+}
+
+
+
+function ItemsPageWithEventId(props: { url: string, eventId: number, auth: AuthenticatedSeller }): JSX.Element
+{
+    const { auth, url, eventId } = props;
     const { accessToken } = auth;
-    const requester = useCallback(async () => listItems(accessToken, eventId), [accessToken, eventId]);
+    const requester = useCallback(async () => listItems(url, accessToken), [accessToken, url]);
     const response = useRequest(requester);
 
     return (
@@ -164,6 +180,6 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
 
     function onDelete()
     {
-        // NOP
+        // TODO
     }
 }

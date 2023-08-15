@@ -15,6 +15,7 @@ export interface SalesEvent
     description: string;
     links: {
         edit: string,
+        items: string,
     }
 }
 

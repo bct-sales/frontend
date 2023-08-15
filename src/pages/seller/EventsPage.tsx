@@ -7,6 +7,7 @@ import { useRestApiRoot } from "@/rest/root";
 import { Box, Button, Card, Flex, Paper, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { ItemsPageState } from "./ItemsPage";
 
 
 
@@ -77,6 +78,8 @@ function EventViewer({ event } : { event: SalesEvent }): JSX.Element
 
     function goToItemsPage()
     {
-        navigate(`/events/${event.id}/items`);
+        const state = new ItemsPageState(event.links.items, event.id);
+
+        navigate(`/events/${event.id}/items`, { state });
     }
 }

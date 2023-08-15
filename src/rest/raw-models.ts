@@ -10,6 +10,7 @@ export const RawSalesEvent = z.object({
     description: z.string(),
     links: z.object({
         edit: z.string(),
+        items: z.string(),
     })
 });
 

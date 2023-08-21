@@ -8,6 +8,7 @@ export const RawSalesEvent = z.object({
     end_time: z.string(),
     location: z.string(),
     description: z.string(),
+    available: z.boolean(),
     links: z.object({
         edit: z.string(),
         items: z.string(),

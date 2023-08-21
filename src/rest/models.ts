@@ -13,6 +13,7 @@ export interface SalesEvent
     endTime: BCTTime;
     location: string;
     description: string;
+    available: boolean;
     links: {
         edit: string,
         items: string,
@@ -30,6 +31,7 @@ export function fromRawSalesEvent(raw: RawSalesEvent): SalesEvent
         location: raw.location,
         description: raw.description,
         links: raw.links,
+        available: raw.available,
     };
 }
 

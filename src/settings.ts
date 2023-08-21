@@ -5,8 +5,8 @@ export function createInitialAuthentication(): AuthenticationData | undefined
 {
     // TODO Needs to be removed!
     // return undefined;
-    return createSellerAuthentication();
-    // return createAdminAuthentication();
+    // return createSellerAuthentication();
+    return createAdminAuthentication();
 }
 
 
@@ -23,7 +23,7 @@ function createSellerAuthentication(): AuthenticationData
 
 function createAdminAuthentication(): AuthenticationData
 {
-    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzIzMzg1OTg2LCJzY29wZXMiOlsiZXZlbnRzOmxpc3QiLCJpdGVtczpsaXN0LWFsbCIsImV2ZW50czphZGQiLCJldmVudHM6ZWRpdCIsImFjY291bnRzOmxpc3QiXX0.NYGc1lfH2pzLsc_NRRGwsxVb6AF2GxzGk93AtZYtAtg`;
+    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzI0MTczMDIxLCJzY29wZXMiOlsiZXZlbnRzOmxpc3QiLCJldmVudHM6YWRkIiwiYWNjb3VudHM6bGlzdCIsImV2ZW50czplZGl0IiwiaXRlbXM6bGlzdC1hbGwiXX0.NARsbadKybPUJxog7zyRk9eNQ5jE-L2gYBoLRYDfwOc`;
     const emailAddress = `admin@bct.be`;
     const role = 'admin';
     const userId = 2;

@@ -2,7 +2,7 @@ import { BCTDate } from "@/date";
 import { BCTTime } from "@/time";
 import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
-import { Stack, TextInput } from "@mantine/core";
+import { Stack, TextInput, Text, createStyles } from "@mantine/core";
 import { ChangeEvent } from "react";
 import { SalesEvent } from "@/rest/models";
 
@@ -11,13 +11,27 @@ interface Props<T>
 {
     event: T;
 
+    showAvailability: boolean;
+
     onChange: (event: T) => void;
 }
+
+
+const useStyles = createStyles(() => ({
+    available: {
+        color: '#0F0',
+    },
+    unavailable: {
+        color: '#F00',
+    }
+}));
+
 
 
 export default function EventEditor<T extends Omit<SalesEvent, 'id' | 'links'>>(props: Props<T>): React.ReactNode
 {
     const event = props.event;
+    const { classes } = useStyles();
 
     return (
         <>
@@ -27,10 +41,36 @@ export default function EventEditor<T extends Omit<SalesEvent, 'id' | 'links'>>(
                 <TimePicker label="End time" time={event.endTime} onChange={onChangeEndTime} />
                 <TextInput label="Location" value={event.location} onChange={onChangeLocation} />
                 <TextInput label="Description" value={event.description} onChange={onChangeDescription} />
+                {renderAvailability()}
             </Stack>
         </>
     );
 
+
+    function renderAvailability(): React.ReactNode
+    {
+        if ( props.showAvailability )
+        {
+            if ( event.available )
+            {
+                return (
+                    <Text className={classes.available}>Available</Text>
+                );
+            }
+            else
+            {
+                return (
+                    <Text className={classes.unavailable}>Unavailable</Text>
+                );
+            }
+        }
+        else
+        {
+            return (
+                <></>
+            );
+        }
+    }
 
     function onChangeDate(date: BCTDate)
     {

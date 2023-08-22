@@ -1,7 +1,7 @@
 import { BCTDate } from "@/date";
 import { SalesEvent } from "@/rest/models";
 import { BCTTime } from "@/time";
-import { Stack, TextInput } from "@mantine/core";
+import { Stack, Switch, TextInput } from "@mantine/core";
 import { ChangeEvent } from "react";
 import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
@@ -26,6 +26,7 @@ export default function EventEditor<T extends Omit<SalesEvent, 'id' | 'links'>>(
                 <TimePicker label="End time" time={event.endTime} onChange={onChangeEndTime} />
                 <TextInput label="Location" value={event.location} onChange={onChangeLocation} />
                 <TextInput label="Description" value={event.description} onChange={onChangeDescription} />
+                <Switch label="Available" checked={event.available} onChange={onChangeAvailability} />
             </Stack>
         </>
     );
@@ -72,6 +73,16 @@ export default function EventEditor<T extends Omit<SalesEvent, 'id' | 'links'>>(
         props.onChange({
             ...props.event,
             description,
+        });
+    }
+
+    function onChangeAvailability(event: ChangeEvent<HTMLInputElement>)
+    {
+        const available = event.target.checked;
+
+        props.onChange({
+            ...props.event,
+            available,
         });
     }
 }

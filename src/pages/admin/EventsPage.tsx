@@ -4,13 +4,24 @@ import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { ActionIcon, Box, Card, Flex, Group, Paper, Stack, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, Card, Flex, Group, Paper, Stack, Text, Title, createStyles } from "@mantine/core";
 import { IconCirclePlus } from "@tabler/icons-react";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddEventState } from "./AddEventPage";
 import { EditEventState } from "./EditEventPage";
 import { useRestApiRoot } from "@/rest/root";
+import EventViewer from "@/components/EventViewer";
+
+
+const useStyles = createStyles(() => ({
+    available: {
+        color: '#0F0',
+    },
+    unavailable: {
+        color: '#F00',
+    }
+}));
 
 
 export default function EventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.Element
@@ -32,6 +43,7 @@ export default function EventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.
 function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, events: SalesEvent[] }): JSX.Element
 {
     const navigate = useNavigate();
+    const { classes } = useStyles();
     const { events } = props;
     const orderedEvents = [...events].sort((x, y) => x.date.compare(y.date));
 
@@ -49,7 +61,7 @@ function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, eve
                 <Box my={50}>
                     <Stack>
                         <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
-                            {orderedEvents.map(event => <EventViewer key={event.id} event={event} />)}
+                            {orderedEvents.map(renderEvent)}
                         </Flex>
                     </Stack>
                 </Box>
@@ -58,44 +70,47 @@ function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, eve
     );
 
 
+    function renderEvent(event: SalesEvent): React.ReactNode
+    {
+        return (
+            <Card withBorder p='md' miw={300} key={event.id}>
+                <EventViewer event={event} />
+                <Group position="apart" mt='md'>
+                    {renderAvailability(event)}
+                    <EditButton onClick={() => { onEditEvent(event); }} />
+                </Group>
+            </Card>
+        );
+    }
+
+    function renderAvailability(event: SalesEvent): React.ReactNode
+    {
+        if ( event.available )
+        {
+            return (
+                <Text className={classes.available}>Available</Text>
+            );
+        }
+        else
+        {
+            return (
+                <Text className={classes.unavailable}>Unavailable</Text>
+            );
+        }
+    }
+
+    function onEditEvent(event: SalesEvent)
+    {
+        const url = `/admin/events/${event.id}`; // TODO fix this
+        const state = new EditEventState(event);
+
+        navigate(url, { state });
+    }
+
     function onAddEvent()
     {
         const state = new AddEventState(props.addUrl);
 
         navigate('/admin/add-event', { state });
-    }
-}
-
-
-function EventViewer({ event } : { event: SalesEvent }): JSX.Element
-{
-    const navigate = useNavigate();
-
-    return (
-        <>
-            <Card withBorder p='md' miw={300}>
-                <Title>
-                    {event.date.toHumanReadableString()}
-                </Title>
-                <Text>
-                    {event.startTime.toHumanReadableString()} - {event.endTime.toHumanReadableString()} ({event.location})
-                </Text>
-                <Text>
-                    {event.description}
-                </Text>
-                <Group position="right">
-                    <EditButton onClick={onEditEvent} />
-                </Group>
-            </Card>
-        </>
-    );
-
-
-    function onEditEvent()
-    {
-        const url = `/admin/events/${event.id}`;
-        const state = new EditEventState(event);
-
-        navigate(url, { state });
     }
 }

@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
 
 
-
 interface EventsPageProps
 {
     auth: AuthenticatedSeller;

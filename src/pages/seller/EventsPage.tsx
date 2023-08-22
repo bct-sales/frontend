@@ -1,14 +1,14 @@
 import { AuthenticatedSeller } from "@/auth/types";
+import EventViewer from "@/components/EventViewer";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { useRestApiRoot } from "@/rest/root";
-import { Box, Button, Card, Flex, Group, Paper, Text, Title } from "@mantine/core";
+import { Box, Button, Card, Flex, Group, Paper, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
-import EventViewer from "@/components/EventViewer";
 
 
 interface EventsPageProps

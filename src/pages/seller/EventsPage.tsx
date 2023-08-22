@@ -4,10 +4,11 @@ import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { useRestApiRoot } from "@/rest/root";
-import { Box, Button, Card, Flex, Paper, Text, Title } from "@mantine/core";
+import { Box, Button, Card, Flex, Group, Paper, Text, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
+import EventViewer from "@/components/EventViewer";
 
 
 interface EventsPageProps
@@ -34,6 +35,7 @@ export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 
 function ActualEventsPage(props: { auth: AuthenticatedSeller, events: SalesEvent[] }): JSX.Element
 {
+    const navigate = useNavigate();
     const { events } = props;
     const orderedEvents = [...events].sort((x, y) => x.date.compare(y.date));
 
@@ -45,37 +47,27 @@ function ActualEventsPage(props: { auth: AuthenticatedSeller, events: SalesEvent
                 </Title>
                 <Box my={50}>
                     <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
-                        {orderedEvents.map(event => <EventViewer key={event.id} event={event} />)}
+                        {orderedEvents.map(renderEvent)}
                     </Flex>
                 </Box>
             </Paper>
         </>
     );
-}
 
 
-function EventViewer({ event } : { event: SalesEvent }): JSX.Element
-{
-    const navigate = useNavigate();
-
-    return (
-        <>
-            <Card withBorder p='md' miw={300}>
-                <Button fullWidth fz='xl' mb='lg' onClick={goToItemsPage}>
-                    {event.date.toHumanReadableString()}
-                </Button>
-                <Text>
-                    {event.startTime.toHumanReadableString()} - {event.endTime.toHumanReadableString()} ({event.location})
-                </Text>
-                <Text>
-                    {event.description}
-                </Text>
+    function renderEvent(event: SalesEvent): React.ReactNode
+    {
+        return (
+            <Card withBorder p='md' miw={300} key={event.id}>
+                <EventViewer event={event} />
+                <Group position='right'>
+                    <Button onClick={() => { goToItemsPage(event); } }>Edit Items</Button>
+                </Group>
             </Card>
-        </>
-    );
+        );
+    }
 
-
-    function goToItemsPage()
+    function goToItemsPage(event: SalesEvent)
     {
         const state = new ItemsPageState(event.links.items, event.id);
 

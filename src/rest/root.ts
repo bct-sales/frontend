@@ -18,7 +18,6 @@ export type Root = z.infer<typeof Root>;
 export async function fetchRoot(): Promise<Root>
 {
     const url = restUrl('/');
-    console.log(url);
     const response = await axios.get<unknown>(url);
 
     return Root.parse(response.data);

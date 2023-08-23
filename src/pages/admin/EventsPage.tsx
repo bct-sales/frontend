@@ -101,7 +101,7 @@ function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, eve
 
     function onEditEvent(event: SalesEvent)
     {
-        const url = `/admin/events/${event.id}`; // TODO fix this
+        const url = `/admin/events/${event.id}`; // No HATEOAS here
         const state = new EditEventState(event);
 
         navigate(url, { state });

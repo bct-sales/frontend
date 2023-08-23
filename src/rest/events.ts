@@ -59,6 +59,7 @@ export async function updateEvent(accessToken: string, salesEvent: SalesEvent)
         end_time: salesEvent.endTime.toIsoString(),
         location: salesEvent.location,
         description: salesEvent.description,
+        available: salesEvent.available,
     };
 
     await axios.put<unknown>( url, data, { headers } );

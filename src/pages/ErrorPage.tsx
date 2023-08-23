@@ -1,4 +1,4 @@
-import { Modal, Title } from "@mantine/core";
+import { Modal, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
 
@@ -12,9 +12,9 @@ export default function ErrorPage(props: Props): React.ReactNode
 {
     const navigate = useNavigate();
     const title = (
-        <Title c='red'>
+        <Text c='red'>
             Error
-        </Title>
+        </Text>
     );
 
     return (

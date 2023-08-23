@@ -1,10 +1,10 @@
-import { Role } from "@/auth/types";
+import { AuthenticationData } from "@/auth/types";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 
-type LoginAction = PayloadAction<{ accessToken: string, role: Role, userId: number }, 'login'>;
+export type LoginAction = PayloadAction<AuthenticationData, 'login'>;
 
-type LogoutAction = PayloadAction<void, 'logout'>;
+export type LogoutAction = PayloadAction<void, 'logout'>;
 
 export type Action = LoginAction
                    | LogoutAction;

@@ -1,4 +1,4 @@
-import { AuthenticatedAdmin } from "@/auth/types";
+import { AuthenticatedAdminStatus } from "@/auth/types";
 import EventEditor from "@/components/EventEditor";
 import StateGuard from "@/components/StateGuard";
 import { updateEvent } from "@/rest/events";
@@ -17,7 +17,7 @@ export class EditEventState
 }
 
 
-export default function EditEventPage(props: { auth: AuthenticatedAdmin }): React.ReactNode
+export default function EditEventPage(props: { auth: AuthenticatedAdminStatus }): React.ReactNode
 {
     return (
         <StateGuard
@@ -33,7 +33,7 @@ export default function EditEventPage(props: { auth: AuthenticatedAdmin }): Reac
 }
 
 
-function ActualEditEventPage(props: { auth: AuthenticatedAdmin, event: SalesEvent }): React.ReactNode
+function ActualEditEventPage(props: { auth: AuthenticatedAdminStatus, event: SalesEvent }): React.ReactNode
 {
     const [ event, setEvent ] = useState<SalesEvent>(props.event);
 

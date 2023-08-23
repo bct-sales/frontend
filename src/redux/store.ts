@@ -1,4 +1,4 @@
-import { Role } from '@/auth/types';
+import { AuthenticationData, Role } from '@/auth/types';
 import { EnhancedStore, Reducer, configureStore } from '@reduxjs/toolkit'
 import { Action } from './actions';
 import { TypedUseSelectorHook, useSelector as originalUseSelector, useDispatch as originalUseDispatch } from 'react-redux';
@@ -6,12 +6,7 @@ import { TypedUseSelectorHook, useSelector as originalUseSelector, useDispatch a
 
 interface State
 {
-    authentication?: {
-        accessToken: string,
-        role: Role,
-        userId: number,
-    };
-
+    authentication?: AuthenticationData;
 }
 
 const initialState: State = { };
@@ -19,6 +14,8 @@ const initialState: State = { };
 
 const reduce: Reducer<State, Action> = (state: State = initialState, action: Action): State =>
 {
+    console.log('Reducing', action);
+
     switch ( action.type )
     {
         case 'login':

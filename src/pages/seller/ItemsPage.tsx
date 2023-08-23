@@ -1,4 +1,4 @@
-import { AuthenticatedSeller } from "@/auth/types";
+import { AuthenticatedSellerStatus } from "@/auth/types";
 import { DeleteButton } from "@/components/DeleteButton";
 import { EditButton } from "@/components/EditButton";
 import RequestWrapper from "@/components/RequestWrapper";
@@ -14,7 +14,7 @@ import { AddItemState } from "./AddItemPage";
 
 interface ItemsPageProps
 {
-    auth: AuthenticatedSeller;
+    auth: AuthenticatedSellerStatus;
 }
 
 
@@ -49,7 +49,7 @@ export default function ItemsPage(props: ItemsPageProps): JSX.Element
 
 
 
-function ItemsPageWithEventId(props: { url: string, eventId: number, auth: AuthenticatedSeller }): JSX.Element
+function ItemsPageWithEventId(props: { url: string, eventId: number, auth: AuthenticatedSellerStatus }): JSX.Element
 {
     const { auth, url, eventId } = props;
     const { accessToken } = auth;
@@ -66,7 +66,7 @@ function ItemsPageWithEventId(props: { url: string, eventId: number, auth: Authe
     );
 }
 
-function ActualItemsPage(props: { auth: AuthenticatedSeller, items: Item[], addItemUrl: string, eventId: number }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[], addItemUrl: string, eventId: number }): JSX.Element
 {
     const { items, eventId } = props;
     const navigate = useNavigate();

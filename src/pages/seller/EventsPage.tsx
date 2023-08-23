@@ -1,4 +1,4 @@
-import { AuthenticatedSeller } from "@/auth/types";
+import { AuthenticatedSellerStatus } from "@/auth/types";
 import EventViewer from "@/components/EventViewer";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
@@ -13,7 +13,7 @@ import { ItemsPageState } from "./ItemsPage";
 
 interface EventsPageProps
 {
-    auth: AuthenticatedSeller;
+    auth: AuthenticatedSellerStatus;
 }
 
 
@@ -33,7 +33,7 @@ export default function EventsPage({ auth }: EventsPageProps): JSX.Element
 }
 
 
-function ActualEventsPage(props: { auth: AuthenticatedSeller, events: SalesEvent[] }): JSX.Element
+function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, events: SalesEvent[] }): JSX.Element
 {
     const navigate = useNavigate();
     const { events } = props;

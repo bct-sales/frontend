@@ -12,42 +12,112 @@ export interface AuthenticationData
     userId: number;
 }
 
-interface AuthenticatedBase extends AuthenticationData
-{
-    authenticated: true;
 
-    logout: () => void;
+export abstract class AuthenticationStatusBase
+{
+    public abstract isAuthenticated(): this is AuthenticatedStatus;
 }
 
-export interface AuthenticatedSeller extends AuthenticatedBase
+export abstract class AuthenticatedStatusBase extends AuthenticationStatusBase
 {
-    role: 'seller';
+    public constructor(private readonly data: AuthenticationData, public readonly logout: () => void)
+    {
+        super();
+    }
+
+    public override isAuthenticated(): this is AuthenticatedStatus
+    {
+        return true;
+    }
+
+    public abstract isAdmin(): this is AuthenticatedAdminStatus;
+
+    public abstract isSeller(): this is AuthenticatedSellerStatus;
+
+    public get emailAddress(): string
+    {
+        return this.data.emailAddress;
+    }
+
+    public get accessToken(): string
+    {
+        return this.data.accessToken;
+    }
+
+    public get userId(): number
+    {
+        return this.data.userId;
+    }
+
+    public get role(): string
+    {
+        return this.data.role;
+    }
 }
 
-export interface AuthenticatedAdmin extends AuthenticatedBase
+export class AuthenticatedSellerStatus extends AuthenticatedStatusBase
 {
-    role: 'admin';
+    public isAdmin(): this is AuthenticatedAdminStatus
+    {
+        return false;
+    }
+
+    public isSeller(): this is AuthenticatedSellerStatus
+    {
+        return true;
+    }
 }
 
-export type AuthenticatedUser = AuthenticatedSeller | AuthenticatedAdmin;
-
-export interface Unauthenticated
+export class AuthenticatedAdminStatus extends AuthenticatedStatusBase
 {
-    authenticated: false;
+    public isAdmin(): this is AuthenticatedAdminStatus
+    {
+        return true;
+    }
 
-    login: (data: AuthenticationData) => void;
+    public isSeller(): this is AuthenticatedSellerStatus
+    {
+        return false;
+    }
 }
 
-export type AuthenticationStatus = AuthenticatedUser | Unauthenticated;
+export type AuthenticationStatus = AuthenticatedStatus | UnauthenticatedStatus;
 
+export type AuthenticatedStatus = AuthenticatedSellerStatus | AuthenticatedAdminStatus;
 
-export function isSeller(auth: AuthenticatedUser): auth is AuthenticatedSeller
+export class UnauthenticatedStatus extends AuthenticationStatusBase
 {
-    return auth.role == 'seller';
+    public constructor(public readonly login: (data: AuthenticationData) => void)
+    {
+        super();
+    }
+
+    public override isAuthenticated(): this is AuthenticatedStatus
+    {
+        return false;
+    }
 }
 
 
-export function isAdmin(auth: AuthenticatedUser): auth is AuthenticatedAdmin
+export function createAuthenticationStatus(data: AuthenticationData | undefined, login: (data: AuthenticationData) => void, logout: () => void): AuthenticationStatus
 {
-    return auth.role == 'admin';
+    if ( data === undefined )
+    {
+        return new UnauthenticatedStatus(login);
+    }
+    else
+    {
+        switch ( data.role )
+        {
+        case 'admin':
+            return new AuthenticatedAdminStatus(data, logout);
+
+        case 'seller':
+            return new AuthenticatedSellerStatus(data, logout);
+
+        default:
+            console.error(`Unknown role`, data.role);
+            throw new Error('Unknown role');
+        }
+    }
 }

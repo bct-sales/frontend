@@ -1,7 +1,6 @@
 import { Button, Group, Header, MantineProvider, Title, Text, MediaQuery } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { AuthProvider } from './auth/provider';
 import { useAuth } from './auth/context';
 import RestRootProvider from './rest/RestRootProvider';
 
@@ -25,7 +24,7 @@ function AppHeader()
 
     function renderLogoutFunctionality(): JSX.Element
     {
-        if ( auth.authenticated )
+        if ( auth.isAuthenticated() )
         {
             return (
                 <Group position='right'>
@@ -44,7 +43,7 @@ function AppHeader()
 
     function onLogout()
     {
-        if ( auth.authenticated )
+        if ( auth.isAuthenticated() )
         {
             auth.logout();
             navigate('/login');
@@ -61,11 +60,9 @@ export default function App() {
     return (
         <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
             <RestRootProvider>
-                <AuthProvider>
-                    <AppHeader />
-                    <Notifications />
-                    <Outlet />
-                </AuthProvider>
+                <AppHeader />
+                <Notifications />
+                <Outlet />
             </RestRootProvider>
         </MantineProvider>
     );

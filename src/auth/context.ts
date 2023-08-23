@@ -1,20 +1,30 @@
-import React from 'react';
-
-
-import { AuthenticationStatus } from '@/auth/types';
-
-
-export const AuthContext = React.createContext<AuthenticationStatus | null>(null);
+import { AuthenticationData, AuthenticationStatus, createAuthenticationStatus } from '@/auth/types';
+import { LoginAction, LogoutAction } from '@/redux/actions';
+import { useDispatch, useSelector } from '@/redux/store';
 
 
 export function useAuth(): AuthenticationStatus
 {
-    const context = React.useContext(AuthContext);
+    const data = useSelector(state => state.authentication);
+    const dispatch = useDispatch();
 
-    if ( !context )
+    return createAuthenticationStatus(data, login, logout);
+
+
+    function login(authenticationData: AuthenticationData)
     {
-        throw new Error('Bug: no AuthContext set');
+        const action: LoginAction = {
+            type: 'login',
+            payload: authenticationData,
+        }
+
+        dispatch(action);
     }
 
-    return context;
+    function logout()
+    {
+        const action: LogoutAction = { type: 'logout', payload: undefined };
+
+        dispatch(action);
+    }
 }

@@ -1,4 +1,4 @@
-import { AuthenticatedSeller } from "@/auth/types";
+import { AuthenticatedSellerStatus } from "@/auth/types";
 import ItemEditor from "@/components/ItemEditor";
 import StateGuard from "@/components/StateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
@@ -10,7 +10,7 @@ import { useState } from "react";
 
 interface Props
 {
-    auth: AuthenticatedSeller;
+    auth: AuthenticatedSellerStatus;
 }
 
 export class AddItemState
@@ -37,7 +37,7 @@ export default function AddItemPage(props: Props): JSX.Element
 }
 
 
-function ActualAddItemPage(props: { auth: AuthenticatedSeller, url: string, salesEventId: number }): JSX.Element
+function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string, salesEventId: number }): JSX.Element
 {
     const [ description, setDescription ] = useState<string>("");
     const [ price, setPrice ] = useState<number>(0);

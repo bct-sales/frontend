@@ -30,7 +30,7 @@ export default function LoginPage()
     });
 
     React.useEffect(() => {
-        if ( auth.authenticated )
+        if ( auth.isAuthenticated() )
         {
             navigate('/events');
         }
@@ -82,7 +82,7 @@ export default function LoginPage()
                 const { userId, role, accessToken } = result.value;
                 const emailAddress = formFields.emailAddress;
 
-                if ( !auth.authenticated )
+                if ( !auth.isAuthenticated() )
                 {
                     auth.login({ emailAddress, role, accessToken,  userId });
 

@@ -1,4 +1,4 @@
-import { AuthenticatedAdmin } from "@/auth/types";
+import { AuthenticatedAdminStatus } from "@/auth/types";
 import EventEditor from "@/components/EventEditor";
 import StateGuard from "@/components/StateGuard";
 import { BCTDate } from "@/date";
@@ -20,7 +20,7 @@ export class AddEventState
 }
 
 
-export default function AddEventPage(props: { auth: AuthenticatedAdmin }): React.ReactNode
+export default function AddEventPage(props: { auth: AuthenticatedAdminStatus }): React.ReactNode
 {
     return (
         <StateGuard
@@ -36,7 +36,7 @@ export default function AddEventPage(props: { auth: AuthenticatedAdmin }): React
 }
 
 
-function ActualAddEventPage(props: { auth: AuthenticatedAdmin, url: string }): React.ReactNode
+function ActualAddEventPage(props: { auth: AuthenticatedAdminStatus, url: string }): React.ReactNode
 {
     const [ event, setEvent ] = useState<Omit<SalesEvent, 'id' | 'links'>>({
         date: BCTDate.today(),
@@ -44,6 +44,7 @@ function ActualAddEventPage(props: { auth: AuthenticatedAdmin, url: string }): R
         endTime: BCTTime.fromIsoString('18:00'),
         location: '',
         description: '',
+        available: true,
     });
 
     return (

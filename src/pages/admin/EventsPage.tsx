@@ -1,4 +1,4 @@
-import { AuthenticatedAdmin } from "@/auth/types";
+import { AuthenticatedAdminStatus } from "@/auth/types";
 import { EditButton } from "@/components/EditButton";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
@@ -24,7 +24,7 @@ const useStyles = createStyles(() => ({
 }));
 
 
-export default function EventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.Element
+export default function EventsPage({ auth }: { auth: AuthenticatedAdminStatus }): JSX.Element
 {
     const restRoot = useRestApiRoot();
     const accessToken = auth.accessToken;
@@ -40,7 +40,7 @@ export default function EventsPage({ auth }: { auth: AuthenticatedAdmin }): JSX.
 }
 
 
-function ActualEventsPage(props: { auth: AuthenticatedAdmin, addUrl: string, events: SalesEvent[] }): JSX.Element
+function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: string, events: SalesEvent[] }): JSX.Element
 {
     const navigate = useNavigate();
     const { classes } = useStyles();

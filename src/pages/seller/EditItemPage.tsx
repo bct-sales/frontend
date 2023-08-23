@@ -1,4 +1,4 @@
-import { AuthenticatedSeller } from "@/auth/types";
+import { AuthenticatedSellerStatus } from "@/auth/types";
 import ItemEditor from "@/components/ItemEditor";
 import StateGuard from "@/components/StateGuard";
 import { MoneyAmount } from "@/money-amount";
@@ -12,7 +12,7 @@ import { useState } from "react";
 
 interface Props
 {
-    auth: AuthenticatedSeller;
+    auth: AuthenticatedSellerStatus;
 }
 
 export default function EditItemPage(props: Props): JSX.Element
@@ -31,7 +31,7 @@ export default function EditItemPage(props: Props): JSX.Element
 }
 
 
-function ActualEditItemPage(props: { auth: AuthenticatedSeller, item: Item }): JSX.Element
+function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item }): JSX.Element
 {
     const [ description, setDescription ] = useState<string>(props.item.description);
     const [ price, setPrice ] = useState<number>(props.item.price.totalCents);

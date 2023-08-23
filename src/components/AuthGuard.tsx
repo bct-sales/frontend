@@ -1,5 +1,5 @@
 import { useAuth } from "@/auth/context";
-import { AuthenticatedAdmin, AuthenticatedSeller } from "@/auth/types";
+import { AuthenticatedAdminStatus, AuthenticatedSellerStatus } from "@/auth/types";
 
 
 interface BaseProps
@@ -9,14 +9,14 @@ interface BaseProps
 
 interface SellerProps extends BaseProps
 {
-    child: (auth: AuthenticatedSeller) => JSX.Element;
+    child: (auth: AuthenticatedSellerStatus) => JSX.Element;
 
     role: 'seller';
 }
 
 interface AdminProps extends BaseProps
 {
-    child: (auth: AuthenticatedAdmin) => JSX.Element;
+    child: (auth: AuthenticatedAdminStatus) => JSX.Element;
 
     role: 'admin';
 }
@@ -28,7 +28,7 @@ export default function AuthGuard(props: Props): JSX.Element
 {
     const auth = useAuth();
 
-    if ( auth.authenticated )
+    if ( auth.isAuthenticated() )
     {
         if ( props.role === 'seller' && auth.role === 'seller' )
         {

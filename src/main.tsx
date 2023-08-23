@@ -6,7 +6,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import * as pages from '@/pages';
 import AuthGuard from './components/AuthGuard.tsx';
 import { Provider } from 'react-redux';
-import { store } from './redux/store.ts';
+import { persistor, store } from './redux/store.ts';
+import { PersistGate } from 'redux-persist/integration/react';
 
 
 const root = document.getElementById('root');
@@ -65,7 +66,9 @@ if ( root )
     ReactDOM.createRoot(root).render(
         <React.StrictMode>
             <Provider store={store}>
-                <RouterProvider router={router} />
+                <PersistGate persistor={persistor} loading={"Loading!"}>
+                    <RouterProvider router={router} />
+                </PersistGate>
             </Provider>
         </React.StrictMode>,
     );

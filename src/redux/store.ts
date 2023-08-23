@@ -1,8 +1,20 @@
-import { AuthenticationData, Role } from '@/auth/types';
-import { EnhancedStore, Reducer, configureStore } from '@reduxjs/toolkit'
+import { AuthenticationData } from '@/auth/types';
+import { Reducer, configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch as originalUseDispatch, useSelector as originalUseSelector } from 'react-redux';
+import
+    {
+        FLUSH,
+        PAUSE,
+        PERSIST,
+        PURGE,
+        Persistor,
+        REGISTER,
+        REHYDRATE,
+        persistStore
+    } from 'redux-persist';
+import persistReducer from 'redux-persist/es/persistReducer';
+import storage from 'redux-persist/lib/storage';
 import { Action } from './actions';
-import { TypedUseSelectorHook, useSelector as originalUseSelector, useDispatch as originalUseDispatch } from 'react-redux';
-
 
 interface State
 {
@@ -14,8 +26,6 @@ const initialState: State = { };
 
 const reduce: Reducer<State, Action> = (state: State = initialState, action: Action): State =>
 {
-    console.log('Reducing', action);
-
     switch ( action.type )
     {
         case 'login':
@@ -31,8 +41,24 @@ const reduce: Reducer<State, Action> = (state: State = initialState, action: Act
     }
 };
 
+const persistConfig = {
+    key: 'root',
+    storage,
+};
 
-export const store: EnhancedStore<State, Action> = configureStore({ reducer: reduce });
+const persistedReducer = persistReducer(persistConfig, reduce);
+
+export const store = configureStore({
+    reducer: persistedReducer,
+    middleware: getDefaultMiddleware => getDefaultMiddleware({
+        serializableCheck: {
+            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+        },
+    }),
+});
+
+
+export const persistor: Persistor = persistStore(store);
 
 export const useSelector: TypedUseSelectorHook<State> = originalUseSelector;
 

@@ -71,8 +71,6 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Edit
             priceInCents: price
         };
 
-        console.log(updatedItem);
-
         updateItem(props.auth.accessToken, props.item.links.edit, updatedItem).then(onSuccess).catch(onError);
     }
 

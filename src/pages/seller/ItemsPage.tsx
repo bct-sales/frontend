@@ -147,7 +147,7 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
         if ( !showDelete )
         {
             return (
-                <EditButton onClick={onEdit} />
+                <EditButton onClick={onEdit} tooltip="Edit item" />
             );
         }
         else

@@ -51,14 +51,14 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
         <>
             <Paper mx='auto' p="md" maw={1000}>
                 <Group position="apart">
-                <Title>
-                    Upcoming Sale Events
-                </Title>
-                <Tooltip label="New event">
-                    <ActionIcon w={50} h={50} onClick={onAddEvent}>
-                        <IconCirclePlus size={100} />
-                    </ActionIcon>
-                </Tooltip>
+                    <Title>
+                        Upcoming Sale Events
+                    </Title>
+                    <Tooltip label="New event">
+                        <ActionIcon w={50} h={50} onClick={onAddEvent}>
+                            <IconCirclePlus size={100} />
+                        </ActionIcon>
+                    </Tooltip>
                 </Group>
                 <Box my={50}>
                     <Stack>

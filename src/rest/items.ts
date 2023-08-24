@@ -45,16 +45,15 @@ export async function listItems(url: string, accessToken: string): Promise<Resul
 }
 
 
-export async function updateItem(accessToken: string, item: Item): Promise<void>
+export async function updateItem(accessToken: string, url: string, item: { description?: string, priceInCents?: number, recipientId?: number, salesEventId?: number }): Promise<void>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };
 
-    const url = item.links.edit;
     const data = {
         description: item.description,
-        price_in_cents: item.price.totalCents,
+        price_in_cents: item.priceInCents,
         recipient_id: item.recipientId,
         sales_event_id: item.salesEventId,
     };

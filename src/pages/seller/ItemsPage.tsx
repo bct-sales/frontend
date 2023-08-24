@@ -1,8 +1,8 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import { DeleteButton } from "@/components/DeleteButton";
 import { EditButton } from "@/components/EditButton";
+import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
-import StateGuard from "@/components/StateGuard";
 import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
@@ -10,33 +10,28 @@ import { Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title } f
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
+import { z } from "zod";
+import { EditItemState } from "./EditItemPage";
 
 
-interface ItemsPageProps
-{
-    auth: AuthenticatedSellerStatus;
-}
+const ItemsPageState = z.object({
+    url: z.string(),
+    eventId: z.number().nonnegative(),
+});
+
+export type ItemsPageState = z.infer<typeof ItemsPageState>;
 
 
-export class ItemsPageState
-{
-    public constructor(public readonly url: string, public readonly eventId: number)
-    {
-        // NOP
-    }
-}
-
-
-export default function ItemsPage(props: ItemsPageProps): JSX.Element
+export default function ItemsPage(props: { auth: AuthenticatedSellerStatus }): JSX.Element
 {
     return (
-        <StateGuard predicate={predicate} child={createPage} />
+        <PersistentStateGuard predicate={predicate} child={createPage} cacheKey="items-page" />
     );
 
 
     function predicate(state: unknown): state is ItemsPageState
     {
-        return state instanceof ItemsPageState;
+        return ItemsPageState.safeParse(state).success;
     }
 
     function createPage(state: ItemsPageState): JSX.Element
@@ -46,7 +41,6 @@ export default function ItemsPage(props: ItemsPageProps): JSX.Element
         );
     }
 }
-
 
 
 function ItemsPageWithEventId(props: { url: string, eventId: number, auth: AuthenticatedSellerStatus }): JSX.Element
@@ -175,7 +169,19 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
 
     function onEdit()
     {
-        navigate(`/edit-item`, { state: item });
+        const state: EditItemState = {
+            itemId: item.id,
+            description: item.description,
+            priceInCents: item.price.totalCents,
+            recipientId: item.recipientId,
+            salesEventId: item.salesEventId,
+            ownerId: item.ownerId,
+            links: {
+                edit: item.links.edit,
+            }
+        };
+
+        navigate(`/edit-item`, { state });
     }
 
     function onDelete()

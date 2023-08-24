@@ -16,12 +16,17 @@ import persistReducer from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
 import { Action } from './actions';
 
+
 interface State
 {
     authentication?: AuthenticationData;
+
+    cache: Record<string, unknown>;
 }
 
-const initialState: State = { };
+const initialState: State = {
+    cache: {},
+};
 
 
 const reduce: Reducer<State, Action> = (state: State = initialState, action: Action): State =>
@@ -30,11 +35,22 @@ const reduce: Reducer<State, Action> = (state: State = initialState, action: Act
     {
         case 'login':
             return {
+                ...initialState,
                 authentication: action.payload
             };
 
         case 'logout':
-            return { };
+            return initialState;
+
+        case 'cache/update':
+            console.log(action);
+            return {
+                ...state,
+                cache: {
+                    ...state.cache,
+                    [action.payload.key]: action.payload.value,
+                }
+            }
 
         default:
             return state;

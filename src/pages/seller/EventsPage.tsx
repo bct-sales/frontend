@@ -69,7 +69,10 @@ function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, events: Sale
 
     function goToItemsPage(event: SalesEvent)
     {
-        const state = new ItemsPageState(event.links.items, event.id);
+        const state: ItemsPageState = {
+            url: event.links.items,
+            eventId: event.id
+        };
 
         navigate(`/events/${event.id}/items`, { state });
     }

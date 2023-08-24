@@ -1,40 +1,50 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import ItemEditor from "@/components/ItemEditor";
-import StateGuard from "@/components/StateGuard";
-import { MoneyAmount } from "@/money-amount";
+import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { updateItem } from "@/rest/items";
-import { Item } from "@/rest/models";
 import { Button, Card, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
+import { z } from "zod";
 
 
-interface Props
-{
-    auth: AuthenticatedSellerStatus;
-}
+const EditItemState = z.object({
+    itemId: z.number().nonnegative(),
+    description: z.string(),
+    priceInCents: z.number().nonnegative(),
+    recipientId: z.number().nonnegative(),
+    salesEventId: z.number().nonnegative(),
+    ownerId: z.number().nonnegative(),
+    links: z.object({
+        edit: z.string(),
+    })
+});
 
-export default function EditItemPage(props: Props): JSX.Element
+export type EditItemState = z.infer<typeof EditItemState>;
+
+
+export default function EditItemPage(props: { auth: AuthenticatedSellerStatus }): JSX.Element
 {
     return (
-        <StateGuard<Item>
+        <PersistentStateGuard
+            cacheKey="edit-item-page"
             child={item => <ActualEditItemPage auth={props.auth} item={item} />}
             predicate={predicate} />
-    )
+    );
 
 
-    function predicate(state: unknown): state is Item
+    function predicate(state: unknown): state is EditItemState
     {
-        return state instanceof Item;
+        return EditItemState.safeParse(state).success;
     }
 }
 
 
-function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item }): JSX.Element
+function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: EditItemState }): JSX.Element
 {
     const [ description, setDescription ] = useState<string>(props.item.description);
-    const [ price, setPrice ] = useState<number>(props.item.price.totalCents);
+    const [ price, setPrice ] = useState<number>(props.item.priceInCents);
 
     return (
         <>
@@ -55,9 +65,15 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
 
     function onUpdateItem()
     {
-        const updatedItem = props.item.updateDescription(description).updatePrice(new MoneyAmount(price));
+        const updatedItem = {
+            ...props.item,
+            description: description,
+            priceInCents: price
+        };
 
-        updateItem(props.auth.accessToken, updatedItem).then(onSuccess).catch(onError);
+        console.log(updatedItem);
+
+        updateItem(props.auth.accessToken, props.item.links.edit, updatedItem).then(onSuccess).catch(onError);
     }
 
     function onSuccess()

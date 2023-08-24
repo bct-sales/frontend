@@ -20,44 +20,44 @@ if ( root )
             element: <App />,
             children: [
                 {
-                    path: "register",
+                    path: "/register",
                     element: <pages.RegisterPage />,
                 },
                 {
-                    path: "login",
+                    path: "/login",
                     element: <pages.LoginPage />
                 },
                 {
-                    path: "events/:eventId/items",
+                    path: "/events/:eventId/items",
                     element: <AuthGuard role='seller' child={auth => <pages.seller.ItemsPage auth={auth} />} />
                 },
                 {
-                    path: "events",
+                    path: "/events",
                     element: <AuthGuard role='seller' child={auth => <pages.seller.EventsPage auth={auth} />} />,
                 },
                 {
-                    path: "edit-item",
+                    path: "/edit-item",
                     element: <AuthGuard role='seller' child={auth => <pages.seller.EditItemPage auth={auth} />} />,
                 },
                 {
-                    path: "add-item",
+                    path: "/add-item",
                     element: <AuthGuard role='seller' child={auth => <pages.seller.AddItemPage auth={auth} />} />,
                 },
                 {
-                    path: "admin/events/:eventId",
+                    path: "/admin/events/:eventId",
                     element:<AuthGuard role='admin' child={auth => <pages.admin.EditEventPage auth={auth} />} />,
                 },
                 {
-                    path: "admin/events",
+                    path: "/admin/events",
                     element:<AuthGuard role='admin' child={auth => <pages.admin.EventsPage auth={auth} />} />,
                 },
                 {
-                    path: "admin/add-event",
+                    path: "/admin/add-event",
                     element:<AuthGuard role='admin' child={auth => <pages.admin.AddEventPage auth={auth} />} />,
                 },
                 {
                     path: "/",
-                    element: <pages.LoginPage />,
+                    element: <pages.EntryPage />,
                 },
             ]
         },

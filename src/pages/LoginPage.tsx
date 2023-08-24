@@ -32,7 +32,7 @@ export default function LoginPage()
     React.useEffect(() => {
         if ( auth.isAuthenticated() )
         {
-            navigate('/events');
+            navigate('/');
         }
     });
 
@@ -86,7 +86,7 @@ export default function LoginPage()
                 {
                     auth.login({ emailAddress, role, accessToken,  userId });
 
-                    navigateToMainPage(role);
+                    navigate("/");
                 }
                 else
                 {
@@ -101,17 +101,5 @@ export default function LoginPage()
                 openMessageBox();
             }
         })();
-    }
-
-    function navigateToMainPage(role: Role)
-    {
-        if ( role === 'seller' )
-        {
-            navigate('/events');
-        }
-        else
-        {
-            navigate('/admin/events');
-        }
     }
 }

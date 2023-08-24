@@ -49,7 +49,7 @@ export abstract class AuthenticatedStatusBase extends AuthenticationStatusBase
         return this.data.userId;
     }
 
-    public get role(): string
+    public get role(): Role
     {
         return this.data.role;
     }

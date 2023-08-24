@@ -1,5 +1,5 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
-import ItemEditor from "@/components/ItemEditor";
+import ItemEditor, { ItemEditorData } from "@/components/ItemEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { updateItem } from "@/rest/items";
@@ -43,13 +43,12 @@ export default function EditItemPage(props: { auth: AuthenticatedSellerStatus })
 
 function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: EditItemState }): JSX.Element
 {
-    const [ description, setDescription ] = useState<string>(props.item.description);
-    const [ price, setPrice ] = useState<number>(props.item.priceInCents);
+    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: props.item.description, priceInCents: props.item.priceInCents });
 
     return (
         <>
             <Card maw={500} mx='auto' m='xl'>
-                <ItemEditor description={description} priceInCents={price} onChange={onChange} />
+                <ItemEditor data={itemData} onChange={onChange} />
                 <Group position="right" mt='xl'>
                     <Button onClick={onUpdateItem}>
                         Update
@@ -67,8 +66,7 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Edit
     {
         const updatedItem = {
             ...props.item,
-            description: description,
-            priceInCents: price
+            ...itemData,
         };
 
         updateItem(props.auth.accessToken, props.item.links.edit, updatedItem).then(onSuccess).catch(onError);
@@ -100,9 +98,8 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Edit
         history.back();
     }
 
-    function onChange(description: string, priceInCents: number)
+    function onChange(data: ItemEditorData)
     {
-        setDescription(description);
-        setPrice(priceInCents);
+        setItemData(data);
     }
 }

@@ -3,17 +3,24 @@ import { NumberInput, TextInput } from "@mantine/core";
 import { ChangeEvent } from "react";
 
 
-interface Props
+export interface ItemEditorData
 {
     description: string;
-
     priceInCents: number;
-
-    onChange: (description: string, priceInCents: number) => void;
 }
 
-export default function ItemEditor({ description, priceInCents, onChange }: Props): JSX.Element
+interface Props
 {
+    data: ItemEditorData;
+
+    onChange: (data: ItemEditorData) => void;
+}
+
+export default function ItemEditor({ data, onChange }: Props): JSX.Element
+{
+    console.log(data);
+    const { description, priceInCents } = data;
+
     return (
         <>
             <TextInput value={description} label='Description' placeholder="Description" onChange={onChangeDescription} />
@@ -44,13 +51,13 @@ export default function ItemEditor({ description, priceInCents, onChange }: Prop
             value = 0;
         }
 
-        onChange(description, value * 100);
+        onChange({...data, priceInCents: value * 100});
     }
 
     function onChangeDescription(event: ChangeEvent<HTMLInputElement>)
     {
         const description = event.target.value;
 
-        onChange(description, priceInCents);
+        onChange({...data, description});
     }
 }

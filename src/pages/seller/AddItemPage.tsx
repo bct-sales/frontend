@@ -1,5 +1,5 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
-import ItemEditor from "@/components/ItemEditor";
+import ItemEditor, { ItemEditorData } from "@/components/ItemEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { AddItemPayload, addItem } from "@/rest/items";
@@ -41,13 +41,12 @@ export default function AddItemPage(props: Props): JSX.Element
 
 function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string, salesEventId: number }): JSX.Element
 {
-    const [ description, setDescription ] = useState<string>("");
-    const [ price, setPrice ] = useState<number>(0);
+    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', priceInCents: 0 });
 
     return (
         <>
             <Card maw={500} mx='auto' m='xl'>
-                <ItemEditor description={description} priceInCents={price} onChange={onChange} />
+                <ItemEditor data={itemData} onChange={onChange} />
                 <Group position="right" mt='xl'>
                     <Button onClick={onAddItem}>
                         Add
@@ -64,8 +63,8 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
     function onAddItem()
     {
         const data: AddItemPayload = {
-            description: description,
-            price_in_cents: price,
+            description: itemData.description,
+            price_in_cents: itemData.priceInCents,
             sales_event_id: props.salesEventId,
             recipient_id: props.auth.userId,
         };
@@ -99,9 +98,8 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
         history.back();
     }
 
-    function onChange(description: string, priceInCents: number)
+    function onChange(data: ItemEditorData)
     {
-        setDescription(description);
-        setPrice(priceInCents);
+        setItemData(data);
     }
 }

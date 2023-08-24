@@ -60,7 +60,7 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
                 </Group>
                 <Box my={50}>
                     <Stack>
-                        <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
+                        <Flex direction="row" justify="flex-start" align="center" gap="md" wrap="wrap">
                             {orderedEvents.map(renderEvent)}
                         </Flex>
                     </Stack>

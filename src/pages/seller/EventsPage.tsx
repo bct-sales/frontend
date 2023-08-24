@@ -46,7 +46,7 @@ function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, events: Sale
                     Upcoming Sale Events
                 </Title>
                 <Box my={50}>
-                    <Flex direction="row" justify="center" align="center" gap="md" wrap="wrap">
+                    <Flex direction="row" justify="flex-start" align="center" gap="md" wrap="wrap">
                         {orderedEvents.map(renderEvent)}
                     </Flex>
                 </Box>

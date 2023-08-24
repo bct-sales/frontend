@@ -1,6 +1,6 @@
 import { AuthenticatedAdminStatus } from "@/auth/types";
 import EventEditor, { EventEditorData } from "@/components/EventEditor";
-import StateGuard from "@/components/StateGuard";
+import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { BCTDate } from "@/date";
 import { updateEvent } from "@/rest/events";
 import { RawSalesEvent } from "@/rest/raw-models";
@@ -31,7 +31,8 @@ export type EditEventState = z.infer<typeof EditEventState>;
 export default function EditEventPage(props: { auth: AuthenticatedAdminStatus }): React.ReactNode
 {
     return (
-        <StateGuard
+        <PersistentStateGuard
+            cacheKey="admin/edit-even"
             child={state => <ActualEditEventPage auth={props.auth} event={state} />}
             predicate={predicate} />
     );

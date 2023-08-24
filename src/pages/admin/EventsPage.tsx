@@ -4,7 +4,7 @@ import EventViewer from "@/components/EventViewer";
 import RequestWrapper from "@/components/RequestWrapper";
 import { BCTDate } from "@/date";
 import { listEvents } from "@/rest/events";
-import { SalesEvent } from "@/rest/raw-models";
+import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { useRestApiRoot } from "@/rest/root";
 import { ActionIcon, Box, Card, Flex, Group, Paper, Stack, Text, Title, Tooltip, createStyles } from "@mantine/core";

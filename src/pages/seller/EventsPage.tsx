@@ -9,7 +9,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
 import { BCTDate } from "@/date";
-import { SalesEvent } from "@/rest/raw-models";
+import { SalesEvent } from "@/rest/models";
 
 
 interface EventsPageProps

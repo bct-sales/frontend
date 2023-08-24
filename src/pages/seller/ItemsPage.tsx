@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
 import { z } from "zod";
 import { EditItemState } from "./EditItemPage";
-import { Item } from "@/rest/raw-models";
+import { Item } from "@/rest/models";
 import { MoneyAmount } from "@/money-amount";
 
 

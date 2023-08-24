@@ -2,7 +2,7 @@ import { AuthenticatedAdminStatus } from "@/auth/types";
 import EventEditor, { EventEditorData } from "@/components/EventEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { updateEvent } from "@/rest/events";
-import { SalesEvent } from "@/rest/raw-models";
+import { SalesEvent } from "@/rest/models";
 import { Button, Group, Stack } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";

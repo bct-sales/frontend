@@ -3,7 +3,7 @@ import EventEditor from "@/components/EventEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { BCTDate } from "@/date";
 import { addEvent } from "@/rest/events";
-import { SalesEventCore } from "@/rest/raw-models";
+import { SalesEventCore } from "@/rest/models";
 import { BCTTime } from "@/time";
 import { ActionIcon, Group, Stack, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";

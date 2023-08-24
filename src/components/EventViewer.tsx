@@ -1,5 +1,5 @@
 import { BCTDate } from "@/date";
-import { SalesEvent } from "@/rest/raw-models";
+import { SalesEvent } from "@/rest/models";
 import { BCTTime } from "@/time";
 import { Text, Title } from "@mantine/core";
 

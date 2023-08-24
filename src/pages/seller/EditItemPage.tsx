@@ -3,7 +3,7 @@ import ItemEditor from "@/components/ItemEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { updateItem } from "@/rest/items";
-import { Item } from "@/rest/raw-models";
+import { Item } from "@/rest/models";
 import { Button, Card, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";

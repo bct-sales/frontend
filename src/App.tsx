@@ -1,5 +1,6 @@
-import { Button, Group, Header, MantineProvider, Title, Text, MediaQuery } from '@mantine/core';
+import { ActionIcon, Group, Header, MantineProvider, MediaQuery, Text, Title, Tooltip } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { IconLogout } from '@tabler/icons-react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from './auth/context';
 import RestRootProvider from './rest/RestRootProvider';
@@ -31,7 +32,11 @@ function AppHeader()
                     <Text>
                         Logged in as {auth.emailAddress} ({auth.role})
                     </Text>
-                    <Button onClick={onLogout}>Logout</Button>
+                    <Tooltip label="Logout">
+                        <ActionIcon onClick={onLogout}>
+                            <IconLogout />
+                        </ActionIcon>
+                    </Tooltip>
                 </Group>
             );
         }

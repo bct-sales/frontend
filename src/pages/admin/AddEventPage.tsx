@@ -1,6 +1,6 @@
 import { AuthenticatedAdminStatus } from "@/auth/types";
 import EventEditor from "@/components/EventEditor";
-import StateGuard from "@/components/StateGuard";
+import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { BCTDate } from "@/date";
 import { addEvent } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
@@ -9,21 +9,21 @@ import { ActionIcon, Group, Stack, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconCirclePlus, IconCircleX } from "@tabler/icons-react";
 import { useState } from "react";
+import { z } from "zod";
 
 
-export class AddEventState
-{
-    public constructor(public readonly url: string)
-    {
-        // NOP
-    }
-}
+const AddEventState = z.object({
+    url: z.string(),
+});
+
+export type AddEventState = z.infer<typeof AddEventState>;
 
 
 export default function AddEventPage(props: { auth: AuthenticatedAdminStatus }): React.ReactNode
 {
     return (
-        <StateGuard
+        <PersistentStateGuard
+            cacheKey="admin/add-event"
             child={state => <ActualAddEventPage auth={props.auth} url={state.url} />}
             predicate={predicate} />
     );
@@ -31,7 +31,7 @@ export default function AddEventPage(props: { auth: AuthenticatedAdminStatus }):
 
     function predicate(state: unknown) : state is AddEventState
     {
-        return state instanceof AddEventState;
+        return AddEventState.safeParse(state).success;
     }
 }
 

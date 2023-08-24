@@ -109,7 +109,9 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
 
     function onAddEvent()
     {
-        const state = new AddEventState(props.addUrl);
+        const state: AddEventState = {
+            url: props.addUrl,
+        };
 
         navigate('/admin/add-event', { state });
     }

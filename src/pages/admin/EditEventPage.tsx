@@ -1,10 +1,8 @@
 import { AuthenticatedAdminStatus } from "@/auth/types";
 import EventEditor, { EventEditorData } from "@/components/EventEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
-import { BCTDate } from "@/date";
 import { updateEvent } from "@/rest/events";
 import { SalesEvent } from "@/rest/raw-models";
-import { BCTTime } from "@/time";
 import { Button, Group, Stack } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -32,9 +30,9 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdminStatus, event: Sal
     const [ event, setEvent ] = useState<SalesEvent>(props.event);
 
     const eventEditorData: EventEditorData = {
-        date: BCTDate.fromIsoString(event.date),
-        startTime: BCTTime.fromIsoString(event.start_time),
-        endTime: BCTTime.fromIsoString(event.end_time),
+        date: event.date,
+        start_time: event.start_time,
+        end_time: event.end_time,
         location: event.location,
         description: event.description,
         available: event.available,
@@ -60,9 +58,9 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdminStatus, event: Sal
     {
         setEvent({
             ...props.event,
-            date: event.date.toIsoString(),
-            start_time: event.startTime.toIsoString(),
-            end_time: event.endTime.toIsoString(),
+            date: event.date,
+            start_time: event.start_time,
+            end_time: event.end_time,
             location: event.location,
             description: event.description,
             available: event.available,

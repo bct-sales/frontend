@@ -2,7 +2,7 @@ import { AuthenticatedSellerStatus } from "@/auth/types";
 import ItemEditor, { ItemEditorData } from "@/components/ItemEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
-import { AddItemPayload, addItem } from "@/rest/items";
+import { AddItemData, addItem } from "@/rest/items";
 import { Button, Card, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -41,7 +41,7 @@ export default function AddItemPage(props: Props): JSX.Element
 
 function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string, salesEventId: number }): JSX.Element
 {
-    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', priceInCents: 0 });
+    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', price_in_cents: 0 });
 
     return (
         <>
@@ -62,9 +62,9 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
 
     function onAddItem()
     {
-        const data: AddItemPayload = {
+        const data: AddItemData = {
             description: itemData.description,
-            price_in_cents: itemData.priceInCents,
+            price_in_cents: itemData.price_in_cents,
             sales_event_id: props.salesEventId,
             recipient_id: props.auth.userId,
         };

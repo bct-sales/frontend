@@ -1,9 +1,9 @@
 import { AuthenticatedAdminStatus } from "@/auth/types";
-import EventEditor, { EventEditorData } from "@/components/EventEditor";
+import EventEditor from "@/components/EventEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { BCTDate } from "@/date";
 import { addEvent } from "@/rest/events";
-import { RawSalesEvent } from "@/rest/raw-models";
+import { SalesEventCore } from "@/rest/raw-models";
 import { BCTTime } from "@/time";
 import { ActionIcon, Group, Stack, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -38,10 +38,10 @@ export default function AddEventPage(props: { auth: AuthenticatedAdminStatus }):
 
 function ActualAddEventPage(props: { auth: AuthenticatedAdminStatus, url: string }): React.ReactNode
 {
-    const [ event, setEvent ] = useState<EventEditorData>({
-        date: BCTDate.today(),
-        startTime: BCTTime.fromIsoString('09:00'),
-        endTime: BCTTime.fromIsoString('18:00'),
+    const [ event, setEvent ] = useState<SalesEventCore>({
+        date: BCTDate.today().toIsoString(),
+        start_time: BCTTime.fromIsoString('09:00').toIsoString(),
+        end_time: BCTTime.fromIsoString('18:00').toIsoString(),
         location: '',
         description: '',
         available: true,
@@ -78,16 +78,7 @@ function ActualAddEventPage(props: { auth: AuthenticatedAdminStatus, url: string
 
     function add()
     {
-        const data: Omit<RawSalesEvent, 'sales_event_id' | 'links'> = {
-            available: event.available,
-            date: event.date.toIsoString(),
-            start_time: event.startTime.toIsoString(),
-            end_time: event.endTime.toIsoString(),
-            description: event.description,
-            location: event.location,
-        }
-
-        addEvent(props.auth.accessToken, props.url, data).then(() => {
+        addEvent(props.auth.accessToken, props.url, event).then(() => {
             notifications.show({ message: 'Event successfully updated' });
             history.back();
         }).catch(error => {

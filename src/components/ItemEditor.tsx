@@ -6,20 +6,19 @@ import { ChangeEvent } from "react";
 export interface ItemEditorData
 {
     description: string;
-    priceInCents: number;
+    price_in_cents: number;
 }
 
-interface Props
+interface Props<T extends ItemEditorData>
 {
-    data: ItemEditorData;
+    data: T;
 
-    onChange: (data: ItemEditorData) => void;
+    onChange: (data: T) => void;
 }
 
-export default function ItemEditor({ data, onChange }: Props): JSX.Element
+export default function ItemEditor<T extends ItemEditorData>({ data, onChange }: Props<T>): JSX.Element
 {
-    console.log(data);
-    const { description, priceInCents } = data;
+    const { description, price_in_cents: priceInCents } = data;
 
     return (
         <>
@@ -51,7 +50,7 @@ export default function ItemEditor({ data, onChange }: Props): JSX.Element
             value = 0;
         }
 
-        onChange({...data, priceInCents: value * 100});
+        onChange({...data, price_in_cents: value * 100});
     }
 
     function onChangeDescription(event: ChangeEvent<HTMLInputElement>)

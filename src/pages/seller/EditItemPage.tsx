@@ -1,8 +1,9 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
-import ItemEditor, { ItemEditorData } from "@/components/ItemEditor";
+import ItemEditor from "@/components/ItemEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { updateItem } from "@/rest/items";
+import { Item } from "@/rest/raw-models";
 import { Button, Card, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -10,14 +11,14 @@ import { z } from "zod";
 
 
 const EditItemState = z.object({
-    itemId: z.number().nonnegative(),
+    item_id: z.number().nonnegative(),
     description: z.string(),
-    priceInCents: z.number().nonnegative(),
-    recipientId: z.number().nonnegative(),
-    salesEventId: z.number().nonnegative(),
-    ownerId: z.number().nonnegative(),
+    price_in_cents: z.number().nonnegative(),
+    recipient_id: z.number().nonnegative(),
+    sales_event_id: z.number().nonnegative(),
+    owner_id: z.number().nonnegative(),
     links: z.object({
-        edit: z.string(),
+        edit: z.string().url(),
     })
 });
 
@@ -41,14 +42,14 @@ export default function EditItemPage(props: { auth: AuthenticatedSellerStatus })
 }
 
 
-function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: EditItemState }): JSX.Element
+function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item }): JSX.Element
 {
-    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: props.item.description, priceInCents: props.item.priceInCents });
+    const [ item, setItem ] = useState<Item>(props.item);
 
     return (
         <>
             <Card maw={500} mx='auto' m='xl'>
-                <ItemEditor data={itemData} onChange={onChange} />
+                <ItemEditor data={item} onChange={onChange} />
                 <Group position="right" mt='xl'>
                     <Button onClick={onUpdateItem}>
                         Update
@@ -66,7 +67,7 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Edit
     {
         const updatedItem = {
             ...props.item,
-            ...itemData,
+            ...item,
         };
 
         updateItem(props.auth.accessToken, props.item.links.edit, updatedItem).then(onSuccess).catch(onError);
@@ -98,8 +99,8 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Edit
         history.back();
     }
 
-    function onChange(data: ItemEditorData)
+    function onChange(data: Item)
     {
-        setItemData(data);
+        setItem(data);
     }
 }

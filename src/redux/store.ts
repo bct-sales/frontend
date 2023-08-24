@@ -43,7 +43,6 @@ const reduce: Reducer<State, Action> = (state: State = initialState, action: Act
             return initialState;
 
         case 'cache/update':
-            console.log(action);
             return {
                 ...state,
                 cache: {

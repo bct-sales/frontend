@@ -4,7 +4,6 @@ import { EditButton } from "@/components/EditButton";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
-import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title } from "@mantine/core";
 import { ChangeEvent, useCallback, useState } from "react";
@@ -12,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
 import { z } from "zod";
 import { EditItemState } from "./EditItemPage";
+import { Item } from "@/rest/raw-models";
+import { MoneyAmount } from "@/money-amount";
 
 
 const ItemsPageState = z.object({
@@ -54,7 +55,7 @@ function ItemsPageWithEventId(props: { url: string, eventId: number, auth: Authe
         <>
             <RequestWrapper
                 requestResult={response}
-                success={response => <ActualItemsPage auth={auth} items={response.items} addItemUrl={response.addItemUrl} eventId={eventId} />}
+                success={response => <ActualItemsPage auth={auth} items={response.items} addItemUrl={response.links.add} eventId={eventId} />}
             />
         </>
     );
@@ -85,7 +86,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                 <Box my={50}>
                     <Stack>
                         <Button onClick={onAddItem}>Add Item</Button>
-                        {items.map(item => <ItemViewer key={item.id} item={item} showDelete={showDelete} />)}
+                        {items.map(item => <ItemViewer key={item.item_id} item={item} showDelete={showDelete} />)}
                     </Stack>
                 </Box>
             </Paper>
@@ -120,7 +121,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }): JSX.Element
 {
     const navigate = useNavigate();
-    const { price, description } = item;
+    const { price_in_cents, description } = item;
 
     return (
         <>
@@ -131,7 +132,7 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
                     </Text>
                     <Group>
                         <Text>
-                            {price.format()}
+                            {new MoneyAmount(price_in_cents).format()}
                         </Text>
                         {renderEditButton()}
                         {renderDeleteButton()}
@@ -172,18 +173,7 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
 
     function onEdit()
     {
-        const state: EditItemState = {
-            itemId: item.id,
-            description: item.description,
-            priceInCents: item.price.totalCents,
-            recipientId: item.recipientId,
-            salesEventId: item.salesEventId,
-            ownerId: item.ownerId,
-            links: {
-                edit: item.links.edit,
-            }
-        };
-
+        const state: EditItemState = item;
         navigate(`/edit-item`, { state });
     }
 

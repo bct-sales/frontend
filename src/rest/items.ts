@@ -1,16 +1,27 @@
 import { Result, failure, success } from '@/result';
 import axios from 'axios';
 import { extractDetailFromException } from './error-handling';
-import { Item } from './models';
-import { RawItems } from './raw-models';
+import { z } from 'zod';
 
 
-interface ListItemsResult
-{
-    items: Item[];
+const ListItemsResult = z.object({
+    items: z.array(z.object({
+        item_id: z.number().nonnegative(),
+        description: z.string(),
+        price_in_cents: z.number().nonnegative(),
+        recipient_id: z.number().nonnegative(),
+        sales_event_id: z.number().nonnegative(),
+        owner_id: z.number().nonnegative(),
+        links: z.object({
+            edit: z.string(),
+        })
+    })),
+    links: z.object({
+        add: z.string().url(),
+    })
+});
 
-    addItemUrl: string;
-}
+export type ListItemsResult = z.infer<typeof ListItemsResult>;
 
 export async function listItems(url: string, accessToken: string): Promise<Result<ListItemsResult, string>>
 {
@@ -21,11 +32,9 @@ export async function listItems(url: string, accessToken: string): Promise<Resul
     try
     {
         const response = await axios.get<unknown>( url, { headers } );
-        const data = RawItems.parse(response.data);
-        const items = data.items.map(x => new Item(x));
-        const addItemUrl = data.links.add;
+        const result = ListItemsResult.parse(response.data);
 
-        return success({ items, addItemUrl });
+        return success(result);
     }
     catch ( error: unknown )
     {
@@ -44,24 +53,27 @@ export async function listItems(url: string, accessToken: string): Promise<Resul
 }
 
 
-export async function updateItem(accessToken: string, url: string, item: { description?: string, priceInCents?: number, recipientId?: number, salesEventId?: number }): Promise<void>
+const UpdateItemData = z.object({
+    description: z.string(),
+    price_in_cents: z.number().nonnegative(),
+    recipient_id: z.number().nonnegative(),
+    sales_event_id: z.number().nonnegative(),
+}).partial();
+
+export type UpdateItemData = z.infer<typeof UpdateItemData>;
+
+
+export async function updateItem(accessToken: string, url: string, data: UpdateItemData): Promise<void>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
-    };
-
-    const data = {
-        description: item.description,
-        price_in_cents: item.priceInCents,
-        recipient_id: item.recipientId,
-        sales_event_id: item.salesEventId,
     };
 
     await axios.put<unknown>( url, data, { headers } );
 }
 
 
-export interface AddItemPayload
+export interface AddItemData
 {
     description: string;
     price_in_cents: number;
@@ -69,7 +81,7 @@ export interface AddItemPayload
     sales_event_id: number;
 };
 
-export async function addItem(accessToken: string, data: AddItemPayload, url: string): Promise<void>
+export async function addItem(accessToken: string, data: AddItemData, url: string): Promise<void>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`

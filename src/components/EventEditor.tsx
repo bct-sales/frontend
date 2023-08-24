@@ -6,33 +6,36 @@ import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
 
 
-interface Props
+interface Props<T extends EventEditorData>
 {
-    event: EventEditorData;
+    event: T;
 
-    onChange: (event: EventEditorData) => void;
+    onChange: (event: T) => void;
 }
 
 export interface EventEditorData
 {
-    date: BCTDate;
-    startTime: BCTTime;
-    endTime: BCTTime;
+    date: string;
+    start_time: string;
+    end_time: string;
     location: string;
     description: string;
     available: boolean;
 }
 
-export default function EventEditor(props: Props): React.ReactNode
+export default function EventEditor<T extends EventEditorData>(props: Props<T>): React.ReactNode
 {
     const event = props.event;
+    const date = BCTDate.fromIsoString(props.event.date);
+    const startTime = BCTTime.fromIsoString(props.event.start_time);
+    const endTime = BCTTime.fromIsoString(props.event.end_time);
 
     return (
         <>
             <Stack>
-                <DatePicker label="Date" date={event.date} onChange={onChangeDate} />
-                <TimePicker label="Start time" time={event.startTime} onChange={onChangeStartTime} />
-                <TimePicker label="End time" time={event.endTime} onChange={onChangeEndTime} />
+                <DatePicker label="Date" date={date} onChange={onChangeDate} />
+                <TimePicker label="Start time" time={startTime} onChange={onChangeStartTime} />
+                <TimePicker label="End time" time={endTime} onChange={onChangeEndTime} />
                 <TextInput label="Location" value={event.location} onChange={onChangeLocation} />
                 <TextInput label="Description" value={event.description} onChange={onChangeDescription} />
                 <Switch label="Available" checked={event.available} onChange={onChangeAvailability} />
@@ -53,7 +56,7 @@ export default function EventEditor(props: Props): React.ReactNode
     {
         props.onChange({
             ...props.event,
-            startTime,
+            start_time: startTime,
         });
     }
 
@@ -61,7 +64,7 @@ export default function EventEditor(props: Props): React.ReactNode
     {
         props.onChange({
             ...props.event,
-            endTime,
+            end_time: endTime,
         });
     }
 

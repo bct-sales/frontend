@@ -79,7 +79,7 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
                 <EventViewer event={event} />
                 <Group position="apart" mt='md'>
                     {renderAvailability(event)}
-                    <EditButton onClick={() => { onEditEvent(event); }} />
+                    <EditButton onClick={() => { onEditEvent(event); }} tooltip="Edit event" />
                 </Group>
             </Card>
         );

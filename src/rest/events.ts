@@ -52,8 +52,16 @@ export async function updateEvent(accessToken: string, salesEvent: RawSalesEvent
         Authorization: `Bearer ${accessToken}`
     };
     const url = salesEvent.links.edit;
+    const data = {
+        date: salesEvent.date,
+        start_time: salesEvent.start_time,
+        end_time: salesEvent.end_time,
+        location: salesEvent.location,
+        description: salesEvent.description,
+        available: salesEvent.available,
+    };
 
-    await axios.put<unknown>( url, salesEvent, { headers } );
+    await axios.put<unknown>( url, data, { headers } );
 }
 
 

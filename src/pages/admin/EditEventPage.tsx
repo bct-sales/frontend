@@ -100,7 +100,7 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdminStatus, event: Edi
             sales_event_id: event.salesEventId,
         };
 
-        updateEvent(props.auth.accessToken, data).then(() => {
+        updateEvent(props.auth.accessToken, event.links.edit, data).then(() => {
             notifications.show({ message: 'Event successfully updated' });
             history.back();
         }).catch(error => {

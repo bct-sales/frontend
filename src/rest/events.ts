@@ -3,6 +3,7 @@ import axios from 'axios';
 import { extractDetailFromException } from './error-handling';
 import { SalesEvent, fromRawSalesEvent } from './models';
 import { RawSalesEvent, RawSalesEvents } from './raw-models';
+import { z } from 'zod';
 
 
 
@@ -46,22 +47,24 @@ export async function listEvents(url: string, accessToken: string): Promise<Resu
 }
 
 
-export async function updateEvent(accessToken: string, salesEvent: RawSalesEvent)
+const UpdateEventData = z.object({
+    date: z.string(),
+    start_time: z.string(),
+    end_time: z.string(),
+    location: z.string(),
+    description: z.string(),
+    available: z.boolean(),
+});
+
+type UpdateEventData = z.infer<typeof UpdateEventData>;
+
+export async function updateEvent(accessToken: string, url: string, salesEvent: UpdateEventData)
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };
-    const url = salesEvent.links.edit;
-    const data = {
-        date: salesEvent.date,
-        start_time: salesEvent.start_time,
-        end_time: salesEvent.end_time,
-        location: salesEvent.location,
-        description: salesEvent.description,
-        available: salesEvent.available,
-    };
 
-    await axios.put<unknown>( url, data, { headers } );
+    await axios.put<unknown>( url, UpdateEventData.parse(salesEvent), { headers } );
 }
 
 

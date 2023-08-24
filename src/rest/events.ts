@@ -2,7 +2,7 @@ import { Result, failure, success } from '@/result';
 import axios from 'axios';
 import { extractDetailFromException } from './error-handling';
 import { SalesEvent, fromRawSalesEvent } from './models';
-import { RawSalesEvent, RawSalesEvents } from './raw-models';
+import { RawSalesEvents } from './raw-models';
 import { z } from 'zod';
 
 
@@ -54,7 +54,7 @@ const UpdateEventData = z.object({
     location: z.string(),
     description: z.string(),
     available: z.boolean(),
-});
+}).partial();
 
 type UpdateEventData = z.infer<typeof UpdateEventData>;
 
@@ -68,7 +68,18 @@ export async function updateEvent(accessToken: string, url: string, salesEvent: 
 }
 
 
-export async function addEvent(accessToken: string, url: string, salesEvent: Omit<RawSalesEvent, "sales_event_id" | "links">)
+const AddEventData = z.object({
+    date: z.string(),
+    start_time: z.string(),
+    end_time: z.string(),
+    location: z.string(),
+    description: z.string(),
+    available: z.boolean(),
+});
+
+type AddEventData = z.infer<typeof AddEventData>;
+
+export async function addEvent(accessToken: string, url: string, salesEvent: AddEventData)
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`

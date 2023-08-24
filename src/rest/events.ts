@@ -1,17 +1,30 @@
 import { Result, failure, success } from '@/result';
 import axios from 'axios';
-import { extractDetailFromException } from './error-handling';
-import { SalesEvent, fromRawSalesEvent } from './models';
-import { RawSalesEvents } from './raw-models';
 import { z } from 'zod';
+import { extractDetailFromException } from './error-handling';
 
 
 
-interface ListEventsResult
-{
-    events: SalesEvent[];
-    addEventUrl: string;
-}
+const ListEventsResult = z.object({
+    events: z.array(z.object({
+        sales_event_id: z.number().nonnegative(),
+        date: z.string(),
+        start_time: z.string(),
+        end_time: z.string(),
+        location: z.string(),
+        description: z.string(),
+        available: z.boolean(),
+        links: z.object({
+            items: z.string().url(),
+            edit: z.string().url(),
+        })
+    })),
+    links: z.object({
+        add: z.string().url(),
+    }),
+});
+
+export type ListEventsResult = z.infer<typeof ListEventsResult>;
 
 
 export async function listEvents(url: string, accessToken: string): Promise<Result<ListEventsResult, string>>
@@ -23,12 +36,9 @@ export async function listEvents(url: string, accessToken: string): Promise<Resu
     try
     {
         const response = await axios.get<unknown>( url, { headers } );
-        const data = RawSalesEvents.parse(response.data);
+        const data = ListEventsResult.parse(response.data);
 
-        return success({
-            events: data.events.map(raw => fromRawSalesEvent(raw)),
-            addEventUrl: data.links.add,
-        });
+        return success(data);
     }
     catch ( error: unknown )
     {
@@ -56,7 +66,7 @@ const UpdateEventData = z.object({
     available: z.boolean(),
 }).partial();
 
-type UpdateEventData = z.infer<typeof UpdateEventData>;
+export type UpdateEventData = z.infer<typeof UpdateEventData>;
 
 export async function updateEvent(accessToken: string, url: string, salesEvent: UpdateEventData)
 {

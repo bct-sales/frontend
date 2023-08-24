@@ -1,17 +1,17 @@
 import { AuthenticatedAdminStatus } from "@/auth/types";
 import { EditButton } from "@/components/EditButton";
+import EventViewer from "@/components/EventViewer";
 import RequestWrapper from "@/components/RequestWrapper";
+import { BCTDate } from "@/date";
 import { listEvents } from "@/rest/events";
-import { SalesEvent } from "@/rest/models";
+import { SalesEvent } from "@/rest/raw-models";
 import { useRequest } from "@/rest/request";
+import { useRestApiRoot } from "@/rest/root";
 import { ActionIcon, Box, Card, Flex, Group, Paper, Stack, Text, Title, Tooltip, createStyles } from "@mantine/core";
 import { IconCirclePlus } from "@tabler/icons-react";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddEventState } from "./AddEventPage";
-import { EditEventState } from "./EditEventPage";
-import { useRestApiRoot } from "@/rest/root";
-import EventViewer from "@/components/EventViewer";
 
 
 const useStyles = createStyles(() => ({
@@ -34,7 +34,7 @@ export default function EventsPage({ auth }: { auth: AuthenticatedAdminStatus })
     return (
         <RequestWrapper
             requestResult={request}
-            success={result => <ActualEventsPage events={result.events} addUrl={result.addEventUrl} auth={auth} />}
+            success={result => <ActualEventsPage events={result.events} addUrl={result.links.add} auth={auth} />}
         />
     );
 }
@@ -45,7 +45,7 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
     const navigate = useNavigate();
     const { classes } = useStyles();
     const { events } = props;
-    const orderedEvents = [...events].sort((x, y) => x.date.compare(y.date));
+    const orderedEvents: SalesEvent[] = [...events].sort(compareEvents);
 
     return (
         <>
@@ -75,7 +75,7 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
     function renderEvent(event: SalesEvent): React.ReactNode
     {
         return (
-            <Card withBorder p='md' miw={300} key={event.id}>
+            <Card withBorder p='md' miw={300} key={event.sales_event_id}>
                 <EventViewer event={event} />
                 <Group position="apart" mt='md'>
                     {renderAvailability(event)}
@@ -103,19 +103,9 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
 
     function onEditEvent(event: SalesEvent)
     {
-        const url = `/admin/events/${event.id}`; // No HATEOAS here
-        const state: EditEventState = {
-            available: event.available,
-            date: event.date.toIsoString(),
-            startTime: event.startTime.toIsoString(),
-            endTime: event.endTime.toIsoString(),
-            description: event.description,
-            links: event.links,
-            location: event.location,
-            salesEventId: event.id,
-        };
+        const url = `/admin/events/${event.sales_event_id}`; // No HATEOAS here
 
-        navigate(url, { state });
+        navigate(url, { state: event });
     }
 
     function onAddEvent()
@@ -125,5 +115,13 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
         };
 
         navigate('/admin/add-event', { state });
+    }
+
+    function compareEvents(x: SalesEvent, y: SalesEvent): number
+    {
+        const dx = BCTDate.fromIsoString(x.date);
+        const dy = BCTDate.fromIsoString(y.date);
+
+        return dx.compare(dy);
     }
 }

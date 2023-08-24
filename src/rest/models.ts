@@ -1,39 +1,37 @@
-import { BCTDate } from "@/date";
-import { RawItem, RawSalesEvent } from "./raw-models";
-import { BCTTime } from "@/time";
 import { MoneyAmount } from "@/money-amount";
+import { RawItem } from "./raw-models";
 
 
 
-export interface SalesEvent
-{
-    id: number;
-    date: BCTDate;
-    startTime: BCTTime;
-    endTime: BCTTime;
-    location: string;
-    description: string;
-    available: boolean;
-    links: {
-        edit: string,
-        items: string,
-    }
-}
+// export interface SalesEvent
+// {
+//     id: number;
+//     date: BCTDate;
+//     startTime: BCTTime;
+//     endTime: BCTTime;
+//     location: string;
+//     description: string;
+//     available: boolean;
+//     links: {
+//         edit: string,
+//         items: string,
+//     }
+// }
 
 
-export function fromRawSalesEvent(raw: RawSalesEvent): SalesEvent
-{
-    return {
-        id: raw.sales_event_id,
-        date: BCTDate.fromIsoString(raw.date),
-        startTime: BCTTime.fromIsoString(raw.start_time),
-        endTime: BCTTime.fromIsoString(raw.end_time),
-        location: raw.location,
-        description: raw.description,
-        links: raw.links,
-        available: raw.available,
-    };
-}
+// export function fromRawSalesEvent(raw: RawSalesEvent): SalesEvent
+// {
+//     return {
+//         id: raw.sales_event_id,
+//         date: BCTDate.fromIsoString(raw.date),
+//         startTime: BCTTime.fromIsoString(raw.start_time),
+//         endTime: BCTTime.fromIsoString(raw.end_time),
+//         location: raw.location,
+//         description: raw.description,
+//         links: raw.links,
+//         available: raw.available,
+//     };
+// }
 
 
 export class Item

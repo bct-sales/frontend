@@ -3,29 +3,11 @@ import EventEditor, { EventEditorData } from "@/components/EventEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { BCTDate } from "@/date";
 import { updateEvent } from "@/rest/events";
-import { RawSalesEvent } from "@/rest/raw-models";
+import { SalesEvent } from "@/rest/raw-models";
 import { BCTTime } from "@/time";
 import { Button, Group, Stack } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
-import { z } from "zod";
-
-
-const EditEventState = z.object({
-    salesEventId: z.number().nonnegative(),
-    date: z.string(),
-    startTime: z.string(),
-    endTime: z.string(),
-    location: z.string(),
-    description: z.string(),
-    available: z.boolean(),
-    links: z.object({
-        edit: z.string(),
-        items: z.string(),
-    })
-});
-
-export type EditEventState = z.infer<typeof EditEventState>;
 
 
 export default function EditEventPage(props: { auth: AuthenticatedAdminStatus }): React.ReactNode
@@ -38,21 +20,21 @@ export default function EditEventPage(props: { auth: AuthenticatedAdminStatus })
     );
 
 
-    function predicate(state: unknown) : state is EditEventState
+    function predicate(state: unknown) : state is SalesEvent
     {
-        return EditEventState.safeParse(state).success;
+        return SalesEvent.safeParse(state).success;
     }
 }
 
 
-function ActualEditEventPage(props: { auth: AuthenticatedAdminStatus, event: EditEventState }): React.ReactNode
+function ActualEditEventPage(props: { auth: AuthenticatedAdminStatus, event: SalesEvent }): React.ReactNode
 {
-    const [ event, setEvent ] = useState<EditEventState>(props.event);
+    const [ event, setEvent ] = useState<SalesEvent>(props.event);
 
     const eventEditorData: EventEditorData = {
         date: BCTDate.fromIsoString(event.date),
-        startTime: BCTTime.fromIsoString(event.startTime),
-        endTime: BCTTime.fromIsoString(event.endTime),
+        startTime: BCTTime.fromIsoString(event.start_time),
+        endTime: BCTTime.fromIsoString(event.end_time),
         location: event.location,
         description: event.description,
         available: event.available,
@@ -79,8 +61,8 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdminStatus, event: Edi
         setEvent({
             ...props.event,
             date: event.date.toIsoString(),
-            startTime: event.startTime.toIsoString(),
-            endTime: event.endTime.toIsoString(),
+            start_time: event.startTime.toIsoString(),
+            end_time: event.endTime.toIsoString(),
             location: event.location,
             description: event.description,
             available: event.available,
@@ -89,18 +71,7 @@ function ActualEditEventPage(props: { auth: AuthenticatedAdminStatus, event: Edi
 
     function update()
     {
-        const data: RawSalesEvent = {
-            available: event.available,
-            date: event.date,
-            start_time: event.startTime,
-            end_time: event.endTime,
-            description: event.description,
-            links: event.links,
-            location: event.location,
-            sales_event_id: event.salesEventId,
-        };
-
-        updateEvent(props.auth.accessToken, event.links.edit, data).then(() => {
+        updateEvent(props.auth.accessToken, event.links.edit, event).then(() => {
             notifications.show({ message: 'Event successfully updated' });
             history.back();
         }).catch(error => {

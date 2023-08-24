@@ -1,14 +1,15 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import EventViewer from "@/components/EventViewer";
 import RequestWrapper from "@/components/RequestWrapper";
-import { listEvents } from "@/rest/events";
-import { SalesEvent } from "@/rest/models";
+import { ListEventsResult, listEvents } from "@/rest/events";
 import { useRequest } from "@/rest/request";
 import { useRestApiRoot } from "@/rest/root";
 import { Box, Button, Card, Flex, Group, Paper, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
+import { BCTDate } from "@/date";
+import { SalesEvent } from "@/rest/raw-models";
 
 
 interface EventsPageProps
@@ -27,17 +28,16 @@ export default function EventsPage({ auth }: EventsPageProps): JSX.Element
     return (
         <RequestWrapper
             requestResult={request}
-            success={result => <ActualEventsPage events={result.events} auth={auth} />}
+            success={result => <ActualEventsPage data={result} auth={auth} />}
         />
     );
 }
 
 
-function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, events: SalesEvent[] }): JSX.Element
+function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, data: ListEventsResult }): JSX.Element
 {
     const navigate = useNavigate();
-    const { events } = props;
-    const orderedEvents = [...events].sort((x, y) => x.date.compare(y.date));
+    const orderedEvents: SalesEvent[] = [...props.data.events].sort(compareEvents);
 
     return (
         <>
@@ -58,7 +58,7 @@ function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, events: Sale
     function renderEvent(event: SalesEvent): React.ReactNode
     {
         return (
-            <Card withBorder p='md' miw={300} key={event.id}>
+            <Card withBorder p='md' miw={300} key={event.sales_event_id}>
                 <EventViewer event={event} />
                 <Group position='right'>
                     <Button onClick={() => { goToItemsPage(event); } }>Edit Items</Button>
@@ -71,9 +71,17 @@ function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, events: Sale
     {
         const state: ItemsPageState = {
             url: event.links.items,
-            eventId: event.id
+            eventId: event.sales_event_id,
         };
 
-        navigate(`/events/${event.id}/items`, { state });
+        navigate(`/events/${event.sales_event_id}/items`, { state });
+    }
+
+    function compareEvents(x: SalesEvent, y: SalesEvent): number
+    {
+        const dx = BCTDate.fromIsoString(x.date);
+        const dy = BCTDate.fromIsoString(y.date);
+
+        return dx.compare(dy);
     }
 }

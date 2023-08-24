@@ -73,13 +73,15 @@ export async function updateItem(accessToken: string, url: string, data: UpdateI
 }
 
 
-export interface AddItemData
-{
-    description: string;
-    price_in_cents: number;
-    recipient_id: number;
-    sales_event_id: number;
-};
+const AddItemData = z.object({
+    description: z.string(),
+    price_in_cents: z.number().nonnegative(),
+    recipient_id: z.number().nonnegative(),
+    sales_event_id: z.number().nonnegative(),
+})
+
+export type AddItemData = z.infer<typeof AddItemData>;
+
 
 export async function addItem(accessToken: string, data: AddItemData, url: string): Promise<void>
 {
@@ -87,5 +89,5 @@ export async function addItem(accessToken: string, data: AddItemData, url: strin
         Authorization: `Bearer ${accessToken}`
     };
 
-    await axios.post<unknown>( url, data, { headers } );
+    await axios.post<unknown>( url, AddItemData.parse(data), { headers } );
 }

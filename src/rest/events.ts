@@ -2,7 +2,7 @@ import { Result, failure, success } from '@/result';
 import axios from 'axios';
 import { extractDetailFromException } from './error-handling';
 import { SalesEvent, fromRawSalesEvent } from './models';
-import { RawSalesEvents } from './raw-models';
+import { RawSalesEvent, RawSalesEvents } from './raw-models';
 
 
 
@@ -46,39 +46,22 @@ export async function listEvents(url: string, accessToken: string): Promise<Resu
 }
 
 
-export async function updateEvent(accessToken: string, salesEvent: SalesEvent)
+export async function updateEvent(accessToken: string, salesEvent: RawSalesEvent)
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };
-
     const url = salesEvent.links.edit;
-    const data = {
-        date: salesEvent.date.toIsoString(),
-        start_time: salesEvent.startTime.toIsoString(),
-        end_time: salesEvent.endTime.toIsoString(),
-        location: salesEvent.location,
-        description: salesEvent.description,
-        available: salesEvent.available,
-    };
 
-    await axios.put<unknown>( url, data, { headers } );
+    await axios.put<unknown>( url, salesEvent, { headers } );
 }
 
 
-export async function addEvent(accessToken: string, url: string, salesEvent: Omit<SalesEvent, "id" | "links">)
+export async function addEvent(accessToken: string, url: string, salesEvent: Omit<RawSalesEvent, "sales_event_id" | "links">)
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };
 
-    const data = {
-        date: salesEvent.date.toIsoString(),
-        start_time: salesEvent.startTime.toIsoString(),
-        end_time: salesEvent.endTime.toIsoString(),
-        location: salesEvent.location,
-        description: salesEvent.description,
-    };
-
-    await axios.post<unknown>( url, data, { headers } );
+    await axios.post<unknown>( url, salesEvent, { headers } );
 }

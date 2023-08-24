@@ -104,7 +104,16 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
     function onEditEvent(event: SalesEvent)
     {
         const url = `/admin/events/${event.id}`; // No HATEOAS here
-        const state = new EditEventState(event);
+        const state: EditEventState = {
+            available: event.available,
+            date: event.date.toIsoString(),
+            startTime: event.startTime.toIsoString(),
+            endTime: event.endTime.toIsoString(),
+            description: event.description,
+            links: event.links,
+            location: event.location,
+            salesEventId: event.id,
+        };
 
         navigate(url, { state });
     }

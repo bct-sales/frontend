@@ -1,5 +1,4 @@
 import { BCTDate } from "@/date";
-import { SalesEvent } from "@/rest/models";
 import { BCTTime } from "@/time";
 import { Stack, Switch, TextInput } from "@mantine/core";
 import { ChangeEvent } from "react";
@@ -7,14 +6,24 @@ import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
 
 
-interface Props<T>
+interface Props
 {
-    event: T;
+    event: EventEditorData;
 
-    onChange: (event: T) => void;
+    onChange: (event: EventEditorData) => void;
 }
 
-export default function EventEditor<T extends Omit<SalesEvent, 'id' | 'links'>>(props: Props<T>): React.ReactNode
+export interface EventEditorData
+{
+    date: BCTDate;
+    startTime: BCTTime;
+    endTime: BCTTime;
+    location: string;
+    description: string;
+    available: boolean;
+}
+
+export default function EventEditor(props: Props): React.ReactNode
 {
     const event = props.event;
 

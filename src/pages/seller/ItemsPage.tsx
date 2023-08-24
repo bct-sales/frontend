@@ -25,7 +25,7 @@ export type ItemsPageState = z.infer<typeof ItemsPageState>;
 export default function ItemsPage(props: { auth: AuthenticatedSellerStatus }): JSX.Element
 {
     return (
-        <PersistentStateGuard predicate={predicate} child={createPage} cacheKey="items-page" />
+        <PersistentStateGuard predicate={predicate} child={createPage} cacheKey="seller/items" />
     );
 
 
@@ -107,7 +107,10 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 
     function onAddItem()
     {
-        const state = new AddItemState(props.addItemUrl, props.eventId);
+        const state: AddItemState = {
+            addItemUrl: props.addItemUrl,
+            salesEventId: props.eventId,
+        };
 
         navigate('/add-item', { state });
     }

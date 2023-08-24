@@ -3,7 +3,6 @@ import axios from 'axios';
 import { extractDetailFromException } from './error-handling';
 import { Item } from './models';
 import { RawItems } from './raw-models';
-import { restUrl } from './url';
 
 
 interface ListItemsResult
@@ -76,5 +75,5 @@ export async function addItem(accessToken: string, data: AddItemPayload, url: st
         Authorization: `Bearer ${accessToken}`
     };
 
-    await axios.post<unknown>( restUrl(url), data, { headers } );
+    await axios.post<unknown>( url, data, { headers } );
 }

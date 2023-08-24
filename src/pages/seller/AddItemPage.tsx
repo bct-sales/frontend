@@ -1,11 +1,12 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import ItemEditor from "@/components/ItemEditor";
-import StateGuard from "@/components/StateGuard";
+import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { AddItemPayload, addItem } from "@/rest/items";
 import { Button, Card, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
+import { z } from "zod";
 
 
 interface Props
@@ -13,18 +14,19 @@ interface Props
     auth: AuthenticatedSellerStatus;
 }
 
-export class AddItemState
-{
-    constructor(public readonly addItemUrl: string, public readonly salesEventId: number)
-    {
-        // NOP
-    }
-}
+const AddItemState = z.object({
+    addItemUrl: z.string(),
+    salesEventId: z.number().nonnegative(),
+});
+
+export type AddItemState = z.infer<typeof AddItemState>;
+
 
 export default function AddItemPage(props: Props): JSX.Element
 {
     return (
-        <StateGuard
+        <PersistentStateGuard
+            cacheKey="seller/add-item"
             child={state => <ActualAddItemPage auth={props.auth} url={state.addItemUrl} salesEventId={state.salesEventId} />}
             predicate={predicate} />
     );
@@ -32,7 +34,7 @@ export default function AddItemPage(props: Props): JSX.Element
 
     function predicate(state: unknown) : state is AddItemState
     {
-        return state instanceof AddItemState;
+        return AddItemState.safeParse(state).success;
     }
 }
 

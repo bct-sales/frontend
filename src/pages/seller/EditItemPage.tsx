@@ -28,7 +28,7 @@ export default function EditItemPage(props: { auth: AuthenticatedSellerStatus })
 {
     return (
         <PersistentStateGuard
-            cacheKey="edit-item-page"
+            cacheKey="seller/edit-item"
             child={item => <ActualEditItemPage auth={props.auth} item={item} />}
             predicate={predicate} />
     );

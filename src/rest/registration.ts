@@ -1,6 +1,5 @@
 import { Result, failure, success } from '@/result';
 import axios from 'axios';
-import { restUrl } from './url';
 import { extractDetailFromException } from './error-handling';
 
 

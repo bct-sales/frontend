@@ -26,6 +26,6 @@ export default function ErrorPage(props: Props): React.ReactNode
 
     function close()
     {
-        navigate('/login');
+        navigate('/');
     }
 }

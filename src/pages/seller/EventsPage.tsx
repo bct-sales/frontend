@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
 import { BCTDate } from "@/date";
 import { SalesEvent } from "@/rest/models";
+import { EditButton } from "@/components/EditButton";
 
 
 interface EventsPageProps
@@ -65,7 +66,7 @@ function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, data: ListEv
             <Card withBorder p='md' miw={300} key={event.sales_event_id}>
                 <EventViewer event={event} />
                 <Group position='right'>
-                    <Button onClick={() => { goToItemsPage(event); } }>Edit Items</Button>
+                    <EditButton onClick={() => { goToItemsPage(event); }} tooltip="Manage items" />
                 </Group>
             </Card>
         );

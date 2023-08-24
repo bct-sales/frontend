@@ -4,7 +4,7 @@ import RequestWrapper from "@/components/RequestWrapper";
 import { ListEventsResult, listEvents } from "@/rest/events";
 import { useRequest } from "@/rest/request";
 import { useRestApiRoot } from "@/rest/root";
-import { Box, Button, Card, Flex, Group, Paper, Title } from "@mantine/core";
+import { Box, Button, Card, Flex, Group, Paper, Stack, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
@@ -41,14 +41,18 @@ function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, data: ListEv
 
     return (
         <>
-            <Paper mx='auto' p="md">
-                <Title>
-                    Upcoming Sale Events
-                </Title>
+            <Paper mx='auto' p="md" maw={1000}>
+                <Group position="apart">
+                    <Title>
+                        Upcoming Sale Events
+                    </Title>
+                </Group>
                 <Box my={50}>
-                    <Flex direction="row" justify="flex-start" align="center" gap="md" wrap="wrap">
-                        {orderedEvents.map(renderEvent)}
-                    </Flex>
+                    <Stack>
+                        <Flex direction="row" justify="flex-start" align="center" gap="md" wrap="wrap">
+                            {orderedEvents.map(renderEvent)}
+                        </Flex>
+                    </Stack>
                 </Box>
             </Paper>
         </>

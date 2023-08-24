@@ -4,7 +4,7 @@ import RequestWrapper from "@/components/RequestWrapper";
 import { listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
-import { ActionIcon, Box, Card, Flex, Group, Paper, Stack, Text, Title, createStyles } from "@mantine/core";
+import { ActionIcon, Box, Card, Flex, Group, Paper, Stack, Text, Title, Tooltip, createStyles } from "@mantine/core";
 import { IconCirclePlus } from "@tabler/icons-react";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -54,9 +54,11 @@ function ActualEventsPage(props: { auth: AuthenticatedAdminStatus, addUrl: strin
                 <Title>
                     Upcoming Sale Events
                 </Title>
-                <ActionIcon w={50} h={50} onClick={onAddEvent}>
-                    <IconCirclePlus size={100} />
-                </ActionIcon>
+                <Tooltip label="New event">
+                    <ActionIcon w={50} h={50} onClick={onAddEvent}>
+                        <IconCirclePlus size={100} />
+                    </ActionIcon>
+                </Tooltip>
                 </Group>
                 <Box my={50}>
                     <Stack>

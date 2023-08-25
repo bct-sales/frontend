@@ -1,16 +1,16 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
+import { EditButton } from "@/components/EditButton";
 import EventViewer from "@/components/EventViewer";
 import RequestWrapper from "@/components/RequestWrapper";
+import { BCTDate } from "@/date";
 import { ListEventsResult, listEvents } from "@/rest/events";
+import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { useRestApiRoot } from "@/rest/root";
-import { Box, Button, Card, Flex, Group, Paper, Stack, Title } from "@mantine/core";
+import { Box, Card, Flex, Group, Paper, Stack, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
-import { BCTDate } from "@/date";
-import { SalesEvent } from "@/rest/models";
-import { EditButton } from "@/components/EditButton";
 
 
 interface EventsPageProps

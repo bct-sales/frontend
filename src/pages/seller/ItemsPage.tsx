@@ -5,7 +5,7 @@ import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { listItems } from "@/rest/items";
 import { useRequest } from "@/rest/request";
-import { Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip } from "@mantine/core";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
@@ -13,6 +13,8 @@ import { z } from "zod";
 import { EditItemState } from "./EditItemPage";
 import { Item } from "@/rest/models";
 import { MoneyAmount } from "@/money-amount";
+import { IconQrcode } from "@tabler/icons-react";
+import { GenerateLabelsPageState } from "./GenerateLabelsPage";
 
 
 const ItemsPageState = z.object({
@@ -38,13 +40,13 @@ export default function ItemsPage(props: { auth: AuthenticatedSellerStatus }): J
     function createPage(state: ItemsPageState): JSX.Element
     {
         return (
-            <ItemsPageWithEventId auth={props.auth} url={state.url} eventId={state.eventId} />
+            <ItemsPageWithState auth={props.auth} url={state.url} eventId={state.eventId} />
         );
     }
 }
 
 
-function ItemsPageWithEventId(props: { url: string, eventId: number, auth: AuthenticatedSellerStatus }): JSX.Element
+function ItemsPageWithState(props: { url: string, eventId: number, auth: AuthenticatedSellerStatus }): JSX.Element
 {
     const { auth, url, eventId } = props;
     const { accessToken } = auth;
@@ -76,6 +78,11 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                     </Title>
                     <Group position="right">
                         <Switch label="Delete mode" onChange={onToggleDeleteVisibility} />
+                        <Tooltip label="Generate PDF">
+                            <ActionIcon onClick={onGenerateCodes}>
+                                <IconQrcode />
+                            </ActionIcon>
+                        </Tooltip>
                         <Button onClick={onBackToEventsPage}>
                             Back
                         </Button>
@@ -93,6 +100,15 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
         </>
     );
 
+
+    function onGenerateCodes()
+    {
+        const state: GenerateLabelsPageState = {
+            eventId: props.eventId,
+        };
+
+        navigate('/labels', { state });
+    }
 
     function onToggleDeleteVisibility(event: ChangeEvent<HTMLInputElement>)
     {

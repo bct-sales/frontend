@@ -7,7 +7,7 @@ import { z } from "zod";
 
 
 const GenerateLabelsPageState = z.object({
-    eventId: z.number().nonnegative(),
+    url: z.string().url(),
 });
 
 export type GenerateLabelsPageState = z.infer<typeof GenerateLabelsPageState>;
@@ -28,12 +28,12 @@ export default function GenerateLabelsPage(props: { auth: AuthenticatedSellerSta
     function createPage(state: GenerateLabelsPageState): JSX.Element
     {
         return (
-            <ActualGenerateLabelsPage auth={props.auth} eventId={state.eventId} />
+            <ActualGenerateLabelsPage auth={props.auth} generateLabelsUrl={state.url} />
         );
     }
 }
 
-function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, eventId: number }): JSX.Element
+function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string }): JSX.Element
 {
     // const navigate = useNavigate();
     const [pageWidth, setPageWidth] = React.useState<number>(210);
@@ -60,9 +60,15 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, even
                     <IntegerInput label="Label Height" onChange={setLabelHeight} value={labelHeight} />
                 </Stack>
                 <Center>
-                    <Button mx='auto'>Generate Labels</Button>
+                    <Button mx='auto' onClick={onGenerateLabels}>Generate Labels</Button>
                 </Center>
             </Paper>
         </>
     );
+
+
+    function onGenerateLabels()
+    {
+        console.log(props.generateLabelsUrl);
+    }
 }

@@ -1,7 +1,7 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
-import { IntegerInput } from "@/components/IntegerInput";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
-import { Button, Center, Group, Paper, Stack, Title } from "@mantine/core";
+import SheetSpecificationsEditor from "@/components/SheetSpecificationsEditor";
+import { Button, Center, Group, Paper, Title } from "@mantine/core";
 import React from "react";
 import { z } from "zod";
 
@@ -36,12 +36,14 @@ export default function GenerateLabelsPage(props: { auth: AuthenticatedSellerSta
 function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string }): JSX.Element
 {
     // const navigate = useNavigate();
-    const [sheetWidth, setSheetWidth] = React.useState<number>(210);
-    const [sheetHeight, setSheetHeight] = React.useState<number>(297);
-    const [columnCount, setColumnCount] = React.useState<number>(3);
-    const [rowCount, setRowCount] = React.useState<number>(8);
-    const [labelWidth, setLabelWidth] = React.useState<number>(80);
-    const [labelHeight, setLabelHeight] = React.useState<number>(50);
+    const [sheetSpecs, setSheetSpecs] = React.useState({
+        sheetWidth: 210,
+        sheetHeight: 297,
+        labelWidth: 80,
+        labelHeight: 50,
+        columnCount: 3,
+        rowCount: 8,
+    })
 
     return (
         <>
@@ -51,14 +53,7 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
                         Generate Labels
                     </Title>
                 </Group>
-                <Stack maw={400} mx='auto' my='xl'>
-                    <IntegerInput label="Sheet Width (mm)" onChange={setSheetWidth} value={sheetWidth} />
-                    <IntegerInput label="Sheet Height (mm)" onChange={setSheetHeight} value={sheetHeight} />
-                    <IntegerInput label="Column Count" onChange={setColumnCount} value={columnCount} />
-                    <IntegerInput label="Row Count" onChange={setRowCount} value={rowCount} />
-                    <IntegerInput label="Label Width" onChange={setLabelWidth} value={labelWidth} />
-                    <IntegerInput label="Label Height" onChange={setLabelHeight} value={labelHeight} />
-                </Stack>
+                <SheetSpecificationsEditor data={sheetSpecs} onChange={setSheetSpecs} />
                 <Center>
                     <Button mx='auto' onClick={onGenerateLabels}>Generate Labels</Button>
                 </Center>

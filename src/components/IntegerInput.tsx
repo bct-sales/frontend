@@ -24,7 +24,6 @@ export function IntegerInput(props: Props): JSX.Element
 
         if ( Number.isInteger(value) )
         {
-            console.log(value);
             props.onChange(value);
         }
         else

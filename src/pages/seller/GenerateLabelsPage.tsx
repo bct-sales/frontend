@@ -1,10 +1,19 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
-import SheetSpecificationsEditor from "@/components/SheetSpecificationsEditor";
-import { Button, Center, Group, Paper, Title } from "@mantine/core";
+import SheetSpecificationsEditor, { SheetSpecificationsData } from "@/components/SheetSpecificationsEditor";
+import { generateLabels, GenerateLabelsData } from "@/rest/labels";
+import { Button, Center, Group, Paper, Title, Text, Box, createStyles } from "@mantine/core";
 import React from "react";
 import { z } from "zod";
+import { DownloadLabelsPageState } from "./DownloadLabelsPage";
+import { useNavigate } from "react-router-dom";
 
+
+const useStyles = createStyles(() => ({
+    errorMessage: {
+        color: '#F00',
+    },
+}));
 
 const GenerateLabelsPageState = z.object({
     url: z.string().url(),
@@ -35,15 +44,20 @@ export default function GenerateLabelsPage(props: { auth: AuthenticatedSellerSta
 
 function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string }): JSX.Element
 {
-    // const navigate = useNavigate();
-    const [sheetSpecs, setSheetSpecs] = React.useState({
+    const navigate = useNavigate();
+    const [sheetSpecs, setSheetSpecs] = React.useState<SheetSpecificationsData>({
         sheetWidth: 210,
         sheetHeight: 297,
-        labelWidth: 80,
-        labelHeight: 50,
+        labelWidth: 65,
+        labelHeight: 30,
         columnCount: 3,
         rowCount: 8,
-    })
+    });
+    const [error, setError] = React.useState<boolean>(false);
+    const { classes } = useStyles();
+
+    const specErrors = validateSheetSpecifications(sheetSpecs);
+    const generateButtonEnabled = specErrors.length === 0;
 
     return (
         <>
@@ -55,15 +69,121 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
                 </Group>
                 <SheetSpecificationsEditor data={sheetSpecs} onChange={setSheetSpecs} />
                 <Center>
-                    <Button mx='auto' onClick={onGenerateLabels}>Generate Labels</Button>
+                    <Button mx='auto' onClick={onGenerateLabels} disabled={!generateButtonEnabled}>Generate Labels</Button>
                 </Center>
+                {renderError()}
+                {renderSpecificationErrors()}
             </Paper>
         </>
     );
 
 
+    function renderSpecificationErrors(): React.ReactNode
+    {
+        const errors = specErrors.map(error => {
+            return (
+                <>
+                    <li className={classes.errorMessage}>{error}</li>
+                </>
+            );
+        });
+
+        return (
+            <>
+                <Center>
+                    <Box w={400}>
+                        <ul>
+                            {errors}
+                        </ul>
+                    </Box>
+                </Center>
+            </>
+        )
+    }
+
+
+    function renderError(): React.ReactNode
+    {
+        if ( error )
+        {
+            return (
+                <Center>
+                    <Text>An error occurred</Text>
+                </Center>
+            )
+        }
+        else
+        {
+            return <></>;
+        }
+    }
+
     function onGenerateLabels()
     {
-        console.log(props.generateLabelsUrl);
+        const data: GenerateLabelsData = {
+            sheet_width: sheetSpecs.sheetWidth,
+            sheet_height: sheetSpecs.sheetHeight,
+            columns: sheetSpecs.columnCount,
+            rows: sheetSpecs.rowCount,
+            label_width: sheetSpecs.labelWidth,
+            label_height: sheetSpecs.labelHeight,
+            corner_radius: 2
+        };
+
+        generateLabels(props.auth.accessToken, data, props.generateLabelsUrl).then((statusUrl: string) => {
+            const state: DownloadLabelsPageState = { statusUrl };
+
+            navigate("/download", { state });
+        }).catch(reason => {
+            console.error(reason);
+            setError(true);
+        });
     }
+}
+
+function validateSheetSpecifications(specs: SheetSpecificationsData): string[]
+{
+    const errors: string[] = [];
+
+    if ( specs.labelWidth === 0 )
+    {
+        errors.push("Invalid label width");
+    }
+
+    if ( specs.labelHeight === 0 )
+    {
+        errors.push("Invalid label height");
+    }
+
+    if ( specs.rowCount === 0 )
+    {
+        errors.push("Invalid row count");
+    }
+
+    if ( specs.columnCount === 0 )
+    {
+        errors.push("Invalid column count");
+    }
+
+    if ( specs.sheetWidth === 0 )
+    {
+        errors.push("Invalid sheet width");
+    }
+
+    if ( specs.sheetHeight === 0 )
+    {
+        errors.push("Invalid sheet height");
+    }
+
+    if ( specs.labelWidth * specs.columnCount > specs.sheetWidth )
+    {
+        errors.push("Labels don't find horizontally");
+    }
+
+    if ( specs.labelHeight * specs.columnCount > specs.sheetHeight )
+    {
+        errors.push("Labels don't find vertically");
+    }
+
+    return errors;
 }

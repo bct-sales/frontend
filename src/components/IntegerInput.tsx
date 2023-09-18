@@ -20,15 +20,19 @@ export function IntegerInput(props: Props): JSX.Element
     function onChange(event: React.ChangeEvent<HTMLInputElement>): void
     {
         const input = event.target.value;
-        const value = parseInt(input);
 
-        if ( Number.isInteger(value) )
+        if ( input == "" )
         {
-            props.onChange(value);
+            props.onChange(0);
         }
         else
         {
-            props.onChange(0);
+            const value = parseInt(input);
+
+            if ( Number.isInteger(value) && value >= 0 )
+            {
+                props.onChange(value);
+            }
         }
     }
 }

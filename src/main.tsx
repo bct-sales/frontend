@@ -48,6 +48,10 @@ if ( root )
                     element: <AuthGuard role='seller' child={auth => <pages.seller.GenerateLabelsPage auth={auth} />} />,
                 },
                 {
+                    path: "/download",
+                    element: <AuthGuard role='seller' child={auth => <pages.seller.DownloadLabelsPage auth={auth} />} />,
+                },
+                {
                     path: "/admin/events/:eventId",
                     element:<AuthGuard role='admin' child={auth => <pages.admin.EditEventPage auth={auth} />} />,
                 },

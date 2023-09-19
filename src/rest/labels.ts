@@ -31,3 +31,32 @@ export async function generateLabels(accessToken: string, data: GenerateLabelsDa
 
     return response.status_url;
 }
+
+
+
+const StatusResponse = z.discriminatedUnion("status", [
+    z.object({status: z.literal('pending')}),
+    z.object({status: z.literal('ready'), url: z.string().url()}),
+]);
+
+export type StatusResponse = z.infer<typeof StatusResponse>;
+
+
+export async function checkLabelGenerationStatus(accessToken: string, url: string): Promise<string | undefined>
+{
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    };
+
+    const rawResponse = await axios.get<unknown>( url, { headers } );
+    const response = StatusResponse.parse(rawResponse.data);
+
+    if (response.status === 'pending')
+    {
+        return undefined;
+    }
+    else
+    {
+        return response.url;
+    }
+}

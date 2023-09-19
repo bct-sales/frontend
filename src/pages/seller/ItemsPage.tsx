@@ -58,15 +58,16 @@ function ItemsPageWithState(props: { url: string, eventId: number, auth: Authent
         <>
             <RequestWrapper
                 requestResult={response}
-                success={response => <ActualItemsPage auth={auth} items={response.items} addItemUrl={response.links.add} generateLabelsUrl={response.links.generate_labels} eventId={eventId} />}
+                success={response => <ActualItemsPage auth={auth} initialItems={response.items} addItemUrl={response.links.add} generateLabelsUrl={response.links.generate_labels} eventId={eventId} />}
             />
         </>
     );
 }
 
-function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[], addItemUrl: string, generateLabelsUrl: string, eventId: number }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems: Item[], addItemUrl: string, generateLabelsUrl: string, eventId: number }): JSX.Element
 {
-    const { items, eventId } = props;
+    const { eventId } = props;
+    const [ items, setItems ] = useState<Item[]>(props.initialItems);
     const navigate = useNavigate();
     const [ showDelete, setShowDelete ] = useState<boolean>(false);
 
@@ -102,10 +103,11 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
     );
 
 
-    function onDelete(item: Item)
+    function onDelete(itemToBeDeleted: Item)
     {
-        deleteItem(props.auth.accessToken, item.links.delete).then(() => {
-            window.location.reload();
+        deleteItem(props.auth.accessToken, itemToBeDeleted.links.delete).then(() => {
+            const remainingItems = items.filter(item => item.item_id !== itemToBeDeleted.item_id);
+            setItems(remainingItems);
         }).catch((reason) => {
             console.error(reason);
 

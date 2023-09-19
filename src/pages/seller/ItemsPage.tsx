@@ -3,7 +3,7 @@ import { DeleteButton } from "@/components/DeleteButton";
 import { EditButton } from "@/components/EditButton";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
-import { listItems } from "@/rest/items";
+import { deleteItem, listItems } from "@/rest/items";
 import { useRequest } from "@/rest/request";
 import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip } from "@mantine/core";
 import { ChangeEvent, useCallback, useState } from "react";
@@ -15,6 +15,7 @@ import { Item } from "@/rest/models";
 import { MoneyAmount } from "@/money-amount";
 import { IconQrcode } from "@tabler/icons-react";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
+import { notifications } from "@mantine/notifications";
 
 
 const ItemsPageState = z.object({
@@ -93,13 +94,26 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                 <Box my={50}>
                     <Stack>
                         <Button onClick={onAddItem}>Add Item</Button>
-                        {items.map(item => <ItemViewer key={item.item_id} item={item} showDelete={showDelete} />)}
+                        {items.map(item => <ItemViewer key={item.item_id} item={item} showDelete={showDelete} onDelete={() => { onDelete(item) }} />)}
                     </Stack>
                 </Box>
             </Paper>
         </>
     );
 
+
+    function onDelete(item: Item)
+    {
+        deleteItem(props.auth.accessToken, item.links.delete).then(() => {
+            window.location.reload();
+        }).catch((reason) => {
+            console.error(reason);
+
+            notifications.show({
+                message: 'An error occurred while deleting the item'
+            });
+        });
+    }
 
     function onGenerateLabels()
     {
@@ -134,7 +148,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 }
 
 
-function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }): JSX.Element
+function ItemViewer({ item, showDelete, onDelete } : { item: Item, showDelete: boolean, onDelete: () => void }): JSX.Element
 {
     const navigate = useNavigate();
     const { price_in_cents, description } = item;
@@ -191,10 +205,5 @@ function ItemViewer({ item, showDelete } : { item: Item, showDelete: boolean }):
     {
         const state: EditItemState = item;
         navigate(`/edit-item`, { state });
-    }
-
-    function onDelete()
-    {
-        // TODO
     }
 }

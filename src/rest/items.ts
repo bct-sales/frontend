@@ -14,6 +14,7 @@ const ListItemsResult = z.object({
         owner_id: z.number().nonnegative(),
         links: z.object({
             edit: z.string().url(),
+            delete: z.string().url(),
         })
     })),
     links: z.object({
@@ -91,4 +92,14 @@ export async function addItem(accessToken: string, data: AddItemData, url: strin
     };
 
     await axios.post<unknown>( url, AddItemData.parse(data), { headers } );
+}
+
+
+export async function deleteItem(accessToken: string, url: string): Promise<void>
+{
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    };
+
+    await axios.delete<unknown>( url, { headers } );
 }

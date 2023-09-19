@@ -37,6 +37,7 @@ export const Item = ItemCore.extend({
     item_id: z.number().nonnegative(),
     links: z.object({
         edit: z.string(),
+        delete: z.string(),
     })
 });
 

@@ -1,5 +1,5 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
-import ItemEditor from "@/components/ItemEditor";
+import ItemEditor, { ItemEditorData } from "@/components/ItemEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { updateItem } from "@/rest/items";
@@ -19,6 +19,7 @@ const EditItemState = z.object({
     owner_id: z.number().nonnegative(),
     links: z.object({
         edit: z.string().url(),
+        delete: z.string().url(),
     })
 });
 
@@ -45,11 +46,17 @@ export default function EditItemPage(props: { auth: AuthenticatedSellerStatus })
 function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item }): JSX.Element
 {
     const [ item, setItem ] = useState<Item>(props.item);
+    const itemEditorData: ItemEditorData = {
+        description: item.description,
+        price_in_cents: item.price_in_cents,
+        isDonation: item.recipient_id === 0,
+    };
+
 
     return (
         <>
             <Card maw={500} mx='auto' m='xl'>
-                <ItemEditor data={item} onChange={onChange} />
+                <ItemEditor data={itemEditorData} onChange={onChange} />
                 <Group position="right" mt='xl'>
                     <Button onClick={onUpdateItem}>
                         Update
@@ -65,7 +72,7 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
 
     function onUpdateItem()
     {
-        const updatedItem = {
+        const updatedItem: Item = {
             ...props.item,
             ...item,
         };
@@ -90,7 +97,7 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
         else
         {
             notifications.show({title: 'Error', message: "Something went wrong"});
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -99,8 +106,13 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
         history.back();
     }
 
-    function onChange(data: Item)
+    function onChange(data: ItemEditorData)
     {
-        setItem(data);
+        setItem({
+            ...item,
+            description: data.description,
+            price_in_cents: data.price_in_cents,
+            recipient_id: data.isDonation ? 0 : props.auth.userId,
+        });
     }
 }

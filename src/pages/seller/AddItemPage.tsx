@@ -41,7 +41,7 @@ export default function AddItemPage(props: Props): JSX.Element
 
 function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string, salesEventId: number }): JSX.Element
 {
-    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', price_in_cents: 0 });
+    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', price_in_cents: 0, isDonation: false });
 
     return (
         <>
@@ -62,11 +62,13 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
 
     function onAddItem()
     {
+        const recipientId = itemData.isDonation ? 0 : props.auth.userId;
+
         const data: AddItemData = {
             description: itemData.description,
             price_in_cents: itemData.price_in_cents,
             sales_event_id: props.salesEventId,
-            recipient_id: props.auth.userId,
+            recipient_id: recipientId,
         };
 
         addItem(props.auth.accessToken, data, props.url).then(onSuccess).catch(onError);

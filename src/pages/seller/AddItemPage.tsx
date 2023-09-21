@@ -3,6 +3,7 @@ import ItemEditor, { ItemEditorData } from "@/components/ItemEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { AddItemData, addItem } from "@/rest/items";
+import { getDonationUserId } from "@/settings";
 import { Button, Card, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -62,7 +63,7 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
 
     function onAddItem()
     {
-        const recipientId = itemData.isDonation ? 0 : props.auth.userId;
+        const recipientId = getDonationUserId();
 
         const data: AddItemData = {
             description: itemData.description,

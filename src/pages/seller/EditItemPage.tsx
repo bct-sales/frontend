@@ -4,6 +4,7 @@ import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { updateItem } from "@/rest/items";
 import { Item } from "@/rest/models";
+import { getDonationUserId, isDonation } from "@/settings";
 import { Button, Card, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -49,7 +50,7 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
     const itemEditorData: ItemEditorData = {
         description: item.description,
         price_in_cents: item.price_in_cents,
-        isDonation: item.recipient_id === 0,
+        isDonation: isDonation(item.recipient_id),
     };
 
 
@@ -112,7 +113,7 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
             ...item,
             description: data.description,
             price_in_cents: data.price_in_cents,
-            recipient_id: data.isDonation ? 0 : props.auth.userId,
+            recipient_id: data.isDonation ? getDonationUserId() : props.auth.userId,
         });
     }
 }

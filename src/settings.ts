@@ -1,6 +1,17 @@
 import { AuthenticationData } from "./auth/types";
 
 
+export function getDonationUserId(): number
+{
+    return 0;
+}
+
+export function isDonation(recipientId: number): boolean
+{
+    return recipientId === getDonationUserId();
+}
+
+
 export function createInitialAuthentication(): AuthenticationData | undefined
 {
     // TODO Needs to be removed!

@@ -1,5 +1,4 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
-import { EditButton } from "@/components/EditButton";
 import EventViewer from "@/components/EventViewer";
 import RequestWrapper from "@/components/RequestWrapper";
 import { BCTDate } from "@/date";
@@ -7,7 +6,7 @@ import { ListEventsResult, listEvents } from "@/rest/events";
 import { SalesEvent } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { useRestApiRoot } from "@/rest/root";
-import { Box, Card, Flex, Group, Paper, Stack, Title } from "@mantine/core";
+import { Box, Button, Card, Flex, Group, Paper, Stack, Title } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ItemsPageState } from "./ItemsPage";
@@ -65,8 +64,8 @@ function ActualEventsPage(props: { auth: AuthenticatedSellerStatus, data: ListEv
         return (
             <Card withBorder p='md' miw={300} key={event.sales_event_id}>
                 <EventViewer event={event} />
-                <Group position='right'>
-                    <EditButton onClick={() => { goToItemsPage(event); }} tooltip="Manage items" />
+                <Group position='center' mt='xl'>
+                    <Button onClick={() => { goToItemsPage(event); }}>Manage Items</Button>
                 </Group>
             </Card>
         );

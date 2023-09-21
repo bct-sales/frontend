@@ -5,7 +5,7 @@ import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { deleteItem, listItems } from "@/rest/items";
 import { useRequest } from "@/rest/request";
-import { ActionIcon, Box, Button, Card, Center, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip } from "@mantine/core";
+import { ActionIcon, Box, Button, Card, Center, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip, createStyles } from "@mantine/core";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
@@ -157,14 +157,25 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
 }
 
 
+const useItemViewerStyles = createStyles(() => ({
+    item: {
+        '&:nth-child(odd)': {
+            background: '#333',
+            padding: '5px',
+        },
+    }
+}));
+
+
 function ItemViewer({ item, showDelete, onDelete } : { item: Item, showDelete: boolean, onDelete: () => void }): JSX.Element
 {
     const navigate = useNavigate();
     const { price_in_cents, description } = item;
+    const { classes } = useItemViewerStyles();
 
     return (
         <>
-            <Group position="apart">
+            <Group position="apart" className={classes.item}>
                 <Text w='75%'>
                     {description}
                 </Text>

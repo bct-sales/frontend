@@ -5,7 +5,7 @@ import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { deleteItem, listItems } from "@/rest/items";
 import { useRequest } from "@/rest/request";
-import { ActionIcon, Box, Button, Card, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip } from "@mantine/core";
+import { ActionIcon, Box, Button, Card, Center, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip } from "@mantine/core";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
@@ -95,8 +95,14 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
             <Paper maw={800} mx='auto' p="md">
                 <Box my={50}>
                     <Stack>
-                        <Button onClick={onAddItem}>Add Item</Button>
-                        {items.map(item => <ItemViewer key={item.item_id} item={item} showDelete={showDelete} onDelete={() => { onDelete(item) }} />)}
+                        <Center>
+                            <Button onClick={onAddItem} w='10em'>Add Item</Button>
+                        </Center>
+                        <Center>
+                            <Stack w={600}>
+                                {items.map(item => <ItemViewer key={item.item_id} item={item} showDelete={showDelete} onDelete={() => { onDelete(item) }} />)}
+                            </Stack>
+                        </Center>
                     </Stack>
                 </Box>
             </Paper>
@@ -158,21 +164,19 @@ function ItemViewer({ item, showDelete, onDelete } : { item: Item, showDelete: b
 
     return (
         <>
-            <Card withBorder p='md'>
-                <Group position="apart">
-                    <Text w='75%'>
-                        {description}
+            <Group position="apart">
+                <Text w='75%'>
+                    {description}
+                </Text>
+                <Group>
+                    {renderGiftIcon()}
+                    <Text>
+                        {new MoneyAmount(price_in_cents).format()}
                     </Text>
-                    <Group>
-                        {renderGiftIcon()}
-                        <Text>
-                            {new MoneyAmount(price_in_cents).format()}
-                        </Text>
-                        {renderEditButton()}
-                        {renderDeleteButton()}
-                    </Group>
+                    {renderEditButton()}
+                    {renderDeleteButton()}
                 </Group>
-            </Card>
+            </Group>
         </>
     );
 

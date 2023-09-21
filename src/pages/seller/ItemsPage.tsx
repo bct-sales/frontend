@@ -13,9 +13,10 @@ import { z } from "zod";
 import { EditItemState } from "./EditItemPage";
 import { Item } from "@/rest/models";
 import { MoneyAmount } from "@/money-amount";
-import { IconQrcode } from "@tabler/icons-react";
+import { IconGift, IconQrcode } from "@tabler/icons-react";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
 import { notifications } from "@mantine/notifications";
+import { isDonation } from "@/settings";
 
 
 const ItemsPageState = z.object({
@@ -163,6 +164,7 @@ function ItemViewer({ item, showDelete, onDelete } : { item: Item, showDelete: b
                         {description}
                     </Text>
                     <Group>
+                        {renderGiftIcon()}
                         <Text>
                             {new MoneyAmount(price_in_cents).format()}
                         </Text>
@@ -174,6 +176,22 @@ function ItemViewer({ item, showDelete, onDelete } : { item: Item, showDelete: b
         </>
     );
 
+
+    function renderGiftIcon()
+    {
+        if ( isDonation(item.recipient_id) )
+        {
+            return (
+                <IconGift />
+            )
+        }
+        else
+        {
+            return (
+                <></>
+            );
+        }
+    }
 
     function renderEditButton()
     {

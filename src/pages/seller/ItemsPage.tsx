@@ -1,24 +1,24 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
+import CharityIcon from "@/components/CharityIcon";
 import { DeleteButton } from "@/components/DeleteButton";
+import DonationIcon from "@/components/DonationIcon";
 import { EditButton } from "@/components/EditButton";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
+import { MoneyAmount } from "@/money-amount";
 import { deleteItem, listItems } from "@/rest/items";
+import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
+import { isDonation } from "@/settings";
 import { ActionIcon, Box, Button, Center, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip, createStyles } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { IconQrcode } from "@tabler/icons-react";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AddItemState } from "./AddItemPage";
 import { z } from "zod";
+import { AddItemState } from "./AddItemPage";
 import { EditItemState } from "./EditItemPage";
-import { Item } from "@/rest/models";
-import { MoneyAmount } from "@/money-amount";
-import { IconQrcode } from "@tabler/icons-react";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
-import { notifications } from "@mantine/notifications";
-import { isDonation } from "@/settings";
-import DonationIcon from "@/components/DonationIcon";
-import CharityIcon from "@/components/CharityIcon";
 
 
 const ItemsPageState = z.object({

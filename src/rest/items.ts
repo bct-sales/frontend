@@ -12,16 +12,17 @@ const ListItemsResult = z.object({
         recipient_id: z.number().nonnegative(),
         sales_event_id: z.number().nonnegative(),
         owner_id: z.number().nonnegative(),
+        charity: z.boolean(),
         links: z.object({
             edit: z.string().url(),
             delete: z.string().url(),
-        })
+        }).strict()
     })),
     links: z.object({
         add: z.string().url(),
         generate_labels: z.string().url(),
-    })
-});
+    }).strict()
+}).strict();
 
 export type ListItemsResult = z.infer<typeof ListItemsResult>;
 
@@ -60,6 +61,7 @@ const UpdateItemData = z.object({
     price_in_cents: z.number().nonnegative(),
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),
+    charity: z.boolean(),
 }).partial();
 
 export type UpdateItemData = z.infer<typeof UpdateItemData>;
@@ -80,7 +82,8 @@ const AddItemData = z.object({
     price_in_cents: z.number().nonnegative(),
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),
-})
+    charity: z.boolean(),
+}).strict();
 
 export type AddItemData = z.infer<typeof AddItemData>;
 

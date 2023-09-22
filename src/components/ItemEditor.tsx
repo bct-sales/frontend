@@ -8,6 +8,7 @@ export interface ItemEditorData
     description: string;
     price_in_cents: number;
     isDonation: boolean;
+    isForCharity: boolean;
 }
 
 interface Props<T extends ItemEditorData>
@@ -19,13 +20,14 @@ interface Props<T extends ItemEditorData>
 
 export default function ItemEditor<T extends ItemEditorData>({ data, onChange }: Props<T>): JSX.Element
 {
-    const { description, price_in_cents: priceInCents, isDonation: donation } = data;
+    const { description, price_in_cents: priceInCents, isDonation: donation, isForCharity } = data;
 
     return (
         <>
             <TextInput value={description} label='Description' placeholder="Description" onChange={onChangeDescription} m='xl' />
             <NumberInput value={priceInCents / 100} label='Price' formatter={formatter} onChange={onChangePrice} step={0.5} min={0} precision={2} m='xl' />
-            <Switch checked={donation} label="Donate to BCT" m='xl' onChange={onChangeDonation} />
+            <Switch checked={donation} label="Donate proceeds to BCT" m='xl' onChange={onChangeDonation} />
+            <Switch checked={isForCharity} label="Donate to charity if unsold" m='xl' onChange={onChangeCharity} />
         </>
     );
 
@@ -43,6 +45,13 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
             const moneyAmount = new MoneyAmount(Math.round(float * 100));
             return moneyAmount.format();
         }
+    }
+
+    function onChangeCharity(event: ChangeEvent<HTMLInputElement>)
+    {
+        const isChecked = event.target.checked;
+
+        onChange({...data, isForCharity: isChecked});
     }
 
     function onChangeDonation(event: ChangeEvent<HTMLInputElement>)

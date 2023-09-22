@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const DownloadLabelsPageState = z.object({
     statusUrl: z.string().url(),
-});
+}).strict();
 
 export type DownloadLabelsPageState = z.infer<typeof DownloadLabelsPageState>;
 

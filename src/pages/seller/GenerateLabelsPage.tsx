@@ -17,7 +17,7 @@ const useStyles = createStyles(() => ({
 
 const GenerateLabelsPageState = z.object({
     url: z.string().url(),
-});
+}).strict();
 
 export type GenerateLabelsPageState = z.infer<typeof GenerateLabelsPageState>;
 

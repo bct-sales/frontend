@@ -17,12 +17,12 @@ const ListEventsResult = z.object({
         links: z.object({
             items: z.string().url(),
             edit: z.string().url(),
-        })
+        }).strict()
     })),
     links: z.object({
         add: z.string().url(),
-    }),
-});
+    }).strict(),
+}).strict();
 
 export type ListEventsResult = z.infer<typeof ListEventsResult>;
 
@@ -85,7 +85,7 @@ const AddEventData = z.object({
     location: z.string(),
     description: z.string(),
     available: z.boolean(),
-});
+}).strict();
 
 type AddEventData = z.infer<typeof AddEventData>;
 

@@ -18,7 +18,7 @@ interface Props
 const AddItemState = z.object({
     addItemUrl: z.string(),
     salesEventId: z.number().nonnegative(),
-});
+}).strict();
 
 export type AddItemState = z.infer<typeof AddItemState>;
 
@@ -42,7 +42,7 @@ export default function AddItemPage(props: Props): JSX.Element
 
 function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string, salesEventId: number }): JSX.Element
 {
-    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', price_in_cents: 0, isDonation: false });
+    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', price_in_cents: 0, isDonation: false, isForCharity: false });
 
     return (
         <>
@@ -70,6 +70,7 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
             price_in_cents: itemData.price_in_cents,
             sales_event_id: props.salesEventId,
             recipient_id: recipientId,
+            charity: itemData.isForCharity,
         };
 
         addItem(props.auth.accessToken, data, props.url).then(onSuccess).catch(onError);

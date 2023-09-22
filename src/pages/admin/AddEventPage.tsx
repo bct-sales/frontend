@@ -14,7 +14,7 @@ import { z } from "zod";
 
 const AddEventState = z.object({
     url: z.string(),
-});
+}).strict();
 
 export type AddEventState = z.infer<typeof AddEventState>;
 

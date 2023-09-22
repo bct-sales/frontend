@@ -18,11 +18,12 @@ const EditItemState = z.object({
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),
     owner_id: z.number().nonnegative(),
+    charity: z.boolean(),
     links: z.object({
         edit: z.string().url(),
         delete: z.string().url(),
-    })
-});
+    }).strict()
+}).strict();
 
 export type EditItemState = z.infer<typeof EditItemState>;
 
@@ -39,7 +40,18 @@ export default function EditItemPage(props: { auth: AuthenticatedSellerStatus })
 
     function predicate(state: unknown): state is EditItemState
     {
-        return EditItemState.safeParse(state).success;
+        const parseResult = EditItemState.safeParse(state);
+
+        if ( parseResult.success )
+        {
+            return true;
+        }
+        else
+        {
+            console.error(parseResult.error);
+
+            return false;
+        }
     }
 }
 
@@ -51,8 +63,8 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
         description: item.description,
         price_in_cents: item.price_in_cents,
         isDonation: isDonation(item.recipient_id),
+        isForCharity: item.charity,
     };
-
 
     return (
         <>
@@ -109,11 +121,14 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
 
     function onChange(data: ItemEditorData)
     {
-        setItem({
+        const newItem = {
             ...item,
             description: data.description,
             price_in_cents: data.price_in_cents,
             recipient_id: data.isDonation ? getDonationUserId() : props.auth.userId,
-        });
+            charity: data.isForCharity,
+        };
+
+        setItem(newItem);
     }
 }

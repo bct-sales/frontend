@@ -8,8 +8,8 @@ export const Root = z.object({
         registration: z.string(),
         login: z.string(),
         events: z.string(),
-    }),
-});
+    }).strict(),
+}).strict();
 
 export type Root = z.infer<typeof Root>;
 

@@ -17,8 +17,8 @@ export const SalesEvent = SalesEventCore.extend({
     links: z.object({
         edit: z.string(),
         items: z.string(),
-    })
-});
+    }).strict()
+}).strict();
 
 export type SalesEvent = z.infer<typeof SalesEvent>;
 
@@ -29,7 +29,8 @@ export const ItemCore = z.object({
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),
     owner_id: z.number().nonnegative(),
-});
+    charity: z.boolean(),
+}).strict();
 
 export type ItemCore = z.infer<typeof ItemCore>;
 
@@ -38,7 +39,7 @@ export const Item = ItemCore.extend({
     links: z.object({
         edit: z.string(),
         delete: z.string(),
-    })
-});
+    }).strict()
+}).strict();
 
 export type Item = z.infer<typeof Item>;

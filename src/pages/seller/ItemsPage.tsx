@@ -5,7 +5,7 @@ import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { deleteItem, listItems } from "@/rest/items";
 import { useRequest } from "@/rest/request";
-import { ActionIcon, Box, Button, Card, Center, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip, createStyles } from "@mantine/core";
+import { ActionIcon, Box, Button, Center, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip, createStyles } from "@mantine/core";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemState } from "./AddItemPage";
@@ -22,7 +22,7 @@ import { isDonation } from "@/settings";
 const ItemsPageState = z.object({
     url: z.string().url(),
     eventId: z.number().nonnegative(),
-});
+}).strict();
 
 export type ItemsPageState = z.infer<typeof ItemsPageState>;
 

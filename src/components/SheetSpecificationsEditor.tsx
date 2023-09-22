@@ -10,7 +10,7 @@ const SheetSpecificationsData = z.object({
     labelHeight: z.number().nonnegative(),
     columnCount: z.number().nonnegative(),
     rowCount: z.number().nonnegative(),
-});
+}).strict();
 
 export type SheetSpecificationsData = z.infer<typeof SheetSpecificationsData>;
 

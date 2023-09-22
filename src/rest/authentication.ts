@@ -20,8 +20,8 @@ const LoginResponse = z.object({
     token_type: z.string(),
     links: z.object({
         events: z.string(),
-    }),
-});
+    }).strict(),
+}).strict();
 
 type LoginResponse = z.infer<typeof LoginResponse>;
 

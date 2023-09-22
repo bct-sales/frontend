@@ -13,7 +13,7 @@ import { z } from "zod";
 import { EditItemState } from "./EditItemPage";
 import { Item } from "@/rest/models";
 import { MoneyAmount } from "@/money-amount";
-import { IconGift, IconQrcode } from "@tabler/icons-react";
+import { IconQrcode } from "@tabler/icons-react";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
 import { notifications } from "@mantine/notifications";
 import { isDonation } from "@/settings";

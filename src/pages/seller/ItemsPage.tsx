@@ -17,6 +17,8 @@ import { IconGift, IconQrcode } from "@tabler/icons-react";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
 import { notifications } from "@mantine/notifications";
 import { isDonation } from "@/settings";
+import DonationIcon from "@/components/DonationIcon";
+import CharityIcon from "@/components/CharityIcon";
 
 
 const ItemsPageState = z.object({
@@ -176,11 +178,12 @@ function ItemViewer({ item, showDelete, onDelete } : { item: Item, showDelete: b
     return (
         <>
             <Group position="apart" className={classes.item}>
-                <Text w='75%'>
+                <Text w='70%'>
                     {description}
                 </Text>
                 <Group>
-                    {renderGiftIcon()}
+                    {renderCharity()}
+                    {renderDonation()}
                     <Text>
                         {new MoneyAmount(price_in_cents).format()}
                     </Text>
@@ -192,12 +195,28 @@ function ItemViewer({ item, showDelete, onDelete } : { item: Item, showDelete: b
     );
 
 
-    function renderGiftIcon()
+    function renderCharity()
+    {
+        if ( item.charity )
+        {
+            return (
+                <CharityIcon />
+            );
+        }
+        else
+        {
+            return (
+                <></>
+            );
+        }
+    }
+
+    function renderDonation()
     {
         if ( isDonation(item.recipient_id) )
         {
             return (
-                <IconGift />
+                <DonationIcon />
             )
         }
         else

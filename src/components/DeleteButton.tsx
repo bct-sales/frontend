@@ -1,10 +1,12 @@
-import { ActionIcon, createStyles } from "@mantine/core";
+import { ActionIcon, Tooltip, createStyles } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 
 
 interface Props
 {
     onClick: () => void;
+
+    tooltip: string;
 }
 
 const useStyles = createStyles(() => ({
@@ -18,8 +20,10 @@ export function DeleteButton(props: Props): JSX.Element
     const { classes } = useStyles();
 
     return (
-        <ActionIcon className={classes.redButton}>
-            <IconTrash onClick={props.onClick} />
-        </ActionIcon>
+        <Tooltip label={props.tooltip}>
+            <ActionIcon className={classes.redButton}>
+                <IconTrash onClick={props.onClick} />
+            </ActionIcon>
+        </Tooltip>
     );
 }

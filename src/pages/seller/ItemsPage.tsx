@@ -10,7 +10,7 @@ import { deleteItem, listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { isDonation } from "@/settings";
-import { ActionIcon, Box, Button, Center, Group, Header, Paper, Stack, Switch, Text, Title, Tooltip, createStyles } from "@mantine/core";
+import { ActionIcon, Box, Button, Center, Group, Header, Paper, Stack, Switch, Table, Text, Title, Tooltip, createStyles } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconQrcode } from "@tabler/icons-react";
 import { ChangeEvent, useCallback, useState } from "react";
@@ -19,6 +19,38 @@ import { z } from "zod";
 import { AddItemState } from "./AddItemPage";
 import { EditItemState } from "./EditItemPage";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
+
+
+const useStyles = createStyles(() => ({
+    itemRow: {
+        "&:nth-of-type(even)": {
+            background: '#222',
+        }
+    },
+    charityColumn: {
+        width: '1%',
+        textAlign: 'center',
+    },
+    donationColumn: {
+        width: '1%',
+        textAlign: 'center',
+    },
+    buttonColumn: {
+        width: '1%',
+        textAlign: 'center',
+    },
+    descriptionColumn: {
+        width: '80%',
+        textAlign: 'left',
+    },
+    priceColumn: {
+        width: '10%',
+        textAlign: 'right',
+    },
+    priceHeader: {
+        textAlign: 'right',
+    }
+}));
 
 
 const ItemsPageState = z.object({
@@ -73,6 +105,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
     const [ items, setItems ] = useState<Item[]>(props.initialItems);
     const navigate = useNavigate();
     const [ showDelete, setShowDelete ] = useState<boolean>(false);
+    const { classes } = useStyles();
 
     return (
         <>
@@ -101,9 +134,30 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
                             <Button onClick={onAddItem} w='10em'>Add Item</Button>
                         </Center>
                         <Center>
-                            <Stack w={600}>
-                                {items.map(item => <ItemViewer key={item.item_id} item={item} showDelete={showDelete} onDelete={() => { onDelete(item) }} />)}
-                            </Stack>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Description
+                                        </th>
+                                        <th>
+                                            Charity
+                                        </th>
+                                        <th>
+                                            Donation
+                                        </th>
+                                        <th className={classes.priceHeader}>
+                                            Price
+                                        </th>
+                                        <th>
+                                            Edit
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {items.map(renderItem)}
+                                </tbody>
+                            </Table>
                         </Center>
                     </Stack>
                 </Box>
@@ -111,6 +165,93 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
         </>
     );
 
+
+    function renderItem(item: Item): React.ReactNode
+    {
+        return (
+            <tr key={item.item_id} className={classes.itemRow}>
+                <td className={classes.descriptionColumn}>
+                    {item.description}
+                </td>
+                <td className={classes.charityColumn}>
+                    {renderCharity()}
+                </td>
+                <td className={classes.donationColumn}>
+                    {renderDonation()}
+                </td>
+                <td className={classes.priceColumn}>
+                    {renderPrice()}
+                </td>
+                <td className={classes.buttonColumn}>
+                    {renderButton()}
+                </td>
+            </tr>
+        );
+
+
+        function renderButton(): React.ReactNode
+        {
+            if ( showDelete )
+            {
+                return (
+                    <DeleteButton onClick={() => { onDelete(item); }} tooltip="Deletes item irrevocably" />
+                );
+            }
+            else
+            {
+                return (
+                    <EditButton onClick={() => { onEdit(item); }} tooltip="Edit item" />
+                );
+            }
+        }
+
+        function renderPrice(): React.ReactNode
+        {
+            return (
+                <Text>
+                    {new MoneyAmount(item.price_in_cents).format()}
+                </Text>
+            );
+        }
+
+        function renderCharity(): React.ReactNode
+        {
+            if ( item.charity )
+            {
+                return (
+                    <CharityIcon />
+                );
+            }
+            else
+            {
+                return (
+                    <></>
+                );
+            }
+        }
+
+        function renderDonation(): React.ReactNode
+        {
+            if ( isDonation(item.recipient_id) )
+            {
+                return (
+                    <DonationIcon />
+                )
+            }
+            else
+            {
+                return (
+                    <></>
+                );
+            }
+        }
+    }
+
+    function onEdit(item: Item)
+    {
+        const state: EditItemState = item;
+        navigate(`/edit-item`, { state });
+    }
 
     function onDelete(itemToBeDeleted: Item)
     {
@@ -155,109 +296,5 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
         };
 
         navigate('/add-item', { state });
-    }
-}
-
-
-const useItemViewerStyles = createStyles(() => ({
-    item: {
-        '&:nth-child(odd)': {
-            background: '#333',
-            padding: '5px',
-        },
-    }
-}));
-
-
-function ItemViewer({ item, showDelete, onDelete } : { item: Item, showDelete: boolean, onDelete: () => void }): JSX.Element
-{
-    const navigate = useNavigate();
-    const { price_in_cents, description } = item;
-    const { classes } = useItemViewerStyles();
-
-    return (
-        <>
-            <Group position="apart" className={classes.item}>
-                <Text w='70%'>
-                    {description}
-                </Text>
-                <Group>
-                    {renderCharity()}
-                    {renderDonation()}
-                    <Text>
-                        {new MoneyAmount(price_in_cents).format()}
-                    </Text>
-                    {renderEditButton()}
-                    {renderDeleteButton()}
-                </Group>
-            </Group>
-        </>
-    );
-
-
-    function renderCharity()
-    {
-        if ( item.charity )
-        {
-            return (
-                <CharityIcon />
-            );
-        }
-        else
-        {
-            return (
-                <></>
-            );
-        }
-    }
-
-    function renderDonation()
-    {
-        if ( isDonation(item.recipient_id) )
-        {
-            return (
-                <DonationIcon />
-            )
-        }
-        else
-        {
-            return (
-                <></>
-            );
-        }
-    }
-
-    function renderEditButton()
-    {
-        if ( !showDelete )
-        {
-            return (
-                <EditButton onClick={onEdit} tooltip="Edit item" />
-            );
-        }
-        else
-        {
-            return <></>;
-        }
-    }
-
-    function renderDeleteButton()
-    {
-        if ( showDelete )
-        {
-            return (
-                <DeleteButton onClick={onDelete} />
-            );
-        }
-        else
-        {
-            return <></>;
-        }
-    }
-
-    function onEdit()
-    {
-        const state: EditItemState = item;
-        navigate(`/edit-item`, { state });
     }
 }

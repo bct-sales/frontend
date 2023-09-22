@@ -15,8 +15,8 @@ export function isDonation(recipientId: number): boolean
 export function createInitialAuthentication(): AuthenticationData | undefined
 {
     // TODO Needs to be removed!
-    // return undefined;
-    return createSellerAuthentication();
+    return undefined;
+    // return createSellerAuthentication();
     // return createAdminAuthentication();
 }
 
@@ -25,10 +25,10 @@ export function createInitialAuthentication(): AuthenticationData | undefined
 function createSellerAuthentication(): AuthenticationData
 {
     // cspell:disable-next-line
-    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzIzMzg1OTU3LCJzY29wZXMiOlsiaXRlbXM6ZWRpdC1vd24iLCJpdGVtczpsaXN0LW93biIsImV2ZW50czpsaXN0IiwiaXRlbXM6YWRkLW93biJdfQ.RiIcpyJTEDCCmTkXLrFTUI38B9ofQCeYTgTt4W3AhQ8`;
+    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzI2OTM3OTM0LCJzY29wZXMiOlsiaXRlbXM6YWRkLW93biIsIml0ZW1zOmxpc3Qtb3duIiwiaXRlbXM6cmVtb3ZlLW93biIsIml0ZW1zOmVkaXQtb3duIiwiZXZlbnRzOmxpc3QiXX0.jdJS81LdsezD6yabroF0QGZ3KP0a2ZewfjP_SQkOasA`;
     const emailAddress = `seller@bct.be`;
     const role = 'seller';
-    const userId = 1;
+    const userId = 2;
 
     return { emailAddress, role, accessToken, userId };
 }
@@ -38,10 +38,10 @@ function createSellerAuthentication(): AuthenticationData
 function createAdminAuthentication(): AuthenticationData
 {
     // cspell:disable-next-line
-    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzI0MTczMDIxLCJzY29wZXMiOlsiZXZlbnRzOmxpc3QiLCJldmVudHM6YWRkIiwiYWNjb3VudHM6bGlzdCIsImV2ZW50czplZGl0IiwiaXRlbXM6bGlzdC1hbGwiXX0.NARsbadKybPUJxog7zyRk9eNQ5jE-L2gYBoLRYDfwOc`;
+    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzI2OTM3OTY3LCJzY29wZXMiOlsiZXZlbnRzOmFkZCIsImV2ZW50czpsaXN0OnVuYXZhaWxhYmxlIiwiaXRlbXM6bGlzdC1hbGwiLCJldmVudHM6bGlzdCIsImFjY291bnRzOmxpc3QiLCJldmVudHM6ZWRpdCJdfQ.7oUuhGz-lUIZ3Qx2DzmUhH6USz3IljJnNj4GcFSGcPQ`;
     const emailAddress = `admin@bct.be`;
     const role = 'admin';
-    const userId = 2;
+    const userId = 1;
 
     return { emailAddress, role, accessToken, userId };
 }

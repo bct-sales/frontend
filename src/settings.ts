@@ -1,6 +1,9 @@
 import { AuthenticationData } from "./auth/types";
 
 
+export const rootUrl = 'http://localhost:8000/api/v1';
+
+
 export function getDonationUserId(): number
 {
     return 0;

@@ -54,7 +54,7 @@ const useStyles = createStyles(() => ({
 
 
 const ItemsPageState = z.object({
-    url: z.string().url(),
+    url: z.string(), // url
     eventId: z.number().nonnegative(),
 }).strict();
 

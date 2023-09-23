@@ -16,7 +16,7 @@ interface Props
 }
 
 const AddItemState = z.object({
-    addItemUrl: z.string(),
+    addItemUrl: z.string(), // url
     salesEventId: z.number().nonnegative(),
 }).strict();
 

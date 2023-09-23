@@ -15,12 +15,12 @@ const ListEventsResult = z.object({
         description: z.string(),
         available: z.boolean(),
         links: z.object({
-            items: z.string().url(),
-            edit: z.string().url(),
+            items: z.string(), // url
+            edit: z.string(), // url
         }).strict()
     })),
     links: z.object({
-        add: z.string().url(),
+        add: z.string(), // url
     }).strict(),
 }).strict();
 

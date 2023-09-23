@@ -20,8 +20,8 @@ const EditItemState = z.object({
     owner_id: z.number().nonnegative(),
     charity: z.boolean(),
     links: z.object({
-        edit: z.string().url(),
-        delete: z.string().url(),
+        edit: z.string(), // url
+        delete: z.string(), // url
     }).strict()
 }).strict();
 

@@ -15,7 +15,7 @@ const GenerateLabelsData = z.object({
 export type GenerateLabelsData = z.infer<typeof GenerateLabelsData>;
 
 const GenerateLabelsResponse = z.object({
-    status_url: z.string().url(),
+    status_url: z.string(), // url
 }).strict();
 
 export type GenerateLabelsResponse = z.infer<typeof GenerateLabelsResponse>;
@@ -36,7 +36,10 @@ export async function generateLabels(accessToken: string, data: GenerateLabelsDa
 
 const StatusResponse = z.discriminatedUnion("status", [
     z.object({status: z.literal('pending')}).strict(),
-    z.object({status: z.literal('ready'), url: z.string().url()}).strict(),
+    z.object({
+        status: z.literal('ready'),
+        url: z.string(), // url
+    }).strict(),
 ]);
 
 export type StatusResponse = z.infer<typeof StatusResponse>;

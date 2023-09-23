@@ -1,7 +1,8 @@
 import { AuthenticationData } from "./auth/types";
 
 
-export const rootUrl = 'http://localhost:8000/api/v1';
+// export const rootUrl = 'http://localhost:8000/api/v1';
+export const rootUrl = '/api/v1';
 
 
 export function getDonationUserId(): number
@@ -17,8 +18,8 @@ export function isDonation(recipientId: number): boolean
 
 export function createInitialAuthentication(): AuthenticationData | undefined
 {
-    // TODO Needs to be removed!
-    return undefined;
+    // TODO Set this correctly!
+    return undefined;  // No default authentication, must be used in production
     // return createSellerAuthentication();
     // return createAdminAuthentication();
 }

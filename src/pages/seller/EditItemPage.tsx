@@ -59,6 +59,8 @@ export default function EditItemPage(props: { auth: AuthenticatedSellerStatus })
 function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item }): JSX.Element
 {
     const [ item, setItem ] = useState<Item>(props.item);
+    const [ validFields, setValidFields ] = useState<boolean>(true);
+
     const itemEditorData: ItemEditorData = {
         description: item.description,
         price_in_cents: item.price_in_cents,
@@ -71,7 +73,7 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
             <Card maw={500} mx='auto' m='xl'>
                 <ItemEditor data={itemEditorData} onChange={onChange} />
                 <Group position="right" mt='xl'>
-                    <Button onClick={onUpdateItem}>
+                    <Button onClick={onUpdateItem} disabled={!validFields}>
                         Update
                     </Button>
                     <Button onClick={onCancel}>
@@ -119,7 +121,7 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
         history.back();
     }
 
-    function onChange(data: ItemEditorData)
+    function onChange(data: ItemEditorData, valid: boolean)
     {
         const newItem = {
             ...item,
@@ -130,5 +132,6 @@ function ActualEditItemPage(props: { auth: AuthenticatedSellerStatus, item: Item
         };
 
         setItem(newItem);
+        setValidFields(valid);
     }
 }

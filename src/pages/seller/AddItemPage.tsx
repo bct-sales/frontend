@@ -43,13 +43,14 @@ export default function AddItemPage(props: Props): JSX.Element
 function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string, salesEventId: number }): JSX.Element
 {
     const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', price_in_cents: 0, isDonation: false, isForCharity: false });
+    const [ validFields, setValidFields ] = useState<boolean>(true);
 
     return (
         <>
             <Card maw={500} mx='auto' m='xl'>
                 <ItemEditor data={itemData} onChange={onChange} />
                 <Group position="right" mt='xl'>
-                    <Button onClick={onAddItem}>
+                    <Button onClick={onAddItem} disabled={!validFields}>
                         Add
                     </Button>
                     <Button onClick={onCancel}>
@@ -103,8 +104,9 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
         history.back();
     }
 
-    function onChange(data: ItemEditorData)
+    function onChange(data: ItemEditorData, valid: boolean)
     {
         setItemData(data);
+        setValidFields(valid);
     }
 }

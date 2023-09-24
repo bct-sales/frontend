@@ -63,7 +63,7 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
 
     function onAddItem()
     {
-        const recipientId = getDonationUserId();
+        const recipientId = itemData.isDonation ? getDonationUserId() : props.auth.userId;
 
         const data: AddItemData = {
             description: itemData.description,

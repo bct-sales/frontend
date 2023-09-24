@@ -48,7 +48,7 @@ export default function LoginPage()
                             </Box>
                         </Center>
 
-                        <Group position="apart" mt="md">
+                        <Group position="center" mt="md">
                             <Button type="submit" disabled={!nonemptyInputs()}>Login</Button>
                         </Group>
                     </form>

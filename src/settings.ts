@@ -1,8 +1,12 @@
 import { AuthenticationData } from "./auth/types";
 
 
-// export const rootUrl = 'http://localhost:8000/api/v1';
-export const rootUrl = '/api/v1';
+export function getRootUrl()
+{
+    // Defined in vite.config.ts
+    console.log(ROOT_URL);
+    return ROOT_URL;
+}
 
 
 export function getDonationUserId(): number

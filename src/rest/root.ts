@@ -1,4 +1,4 @@
-import { rootUrl } from "@/settings";
+import { getRootUrl } from "@/settings";
 import axios from "axios";
 import React from "react";
 import { z } from "zod";
@@ -17,7 +17,7 @@ export type Root = z.infer<typeof Root>;
 
 export async function fetchRoot(): Promise<Root>
 {
-    const response = await axios.get<unknown>(rootUrl);
+    const response = await axios.get<unknown>(getRootUrl());
 
     return Root.parse(response.data);
 }

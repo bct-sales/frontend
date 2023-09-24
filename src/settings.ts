@@ -33,9 +33,9 @@ export function createInitialAuthentication(): AuthenticationData | undefined
 function createSellerAuthentication(): AuthenticationData
 {
     // cspell:disable-next-line
-    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzI2OTM3OTM0LCJzY29wZXMiOlsiaXRlbXM6YWRkLW93biIsIml0ZW1zOmxpc3Qtb3duIiwiaXRlbXM6cmVtb3ZlLW93biIsIml0ZW1zOmVkaXQtb3duIiwiZXZlbnRzOmxpc3QiXX0.jdJS81LdsezD6yabroF0QGZ3KP0a2ZewfjP_SQkOasA`;
-    const role = 'seller';
-    const userId = 2;
+    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzI3MTE2MTI1LCJzY29wZXMiOlsiZXZlbnRzOmFkZCIsImFjY291bnRzOmxpc3QiLCJldmVudHM6bGlzdDp1bmF2YWlsYWJsZSIsImV2ZW50czplZGl0IiwiZXZlbnRzOmxpc3QiLCJpdGVtczpsaXN0LWFsbCJdfQ.QBSnGKccwyGJ-_hVCJmL5b06dVkTsSzNQT7HPqc9Kjc`;
+    const role = 'admin';
+    const userId = 1;
 
     return { role, accessToken, userId };
 }
@@ -45,9 +45,9 @@ function createSellerAuthentication(): AuthenticationData
 function createAdminAuthentication(): AuthenticationData
 {
     // cspell:disable-next-line
-    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzI2OTM3OTY3LCJzY29wZXMiOlsiZXZlbnRzOmFkZCIsImV2ZW50czpsaXN0OnVuYXZhaWxhYmxlIiwiaXRlbXM6bGlzdC1hbGwiLCJldmVudHM6bGlzdCIsImFjY291bnRzOmxpc3QiLCJldmVudHM6ZWRpdCJdfQ.7oUuhGz-lUIZ3Qx2DzmUhH6USz3IljJnNj4GcFSGcPQ`;
-    const role = 'admin';
-    const userId = 1;
+    const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzI3MTE2MTM0LCJzY29wZXMiOlsiaXRlbXM6bGlzdC1vd24iLCJpdGVtczphZGQtb3duIiwiZXZlbnRzOmxpc3QiLCJpdGVtczpyZW1vdmUtb3duIiwiaXRlbXM6ZWRpdC1vd24iXX0.Wsui7-oM_qvA3zMWSiq1ShFAfePQIUPEUKUuE1GuoUU`;
+    const role = 'seller';
+    const userId = 2;
 
     return { role, accessToken, userId };
 }

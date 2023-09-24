@@ -1,8 +1,7 @@
 import { useAuth } from "@/auth/context";
-import { Role } from "@/auth/types";
 import * as rest from '@/rest';
 import { useRestApiRoot } from "@/rest/root";
-import { Anchor, Box, Button, Center, Group, Modal, PasswordInput, Text, TextInput, Title } from "@mantine/core";
+import { Box, Button, Center, Group, Modal, PasswordInput, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";

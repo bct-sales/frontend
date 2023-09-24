@@ -74,26 +74,27 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
         };
 
         addItem(props.auth.accessToken, data, props.url).then(onSuccess).catch(onError);
-    }
 
-    function onSuccess()
-    {
-        notifications.show({ message: 'Item successfully added' });
-        history.back();
-    }
 
-    function onError(error: unknown)
-    {
-        const detail = extractDetailFromException(error);
-
-        if ( detail !== null )
+        function onSuccess()
         {
-            notifications.show({message: detail});
+            notifications.show({ message: 'Item successfully added' });
+            history.back();
         }
-        else
+
+        function onError(error: unknown)
         {
-            notifications.show({message: "Something went wrong"});
-            console.log(error);
+            const detail = extractDetailFromException(error);
+
+            if ( detail !== null )
+            {
+                notifications.show({message: detail});
+            }
+            else
+            {
+                console.error(error);
+                notifications.show({message: "Something went wrong"});
+            }
         }
     }
 

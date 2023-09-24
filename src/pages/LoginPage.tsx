@@ -43,7 +43,7 @@ export default function LoginPage()
                     <form onSubmit={form.onSubmit(onSubmit)}>
                         <Center>
                             <Box miw='20em'>
-                                <TextInput label="Email Address" placeholder="Email Address" {...form.getInputProps('emailAddress')} p='sm' />
+                                <TextInput label="Your ID" placeholder="Number" {...form.getInputProps('emailAddress')} p='sm' />
                                 <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} p='sm' />
                             </Box>
                         </Center>

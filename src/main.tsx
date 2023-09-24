@@ -20,10 +20,6 @@ if ( root )
             element: <App />,
             children: [
                 {
-                    path: "/register",
-                    element: <pages.RegisterPage />,
-                },
-                {
                     path: "/login",
                     element: <pages.LoginPage />
                 },

@@ -30,7 +30,7 @@ function AppHeader()
             return (
                 <Group position='right'>
                     <Text>
-                        Logged in as {auth.emailAddress} ({auth.role})
+                        Logged in as {auth.userId} ({auth.role})
                     </Text>
                     <Tooltip label="Logout">
                         <ActionIcon onClick={onLogout}>

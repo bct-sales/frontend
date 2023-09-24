@@ -6,7 +6,7 @@ import { extractDetailFromException } from './error-handling';
 
 
 const AuthenticationParameters = z.object({
-    emailAddress: z.string().email(),
+    userId: z.number(),
     password: z.string(),
 });
 
@@ -30,7 +30,7 @@ export async function authenticateUser( url: string, data: AuthenticationParamet
 {
     const payload = {
         grant_type: 'password',
-        username: data.emailAddress,
+        username: `${data.userId}`,
         password: data.password
     };
     const headers = {

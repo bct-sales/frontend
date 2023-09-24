@@ -3,8 +3,6 @@ export type Role = "seller" | "admin";
 
 export interface AuthenticationData
 {
-    emailAddress: string;
-
     accessToken: string;
 
     role: Role;
@@ -33,11 +31,6 @@ export abstract class AuthenticatedStatusBase extends AuthenticationStatusBase
     public abstract isAdmin(): this is AuthenticatedAdminStatus;
 
     public abstract isSeller(): this is AuthenticatedSellerStatus;
-
-    public get emailAddress(): string
-    {
-        return this.data.emailAddress;
-    }
 
     public get accessToken(): string
     {

@@ -1,7 +1,7 @@
 import { useAuth } from "@/auth/context";
 import * as rest from '@/rest';
 import { useRestApiRoot } from "@/rest/root";
-import { Box, Button, Center, Group, Modal, PasswordInput, Text, TextInput, Title } from "@mantine/core";
+import { Box, Button, Center, Group, Modal, NumberInput, PasswordInput, Text, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 interface FormFields
 {
-    emailAddress: string;
+    userId: number;
     password: string;
 }
 
@@ -23,7 +23,7 @@ export default function LoginPage()
     const navigate = useNavigate();
     const form = useForm<FormFields>({
         initialValues: {
-            emailAddress: '',
+            userId: 0,
             password: ''
         },
     });
@@ -42,7 +42,7 @@ export default function LoginPage()
                     <form onSubmit={form.onSubmit(onSubmit)}>
                         <Center>
                             <Box miw='20em'>
-                                <TextInput label="Your ID" placeholder="Number" {...form.getInputProps('emailAddress')} p='sm' />
+                                <NumberInput label="Your ID" placeholder="Number" {...form.getInputProps('userId')} p='sm' />
                                 <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} p='sm' />
                             </Box>
                         </Center>
@@ -65,22 +65,26 @@ export default function LoginPage()
     {
         const fields = form.values;
 
-        return fields.emailAddress.length > 0 && fields.password.length > 0;
+        return fields.userId > 0 && fields.password.length > 0;
     }
 
     function onSubmit(formFields: FormFields)
     {
         void (async () => {
-            const result = await rest.authenticateUser(restRoot.links.login, formFields);
+            const authenticationParameters: rest.AuthenticationParameters = {
+                userId: formFields.userId,
+                password: formFields.password,
+            };
+
+            const result = await rest.authenticateUser(restRoot.links.login, authenticationParameters);
 
             if ( result.success )
             {
                 const { userId, role, accessToken } = result.value;
-                const emailAddress = formFields.emailAddress;
 
                 if ( !auth.isAuthenticated() )
                 {
-                    auth.login({ emailAddress, role, accessToken,  userId });
+                    auth.login({ role, accessToken, userId });
 
                     navigate("/");
                 }

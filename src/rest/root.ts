@@ -6,7 +6,6 @@ import { z } from "zod";
 
 export const Root = z.object({
     links: z.object({
-        registration: z.string(),
         login: z.string(),
         events: z.string(),
     }).strict(),

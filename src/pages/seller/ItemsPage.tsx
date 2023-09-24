@@ -258,6 +258,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
         deleteItem(props.auth.accessToken, itemToBeDeleted.links.delete).then(() => {
             const remainingItems = items.filter(item => item.item_id !== itemToBeDeleted.item_id);
             setItems(remainingItems);
+            notifications.show({ message: 'Item successfully removed' });
         }).catch((reason) => {
             console.error(reason);
 

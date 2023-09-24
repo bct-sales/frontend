@@ -49,9 +49,6 @@ export default function LoginPage()
                         </Center>
 
                         <Group position="apart" mt="md">
-                            <Text>
-                                No account? Click <Anchor href="/register">here</Anchor> to register.
-                            </Text>
                             <Button type="submit" disabled={!nonemptyInputs()}>Login</Button>
                         </Group>
                     </form>

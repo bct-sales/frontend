@@ -48,13 +48,13 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
     const [sheetSpecs, setSheetSpecs] = React.useState<SheetSpecificationsData>({
         sheetWidth: 210,
         sheetHeight: 297,
-        labelWidth: 65,
+        labelWidth: 100,
         labelHeight: 30,
-        columnCount: 3,
+        columnCount: 2,
         rowCount: 8,
         margin: 5,
-        spacing: 5,
-        font_size: 14,
+        spacing: 2,
+        font_size: 12,
         border: false,
     });
     const [error, setError] = React.useState<boolean>(false);

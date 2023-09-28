@@ -62,7 +62,7 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
     return (
         <>
             <Paper mx='auto' p="md" maw={1000}>
-            <Group position="apart">
+                <Group position="apart">
                     <Title>
                         Generate Labels
                     </Title>

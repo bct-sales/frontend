@@ -10,6 +10,10 @@ const GenerateLabelsData = z.object({
     label_width: z.number().int(),
     label_height: z.number().int(),
     corner_radius: z.number().int(),
+    margin: z.number().nonnegative(),
+    spacing: z.number().nonnegative(),
+    font_size: z.number().nonnegative(),
+    border: z.boolean(),
 }).strict();
 
 export type GenerateLabelsData = z.infer<typeof GenerateLabelsData>;

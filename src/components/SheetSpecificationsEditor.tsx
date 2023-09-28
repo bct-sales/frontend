@@ -1,5 +1,6 @@
 import { IntegerInput } from "@/components/IntegerInput";
-import { Stack } from "@mantine/core";
+import { Stack, Switch } from "@mantine/core";
+import { ChangeEvent } from "react";
 import { z } from "zod";
 
 
@@ -10,6 +11,10 @@ const SheetSpecificationsData = z.object({
     labelHeight: z.number().nonnegative(),
     columnCount: z.number().nonnegative(),
     rowCount: z.number().nonnegative(),
+    margin: z.number().nonnegative(),
+    spacing: z.number().nonnegative(),
+    font_size: z.number().nonnegative(),
+    border: z.boolean(),
 }).strict();
 
 export type SheetSpecificationsData = z.infer<typeof SheetSpecificationsData>;
@@ -34,6 +39,10 @@ export default function SheetSpecificationsEditor(props: Props): JSX.Element
                 <IntegerInput label="Row Count" onChange={onChange('rowCount')} value={props.data.rowCount} />
                 <IntegerInput label="Label Width" onChange={onChange('labelWidth')} value={props.data.labelWidth} />
                 <IntegerInput label="Label Height" onChange={onChange('labelHeight')} value={props.data.labelHeight} />
+                <IntegerInput label="Margin" onChange={onChange('margin')} value={props.data.margin} />
+                <IntegerInput label="Spacing" onChange={onChange('spacing')} value={props.data.spacing} />
+                <IntegerInput label="Font Size" onChange={onChange('font_size')} value={props.data.font_size} />
+                <Switch label="Draw border" checked={props.data.border} onChange={onBorderChange} />
             </Stack>
         </>
     );
@@ -48,5 +57,15 @@ export default function SheetSpecificationsEditor(props: Props): JSX.Element
                 [key]: value,
             })
         };
+    }
+
+    function onBorderChange(event: ChangeEvent<HTMLInputElement>): void
+    {
+        const checked = event.target.checked;
+
+        props.onChange({
+            ...props.data,
+            border: checked,
+        });
     }
 }

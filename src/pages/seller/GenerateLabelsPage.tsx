@@ -52,6 +52,10 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
         labelHeight: 30,
         columnCount: 3,
         rowCount: 8,
+        margin: 5,
+        spacing: 5,
+        font_size: 14,
+        border: false,
     });
     const [error, setError] = React.useState<boolean>(false);
     const { classes } = useStyles();
@@ -127,7 +131,11 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
             rows: sheetSpecs.rowCount,
             label_width: sheetSpecs.labelWidth,
             label_height: sheetSpecs.labelHeight,
-            corner_radius: 2
+            corner_radius: 2,
+            margin: sheetSpecs.margin,
+            spacing: sheetSpecs.spacing,
+            font_size: sheetSpecs.font_size,
+            border: sheetSpecs.border,
         };
 
         generateLabels(props.auth.accessToken, data, props.generateLabelsUrl).then((statusUrl: string) => {

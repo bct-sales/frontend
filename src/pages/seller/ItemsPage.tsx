@@ -10,9 +10,8 @@ import { deleteItem, listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { isDonation } from "@/settings";
-import { ActionIcon, Box, Button, Center, Group, Header, Paper, Stack, Switch, Table, Text, Title, Tooltip, createStyles } from "@mantine/core";
+import { Box, Button, Center, Group, Header, Paper, Stack, Switch, Table, Text, Title, createStyles } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { IconQrcode } from "@tabler/icons-react";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -116,13 +115,8 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
                     </Title>
                     <Group position="right">
                         <Switch label="Delete mode" onChange={onToggleDeleteVisibility} />
-                        <Tooltip label="Generate PDF">
-                            <ActionIcon onClick={onGenerateLabels}>
-                                <IconQrcode />
-                            </ActionIcon>
-                        </Tooltip>
-                        <Button onClick={onBackToEventsPage}>
-                            Back
+                        <Button onClick={onGenerateLabels}>
+                            Generate Labels
                         </Button>
                     </Group>
                 </Group>
@@ -282,11 +276,6 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
         const checked = event.target.checked;
 
         setShowDelete(checked);
-    }
-
-    function onBackToEventsPage()
-    {
-        navigate('/events');
     }
 
     function onAddItem()

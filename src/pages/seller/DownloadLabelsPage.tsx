@@ -1,12 +1,11 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { checkLabelGenerationStatus } from "@/rest/labels";
-import { Button, Center, Paper, Stack } from "@mantine/core";
+import { Button, Center, Loader, Paper, Stack } from "@mantine/core";
 import { IconFileDownload } from "@tabler/icons-react";
 import React from "react";
 import { z } from "zod";
 import { Text } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
 
 
 const DownloadLabelsPageState = z.object({
@@ -40,7 +39,6 @@ export default function DownloadLabelsPage(props: { auth: AuthenticatedSellerSta
 function ActualDownloadLabelsPage(props: { auth: AuthenticatedSellerStatus, statusUrl: string }): JSX.Element
 {
     const [ downloadUrl, setDownloadUrl ] = React.useState<string | undefined>(undefined);
-    const navigate = useNavigate();
 
     React.useEffect(() => {
         const aux = async () => {
@@ -48,7 +46,7 @@ function ActualDownloadLabelsPage(props: { auth: AuthenticatedSellerStatus, stat
 
             if ( result === undefined )
             {
-                setTimeout(() => void aux(), 1000);
+                setTimeout(() => void aux(), 5000);
             }
             else
             {
@@ -64,9 +62,16 @@ function ActualDownloadLabelsPage(props: { auth: AuthenticatedSellerStatus, stat
     {
         return (
             <>
-                <Center>
-                    Waiting for generation to be ready
-                </Center>
+                <Stack m='xl'>
+                    <Center>
+                        <Loader />
+                    </Center>
+                    <Center>
+                        <Text>
+                            Waiting for generation to be ready (expected: 5s)
+                        </Text>
+                    </Center>
+                </Stack>
             </>
         );
     }

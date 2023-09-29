@@ -31,6 +31,7 @@ export function createInitialAuthentication(): AuthenticationData | undefined
 /* eslint-disable @typescript-eslint/no-unused-vars */
 function createSellerAuthentication(): AuthenticationData
 {
+    // It's safe to leave this access token here, it's only valid on the dev machine
     // cspell:disable-next-line
     const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzI3MTE2MTI1LCJzY29wZXMiOlsiZXZlbnRzOmFkZCIsImFjY291bnRzOmxpc3QiLCJldmVudHM6bGlzdDp1bmF2YWlsYWJsZSIsImV2ZW50czplZGl0IiwiZXZlbnRzOmxpc3QiLCJpdGVtczpsaXN0LWFsbCJdfQ.QBSnGKccwyGJ-_hVCJmL5b06dVkTsSzNQT7HPqc9Kjc`;
     const role = 'admin';
@@ -43,6 +44,7 @@ function createSellerAuthentication(): AuthenticationData
 /* eslint-disable @typescript-eslint/no-unused-vars */
 function createAdminAuthentication(): AuthenticationData
 {
+    // It's safe to leave this access token here, it's only valid on the dev machine
     // cspell:disable-next-line
     const accessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzI3MTE2MTM0LCJzY29wZXMiOlsiaXRlbXM6bGlzdC1vd24iLCJpdGVtczphZGQtb3duIiwiZXZlbnRzOmxpc3QiLCJpdGVtczpyZW1vdmUtb3duIiwiaXRlbXM6ZWRpdC1vd24iXX0.Wsui7-oM_qvA3zMWSiq1ShFAfePQIUPEUKUuE1GuoUU`;
     const role = 'seller';

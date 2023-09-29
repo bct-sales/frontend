@@ -106,3 +106,29 @@ export async function deleteItem(accessToken: string, url: string): Promise<void
 
     await axios.delete<unknown>( url, { headers } );
 }
+
+
+
+const GetItemData = z.object({
+    item_id: z.number().nonnegative(),
+    description: z.string(),
+    price_in_cents: z.number().nonnegative(),
+    recipient_id: z.number().nonnegative(),
+    sales_event_id: z.number().nonnegative(),
+    owner_id: z.number().nonnegative(),
+    charity: z.boolean(),
+}).strict();
+
+export type GetItemData = z.infer<typeof GetItemData>;
+
+export async function getItem(accessToken: string, url: string): Promise<GetItemData>
+{
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    };
+
+    const response = await axios.get<unknown>( url, { headers } );
+    const result = GetItemData.parse(response.data);
+
+    return result;
+}

@@ -60,6 +60,10 @@ if ( root )
                     element:<AuthGuard role='admin' child={auth => <pages.admin.AddEventPage auth={auth} />} />,
                 },
                 {
+                    path: "/cashier/sale",
+                    element:<AuthGuard role='seller' child={auth => <pages.cashier.SalePage auth={auth} />} />,
+                },
+                {
                     path: "/",
                     element: <pages.EntryPage />,
                 },

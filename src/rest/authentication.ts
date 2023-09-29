@@ -16,7 +16,7 @@ export type AuthenticationParameters = z.infer<typeof AuthenticationParameters>;
 const LoginResponse = z.object({
     user_id: z.number().nonnegative(),
     access_token: z.string(),
-    role: z.union([z.literal('seller'), z.literal('admin')]),
+    role: z.union([z.literal('seller'), z.literal('admin'), z.literal('cashier')]),
     token_type: z.string(),
     links: z.object({
         events: z.string(),

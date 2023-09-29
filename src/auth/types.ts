@@ -1,4 +1,4 @@
-export type Role = "seller" | "admin";
+export type Role = "seller" | "admin" | "cashier";
 
 
 export interface AuthenticationData
@@ -32,6 +32,8 @@ export abstract class AuthenticatedStatusBase extends AuthenticationStatusBase
 
     public abstract isSeller(): this is AuthenticatedSellerStatus;
 
+    public abstract isCashier(): this is AuthenticatedCashierStatus;
+
     public get accessToken(): string
     {
         return this.data.accessToken;
@@ -59,6 +61,11 @@ export class AuthenticatedSellerStatus extends AuthenticatedStatusBase
     {
         return true;
     }
+
+    public isCashier(): this is AuthenticatedCashierStatus
+    {
+        return false;
+    }
 }
 
 export class AuthenticatedAdminStatus extends AuthenticatedStatusBase
@@ -72,11 +79,34 @@ export class AuthenticatedAdminStatus extends AuthenticatedStatusBase
     {
         return false;
     }
+
+    public isCashier(): this is AuthenticatedCashierStatus
+    {
+        return false;
+    }
+}
+
+export class AuthenticatedCashierStatus extends AuthenticatedStatusBase
+{
+    public isAdmin(): this is AuthenticatedAdminStatus
+    {
+        return false;
+    }
+
+    public isSeller(): this is AuthenticatedSellerStatus
+    {
+        return false;
+    }
+
+    public isCashier(): this is AuthenticatedCashierStatus
+    {
+        return true;
+    }
 }
 
 export type AuthenticationStatus = AuthenticatedStatus | UnauthenticatedStatus;
 
-export type AuthenticatedStatus = AuthenticatedSellerStatus | AuthenticatedAdminStatus;
+export type AuthenticatedStatus = AuthenticatedSellerStatus | AuthenticatedAdminStatus | AuthenticatedCashierStatus;
 
 export class UnauthenticatedStatus extends AuthenticationStatusBase
 {
@@ -107,6 +137,9 @@ export function createAuthenticationStatus(data: AuthenticationData | undefined,
 
         case 'seller':
             return new AuthenticatedSellerStatus(data, logout);
+
+        case 'cashier':
+            return new AuthenticatedCashierStatus(data, logout);
 
         default:
             console.error(`Unknown role`, data.role);

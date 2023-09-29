@@ -61,7 +61,7 @@ if ( root )
                 },
                 {
                     path: "/cashier/sale",
-                    element:<AuthGuard role='seller' child={auth => <pages.cashier.SalePage auth={auth} />} />,
+                    element:<AuthGuard role='cashier' child={auth => <pages.cashier.SalePage auth={auth} />} />,
                 },
                 {
                     path: "/",

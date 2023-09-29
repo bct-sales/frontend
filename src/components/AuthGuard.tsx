@@ -21,7 +21,14 @@ interface AdminProps extends BaseProps
     role: 'admin';
 }
 
-type Props = SellerProps | AdminProps;
+interface CashierProps extends BaseProps
+{
+    child: (auth: AuthenticatedAdminStatus) => JSX.Element;
+
+    role: 'cashier';
+}
+
+type Props = SellerProps | AdminProps | CashierProps;
 
 
 export default function AuthGuard(props: Props): JSX.Element
@@ -35,6 +42,10 @@ export default function AuthGuard(props: Props): JSX.Element
             return props.child(auth);
         }
         else if ( props.role === 'admin' && auth.role === 'admin' )
+        {
+            return props.child(auth);
+        }
+        else if ( props.role === 'cashier' && auth.role === 'cashier' )
         {
             return props.child(auth);
         }

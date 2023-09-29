@@ -34,6 +34,8 @@ export default function EntryPage(): React.ReactNode
                 return '/admin/events';
             case 'seller':
                 return '/events';
+            case 'cashier':
+                return '/cashier/sale';
             default:
                 console.error('Unknown role', role);
                 throw new Error('Unknown role');

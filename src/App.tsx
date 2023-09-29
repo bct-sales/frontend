@@ -1,6 +1,6 @@
 import { ActionIcon, Group, Header, MantineProvider, MediaQuery, Text, Title, Tooltip } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { IconLogout } from '@tabler/icons-react';
+import { IconHome, IconLogout } from '@tabler/icons-react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from './auth/context';
 import RestRootProvider from './rest/RestRootProvider';
@@ -14,9 +14,14 @@ function AppHeader()
     return (
         <Header p='lg' height={{base: 60, md: 80}}>
             <Group position='apart'>
-                <MediaQuery smallerThan='sm' styles={{display: 'none'}}>
-                    <Title>BCT Sales</Title>
-                </MediaQuery>
+                <Group>
+                    <Tooltip label="Go back to main page">
+                        <a href="/"><IconHome /></a>
+                    </Tooltip>
+                    <MediaQuery smallerThan='sm' styles={{display: 'none'}}>
+                        <Title>BCT Sales</Title>
+                    </MediaQuery>
+                </Group>
                 {renderLogoutFunctionality()}
             </Group>
         </Header>
@@ -32,7 +37,7 @@ function AppHeader()
                     <Text>
                         Logged in as {auth.userId} ({auth.role})
                     </Text>
-                    <Tooltip label="Logout">
+                    <Tooltip label="Log Out">
                         <ActionIcon onClick={onLogout}>
                             <IconLogout />
                         </ActionIcon>

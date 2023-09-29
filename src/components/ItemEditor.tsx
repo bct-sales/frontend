@@ -27,7 +27,7 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
 
     return (
         <>
-            <TextInput value={description} label='Description' placeholder="Description" onChange={onChangeDescription} m='xl' />
+            <TextInput autoFocus value={description} label='Description' placeholder="Description" onChange={onChangeDescription} m='xl' />
             <NumberInput value={priceInCents / 100} label='Price' parser={parser} formatter={formatter} onChange={onChangePrice} step={0.5} min={0} precision={2} m='xl' {...priceError} />
             <Switch checked={donation} label="Donate proceeds to BCT" m='xl' onChange={onChangeDonation} />
             <Switch checked={isForCharity} label="Donate to charity if unsold" m='xl' onChange={onChangeCharity} />

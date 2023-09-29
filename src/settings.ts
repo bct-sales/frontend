@@ -4,7 +4,6 @@ import { AuthenticationData } from "./auth/types";
 export function getRootUrl()
 {
     // Defined in vite.config.ts
-    console.log(ROOT_URL);
     return ROOT_URL;
 }
 

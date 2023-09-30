@@ -149,7 +149,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {items.map(renderItem)}
+                                {[...items].reverse().map(renderItem)}
                                 </tbody>
                             </Table>
                         </Center>

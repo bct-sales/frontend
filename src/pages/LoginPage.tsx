@@ -1,7 +1,7 @@
 import { useAuth } from "@/auth/context";
 import * as rest from '@/rest';
 import { useRestApiRoot } from "@/rest/root";
-import { Box, Button, Center, Group, Modal, NumberInput, PasswordInput, Text, Title } from "@mantine/core";
+import { Box, Button, Center, Group, Modal, PasswordInput, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import React from "react";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 interface FormFields
 {
-    userId: number;
+    userId: string;
     password: string;
 }
 
@@ -23,9 +23,13 @@ export default function LoginPage()
     const navigate = useNavigate();
     const form = useForm<FormFields>({
         initialValues: {
-            userId: 0,
+            userId: '',
             password: ''
         },
+        validate: {
+            userId: login => { console.log('1'); return isValidLogin(login) ? null : "Enter a series of digits"; },
+            password: password => (isValidPassword(password) ? null : "Enter a password"),
+        }
     });
 
     React.useEffect(() => {
@@ -42,37 +46,56 @@ export default function LoginPage()
                     <form onSubmit={form.onSubmit(onSubmit)}>
                         <Center>
                             <Box miw='20em'>
-                                <NumberInput label="Your ID" placeholder="Number" {...form.getInputProps('userId')} p='sm' />
-                                <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} p='sm' />
+                                {renderLoginInput()}
+                                {renderPasswordInput()}
                             </Box>
                         </Center>
 
                         <Group position="center" mt="md">
-                            <Button type="submit" disabled={!nonemptyInputs()}>Login</Button>
+                            <Button type="submit">Login</Button>
                         </Group>
                     </form>
                 </Box>
             </Center>
             <Modal opened={messageBoxShowing} onClose={closeMessageBox} withCloseButton={false} centered>
-                <Title order={1}>Error</Title>
-                <Text>{message}</Text>
+                <Title order={1} m='xl'>Error</Title>
+                <Text m='xl'>{message}</Text>
             </Modal>
         </>
     );
 
 
-    function nonemptyInputs()
+    function renderLoginInput(): React.ReactNode
     {
-        const fields = form.values;
+        console.log(form.getInputProps('userId'));
 
-        return fields.userId > 0 && fields.password.length > 0;
+        return (
+            <TextInput label="Your ID" placeholder="Number" {...form.getInputProps('userId')} p='sm' />
+        );
+    }
+
+    function renderPasswordInput(): React.ReactNode
+    {
+        return (
+            <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} p='sm' />
+        );
+    }
+
+    function isValidLogin(login: string): boolean
+    {
+        return /^\d+$/.test(login);
+    }
+
+    function isValidPassword(password: string): boolean
+    {
+        return password.length > 0;
     }
 
     function onSubmit(formFields: FormFields)
     {
         void (async () => {
             const authenticationParameters: rest.AuthenticationParameters = {
-                userId: formFields.userId,
+                userId: parseInt(formFields.userId),
                 password: formFields.password,
             };
 

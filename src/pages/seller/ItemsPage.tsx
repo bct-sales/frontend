@@ -1,22 +1,18 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import CharityIcon from "@/components/CharityIcon";
-import { DeleteButton } from "@/components/DeleteButton";
 import DonationIcon from "@/components/DonationIcon";
-import { EditButton } from "@/components/EditButton";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import RequestWrapper from "@/components/RequestWrapper";
 import { MoneyAmount } from "@/money-amount";
-import { deleteItem, listItems } from "@/rest/items";
+import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { isDonation } from "@/settings";
-import { Box, Button, Center, Group, Header, Paper, Stack, Switch, Table, Text, Title, createStyles } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { ChangeEvent, useCallback, useState } from "react";
+import { Box, Button, Center, Group, Header, Paper, Stack, Table, Text, Title, createStyles } from "@mantine/core";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { AddItemState } from "./AddItemPage";
-import { EditItemState } from "./EditItemPage";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
 
 
@@ -92,18 +88,16 @@ function ItemsPageWithState(props: { url: string, eventId: number, auth: Authent
         <>
             <RequestWrapper
                 requestResult={response}
-                success={response => <ActualItemsPage auth={auth} initialItems={response.items} addItemUrl={response.links.add} generateLabelsUrl={response.links.generate_labels} eventId={eventId} />}
+                success={response => <ActualItemsPage auth={auth} items={response.items} addItemUrl={response.links.add} generateLabelsUrl={response.links.generate_labels} eventId={eventId} />}
             />
         </>
     );
 }
 
-function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems: Item[], addItemUrl: string, generateLabelsUrl: string, eventId: number }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[], addItemUrl: string, generateLabelsUrl: string, eventId: number }): JSX.Element
 {
     const { eventId } = props;
-    const [ items, setItems ] = useState<Item[]>(props.initialItems);
     const navigate = useNavigate();
-    const [ showDelete, setShowDelete ] = useState<boolean>(false);
     const { classes } = useStyles();
 
     return (
@@ -114,7 +108,6 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
                         Sale Event {eventId} Items
                     </Title>
                     <Group position="right">
-                        <Switch label="Delete mode" onChange={onToggleDeleteVisibility} />
                         <Button onClick={onGenerateLabels}>
                             Generate Labels
                         </Button>
@@ -143,13 +136,10 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
                                         <th className={classes.priceHeader}>
                                             Price
                                         </th>
-                                        <th>
-                                            Edit
-                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {[...items].reverse().map(renderItem)}
+                                {[...props.items].reverse().map(renderItem)}
                                 </tbody>
                             </Table>
                         </Center>
@@ -176,28 +166,9 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
                 <td className={classes.priceColumn}>
                     {renderPrice()}
                 </td>
-                <td className={classes.buttonColumn}>
-                    {renderButton()}
-                </td>
             </tr>
         );
 
-
-        function renderButton(): React.ReactNode
-        {
-            if ( showDelete )
-            {
-                return (
-                    <DeleteButton onClick={() => { onDelete(item); }} tooltip="Deletes item irrevocably" />
-                );
-            }
-            else
-            {
-                return (
-                    <EditButton onClick={() => { onEdit(item); }} tooltip="Edit item" />
-                );
-            }
-        }
 
         function renderPrice(): React.ReactNode
         {
@@ -241,27 +212,6 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
         }
     }
 
-    function onEdit(item: Item)
-    {
-        const state: EditItemState = item;
-        navigate(`/edit-item`, { state });
-    }
-
-    function onDelete(itemToBeDeleted: Item)
-    {
-        deleteItem(props.auth.accessToken, itemToBeDeleted.links.delete).then(() => {
-            const remainingItems = items.filter(item => item.item_id !== itemToBeDeleted.item_id);
-            setItems(remainingItems);
-            notifications.show({ message: 'Item successfully removed' });
-        }).catch((reason) => {
-            console.error(reason);
-
-            notifications.show({
-                message: 'An error occurred while deleting the item'
-            });
-        });
-    }
-
     function onGenerateLabels()
     {
         const state: GenerateLabelsPageState = {
@@ -269,13 +219,6 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, initialItems:
         };
 
         navigate('/labels', { state });
-    }
-
-    function onToggleDeleteVisibility(event: ChangeEvent<HTMLInputElement>)
-    {
-        const checked = event.target.checked;
-
-        setShowDelete(checked);
     }
 
     function onAddItem()

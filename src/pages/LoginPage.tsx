@@ -67,8 +67,6 @@ export default function LoginPage()
 
     function renderLoginInput(): React.ReactNode
     {
-        console.log(form.getInputProps('userId'));
-
         return (
             <TextInput label="Your ID" placeholder="Number" {...form.getInputProps('userId')} p='sm' />
         );

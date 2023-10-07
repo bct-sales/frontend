@@ -125,7 +125,13 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                                 <thead>
                                     <tr>
                                         <th>
+                                            Id
+                                        </th>
+                                        <th>
                                             Description
+                                        </th>
+                                        <th>
+                                            Category
                                         </th>
                                         <th>
                                             Charity
@@ -154,8 +160,14 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
     {
         return (
             <tr key={item.item_id} className={classes.itemRow}>
+                <td>
+                    {item.item_id}
+                </td>
                 <td className={classes.descriptionColumn}>
                     {item.description}
+                </td>
+                <td>
+                    {item.category}
                 </td>
                 <td className={classes.charityColumn}>
                     {renderCharity()}

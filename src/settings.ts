@@ -18,10 +18,25 @@ export function isDonation(recipientId: number): boolean
     return recipientId === getDonationUserId();
 }
 
+export function getItemCategories(): string[]
+{
+    return [
+        'Clothing 0-3 mos (50-56)',
+        'Clothing 3-6 mos (56-62)',
+        'Clothing 6-12 mos (68-80)',
+        'Clothing 12-24 mos (86-92)',
+        'Clothing 2-3 yrs (92-98)',
+        'Clothing 4-6 yrs (104-116)',
+        'Clothing 7-8 yrs (122-134)',
+        'Toys',
+        'Baby/Child Equipment',
+        'Large Items',
+    ];
+}
+
 
 export function createInitialAuthentication(): AuthenticationData | undefined
 {
-    // TODO Set this correctly!
     return undefined;  // No default authentication, must be used in production
     // return createSellerAuthentication();
     // return createAdminAuthentication();

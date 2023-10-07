@@ -3,7 +3,7 @@ import ItemEditor, { ItemEditorData } from "@/components/ItemEditor";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { extractDetailFromException } from "@/rest/error-handling";
 import { AddItemData, addItem } from "@/rest/items";
-import { getDonationUserId } from "@/settings";
+import { getDonationUserId, getItemCategories } from "@/settings";
 import { Button, Card, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -42,7 +42,13 @@ export default function AddItemPage(props: Props): JSX.Element
 
 function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string, salesEventId: number }): JSX.Element
 {
-    const [ itemData, setItemData ] = useState<ItemEditorData>({ description: '', price_in_cents: 0, isDonation: false, isForCharity: false });
+    const [ itemData, setItemData ] = useState<ItemEditorData>({
+        description: '',
+        category: getItemCategories()[0],
+        price_in_cents: 0,
+        isDonation: false,
+        isForCharity: false
+    });
     const [ validFields, setValidFields ] = useState<boolean>(true);
 
     return (
@@ -68,6 +74,7 @@ function ActualAddItemPage(props: { auth: AuthenticatedSellerStatus, url: string
 
         const data: AddItemData = {
             description: itemData.description,
+            category: itemData.category,
             price_in_cents: itemData.price_in_cents,
             sales_event_id: props.salesEventId,
             recipient_id: recipientId,

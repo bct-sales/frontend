@@ -8,6 +8,7 @@ const ListItemsResult = z.object({
     items: z.array(z.object({
         item_id: z.number().nonnegative(),
         description: z.string(),
+        category: z.string(),
         price_in_cents: z.number().nonnegative(),
         recipient_id: z.number().nonnegative(),
         sales_event_id: z.number().nonnegative(),
@@ -58,6 +59,7 @@ export async function listItems(url: string, accessToken: string): Promise<Resul
 
 const UpdateItemData = z.object({
     description: z.string(),
+    category: z.string(),
     price_in_cents: z.number().nonnegative(),
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),
@@ -79,6 +81,7 @@ export async function updateItem(accessToken: string, url: string, data: UpdateI
 
 const AddItemData = z.object({
     description: z.string(),
+    category: z.string(),
     price_in_cents: z.number().nonnegative(),
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),
@@ -112,6 +115,7 @@ export async function deleteItem(accessToken: string, url: string): Promise<void
 const GetItemData = z.object({
     item_id: z.number().nonnegative(),
     description: z.string(),
+    category: z.string(),
     price_in_cents: z.number().nonnegative(),
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),

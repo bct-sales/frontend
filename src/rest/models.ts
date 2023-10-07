@@ -25,6 +25,7 @@ export type SalesEvent = z.infer<typeof SalesEvent>;
 
 export const ItemCore = z.object({
     description: z.string(),
+    category: z.string(),
     price_in_cents: z.number().nonnegative(),
     recipient_id: z.number().nonnegative(),
     sales_event_id: z.number().nonnegative(),

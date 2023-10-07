@@ -1,12 +1,13 @@
 import { MoneyAmount } from "@/money-amount";
 import { isValidItemPrice } from "@/validation";
-import { NumberInput, Switch, TextInput } from "@mantine/core";
+import { NumberInput, Select, Switch, TextInput } from "@mantine/core";
 import { ChangeEvent } from "react";
-
+import { getItemCategories } from '@/settings';
 
 export interface ItemEditorData
 {
     description: string;
+    category: string;
     price_in_cents: number;
     isDonation: boolean;
     isForCharity: boolean;
@@ -24,18 +25,20 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
     const { description, price_in_cents: priceInCents, isDonation: donation, isForCharity } = data;
     const validPrice = isValidItemPrice(priceInCents);
     const priceError = validPrice ? {} : { error: 'Must be multiple of 50 cents' };
+    const itemCategories = getItemCategories();
 
     return (
         <>
             <TextInput autoFocus value={description} label='Description' placeholder="Description" onChange={onChangeDescription} m='xl' />
-            <NumberInput value={priceInCents / 100} label='Price' parser={parser} formatter={formatter} onChange={onChangePrice} step={0.5} min={0} precision={2} m='xl' {...priceError} />
+            <Select label="Category" data={itemCategories} searchable value={data.category} m='xl' onChange={onChangeCategory} />
+            <NumberInput value={priceInCents / 100} label='Price' parser={parsePrice} formatter={formatPrice} onChange={onChangePrice} step={0.5} min={0} precision={2} m='xl' {...priceError} />
             <Switch checked={donation} label="Donate proceeds to BCT" m='xl' onChange={onChangeDonation} />
             <Switch checked={isForCharity} label="Donate to charity if unsold" m='xl' onChange={onChangeCharity} />
         </>
     );
 
 
-    function parser(string: string): string
+    function parsePrice(string: string): string
     {
         const match = /\d+(\.\d*)/.exec(string);
 
@@ -49,7 +52,7 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
         }
     }
 
-    function formatter(str: string): string
+    function formatPrice(str: string): string
     {
         const float = parseFloat(str);
 
@@ -62,6 +65,13 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
             const moneyAmount = new MoneyAmount(Math.round(float * 100));
             return moneyAmount.format();
         }
+    }
+
+    function onChangeCategory(category: string)
+    {
+        const newData = {...data, category};
+
+        onChange(newData, areAllFieldsValid(newData));
     }
 
     function onChangeCharity(event: ChangeEvent<HTMLInputElement>)

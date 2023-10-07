@@ -2,7 +2,7 @@ import { AuthenticatedSellerStatus } from "@/auth/types";
 import { DeleteButton } from "@/components/DeleteButton";
 import { MoneyAmount } from "@/money-amount";
 import { isDonation } from "@/settings";
-import { Text, Card, Center, Paper, Table, TextInput, createStyles, Box, Title, Button } from "@mantine/core";
+import { Text, Card, Center, Paper, Table, TextInput, createStyles, Box, Button } from "@mantine/core";
 import { getHotkeyHandler } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import React, { ChangeEvent } from "react";

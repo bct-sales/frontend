@@ -8,44 +8,12 @@ import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { isDonation } from "@/settings";
-import { Box, Button, Center, Group, Header, Paper, Stack, Table, Text, Title, createStyles } from "@mantine/core";
+import { Box, Button, Card, Center, Flex, Group, Header, Paper, Space, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { AddItemState } from "./AddItemPage";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
-
-
-const useStyles = createStyles(() => ({
-    itemRow: {
-        "&:nth-of-type(even)": {
-            background: '#222',
-        }
-    },
-    charityColumn: {
-        width: '1%',
-        textAlign: 'center',
-    },
-    donationColumn: {
-        width: '1%',
-        textAlign: 'center',
-    },
-    buttonColumn: {
-        width: '1%',
-        textAlign: 'center',
-    },
-    descriptionColumn: {
-        width: '80%',
-        textAlign: 'left',
-    },
-    priceColumn: {
-        width: '10%',
-        textAlign: 'right',
-    },
-    priceHeader: {
-        textAlign: 'right',
-    }
-}));
 
 
 const ItemsPageState = z.object({
@@ -98,7 +66,6 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 {
     const { eventId } = props;
     const navigate = useNavigate();
-    const { classes } = useStyles();
 
     return (
         <>
@@ -121,33 +88,9 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                             <Button onClick={onAddItem} w='10em'>Add Item</Button>
                         </Center>
                         <Center>
-                            <Table>
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            Id
-                                        </th>
-                                        <th>
-                                            Description
-                                        </th>
-                                        <th>
-                                            Category
-                                        </th>
-                                        <th>
-                                            Charity
-                                        </th>
-                                        <th>
-                                            Donation
-                                        </th>
-                                        <th className={classes.priceHeader}>
-                                            Price
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            <Flex direction="column" justify="flex-start" align="stretch" gap="md">
                                 {[...props.items].reverse().map(renderItem)}
-                                </tbody>
-                            </Table>
+                            </Flex>
                         </Center>
                     </Stack>
                 </Box>
@@ -159,35 +102,44 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
     function renderItem(item: Item): React.ReactNode
     {
         return (
-            <tr key={item.item_id} className={classes.itemRow}>
-                <td>
-                    {item.item_id}
-                </td>
-                <td className={classes.descriptionColumn}>
-                    {item.description}
-                </td>
-                <td>
-                    {item.category}
-                </td>
-                <td className={classes.charityColumn}>
-                    {renderCharity()}
-                </td>
-                <td className={classes.donationColumn}>
-                    {renderDonation()}
-                </td>
-                <td className={classes.priceColumn}>
-                    {renderPrice()}
-                </td>
-            </tr>
+            <Card key={item.item_id}>
+                <Table>
+                    <tbody>
+                        <tr>
+                            <th>Description</th>
+                            <td>{item.description}</td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td>{item.category}</td>
+                        </tr>
+                    </tbody>
+                </Table>
+                <Space h="md" />
+                <Group position="apart">
+                    <Tooltip label="Unique ID for this item">
+                        <Text fz="xs">
+                            #{item.item_id}
+                        </Text>
+                    </Tooltip>
+                    <Group>
+                        {renderCharity()}
+                        {renderDonation()}
+                        {renderPrice()}
+                    </Group>
+                </Group>
+            </Card>
         );
 
 
         function renderPrice(): React.ReactNode
         {
             return (
-                <Text>
-                    {new MoneyAmount(item.price_in_cents).format()}
-                </Text>
+                <Tooltip label="Price of the item">
+                    <Text>
+                        {new MoneyAmount(item.price_in_cents).format()}
+                    </Text>
+                </Tooltip>
             );
         }
 

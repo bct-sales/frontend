@@ -6,11 +6,11 @@ import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
 
 
-interface Props<T extends EventEditorData>
+interface Props
 {
-    event: T;
+    event: EventEditorData;
 
-    onChange: (event: T) => void;
+    onChange: (event: EventEditorData) => void;
 }
 
 export interface EventEditorData
@@ -23,7 +23,7 @@ export interface EventEditorData
     available: boolean;
 }
 
-export default function EventEditor<T extends EventEditorData>(props: Props<T>): React.ReactNode
+export default function EventEditor(props: Props): React.ReactNode
 {
     const event = props.event;
     const date = BCTDate.fromIsoString(props.event.date);
@@ -48,7 +48,7 @@ export default function EventEditor<T extends EventEditorData>(props: Props<T>):
     {
         props.onChange({
             ...props.event,
-            date,
+            date: date.toIsoString(),
         });
     }
 
@@ -56,7 +56,7 @@ export default function EventEditor<T extends EventEditorData>(props: Props<T>):
     {
         props.onChange({
             ...props.event,
-            start_time: startTime,
+            start_time: startTime.toIsoString(),
         });
     }
 
@@ -64,7 +64,7 @@ export default function EventEditor<T extends EventEditorData>(props: Props<T>):
     {
         props.onChange({
             ...props.event,
-            end_time: endTime,
+            end_time: endTime.toIsoString(),
         });
     }
 

@@ -55,7 +55,7 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
         margin: 5,
         spacing: 2,
         font_size: 12,
-        border: false,
+        border: true,
     });
     const [error, setError] = React.useState<boolean>(false);
     const { classes } = useStyles();

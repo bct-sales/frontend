@@ -42,7 +42,7 @@ export default function SheetSpecificationsEditor(props: Props): JSX.Element
                 <IntegerInput label="Margin" onChange={onChange('margin')} value={props.data.margin} />
                 <IntegerInput label="Spacing" onChange={onChange('spacing')} value={props.data.spacing} />
                 <IntegerInput label="Font Size" onChange={onChange('font_size')} value={props.data.font_size} />
-                <Switch label="Draw border" checked={props.data.border} onChange={onBorderChange} />
+                <Switch label="Draw label borders" checked={props.data.border} onChange={onBorderChange} />
             </Stack>
         </>
     );

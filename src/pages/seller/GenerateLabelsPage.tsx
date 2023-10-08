@@ -48,9 +48,9 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
     const [sheetSpecs, setSheetSpecs] = React.useState<SheetSpecificationsData>({
         sheetWidth: 210,
         sheetHeight: 297,
-        labelWidth: 100,
-        labelHeight: 30,
-        columnCount: 2,
+        labelWidth: 65,
+        labelHeight: 32,
+        columnCount: 3,
         rowCount: 8,
         margin: 5,
         spacing: 2,

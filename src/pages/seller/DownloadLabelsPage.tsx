@@ -1,7 +1,7 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import { checkLabelGenerationStatus } from "@/rest/labels";
-import { Button, Center, Loader, Paper, Stack } from "@mantine/core";
+import { Button, Card, Center, Loader, Paper, Stack } from "@mantine/core";
 import { IconFileDownload } from "@tabler/icons-react";
 import React from "react";
 import { z } from "zod";
@@ -86,6 +86,23 @@ function ActualDownloadLabelsPage(props: { auth: AuthenticatedSellerStatus, stat
                         </Center>
                         <Center>
                             <Text>Your label sheet is ready for download.</Text>
+                        </Center>
+                        <Center>
+                            <Card maw={800}>
+                                <ul>
+                                    <li>
+                                        Prior to printing, please ensure that nothing overlaps with the barcode.
+                                        If it does, choosing a smaller font size should help.
+                                    </li>
+                                    <li>
+                                        The number in the lower left corner <em>must</em> be readable, otherwise the item will not be able to be sold.
+                                    </li>
+                                    <li>
+                                        We strongly suggest you print the labels on single label sheets, i.e., sheets on which the labels have not been precut.
+                                        This way, you do not need to worry about aligning the labels on the sheet.
+                                    </li>
+                                </ul>
+                            </Card>
                         </Center>
                         <Center>
                             <Button component="a" href="/events">Back to events overview</Button>

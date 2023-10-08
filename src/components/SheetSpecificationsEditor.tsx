@@ -1,5 +1,5 @@
 import { IntegerInput } from "@/components/IntegerInput";
-import { Stack, Switch } from "@mantine/core";
+import { NumberInput, Stack, Switch } from "@mantine/core";
 import { ChangeEvent } from "react";
 import { z } from "zod";
 
@@ -37,8 +37,8 @@ export default function SheetSpecificationsEditor(props: Props): JSX.Element
                 <IntegerInput label="Sheet Height (mm)" onChange={onChange('sheetHeight')} value={props.data.sheetHeight} />
                 <IntegerInput label="Column Count" onChange={onChange('columnCount')} value={props.data.columnCount} />
                 <IntegerInput label="Row Count" onChange={onChange('rowCount')} value={props.data.rowCount} />
-                <IntegerInput label="Label Width" onChange={onChange('labelWidth')} value={props.data.labelWidth} />
-                <IntegerInput label="Label Height" onChange={onChange('labelHeight')} value={props.data.labelHeight} />
+                <NumberInput label="Label Width (mm)" step={0.1} precision={2} onChange={onChange('labelWidth')} value={props.data.labelWidth} />
+                <NumberInput label="Label Height (mm)" step={0.1} precision={2} onChange={onChange('labelHeight')} value={props.data.labelHeight} />
                 <IntegerInput label="Margin" onChange={onChange('margin')} value={props.data.margin} />
                 <IntegerInput label="Spacing" onChange={onChange('spacing')} value={props.data.spacing} />
                 <IntegerInput label="Font Size" onChange={onChange('font_size')} value={props.data.font_size} />

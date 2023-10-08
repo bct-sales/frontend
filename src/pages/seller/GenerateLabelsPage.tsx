@@ -185,12 +185,12 @@ function validateSheetSpecifications(specs: SheetSpecificationsData): string[]
 
     if ( specs.labelWidth * specs.columnCount > specs.sheetWidth )
     {
-        errors.push("Labels don't find horizontally");
+        errors.push("Labels don't fit horizontally");
     }
 
-    if ( specs.labelHeight * specs.columnCount > specs.sheetHeight )
+    if ( specs.labelHeight * specs.rowCount > specs.sheetHeight )
     {
-        errors.push("Labels don't find vertically");
+        errors.push("Labels don't fit vertically");
     }
 
     return errors;

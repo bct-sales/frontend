@@ -3,16 +3,16 @@ import { z } from 'zod';
 
 
 const GenerateLabelsData = z.object({
-    sheet_width: z.number().int(),
-    sheet_height: z.number().int(),
-    columns: z.number().int(),
-    rows: z.number().int(),
-    label_width: z.number().int(),
-    label_height: z.number().int(),
-    corner_radius: z.number().int(),
-    margin: z.number().nonnegative(),
-    spacing: z.number().nonnegative(),
-    font_size: z.number().nonnegative(),
+    sheet_width: z.number().int().nonnegative(),
+    sheet_height: z.number().int().nonnegative(),
+    columns: z.number().int().nonnegative(),
+    rows: z.number().int().nonnegative(),
+    label_width: z.number().nonnegative(),
+    label_height: z.number().nonnegative(),
+    corner_radius: z.number().int().nonnegative(),
+    margin: z.number().nonnegative().nonnegative(),
+    spacing: z.number().nonnegative().nonnegative(),
+    font_size: z.number().nonnegative().nonnegative(),
     border: z.boolean(),
 }).strict();
 

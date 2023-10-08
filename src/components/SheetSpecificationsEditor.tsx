@@ -1,16 +1,15 @@
-import { IntegerInput } from "@/components/IntegerInput";
 import { NumberInput, Stack, Switch } from "@mantine/core";
 import { ChangeEvent } from "react";
 import { z } from "zod";
 
 
 const SheetSpecificationsData = z.object({
-    sheetWidth: z.number().nonnegative(),
-    sheetHeight: z.number().nonnegative(),
+    sheetWidth: z.number().int().nonnegative(),
+    sheetHeight: z.number().int().nonnegative(),
     labelWidth: z.number().nonnegative(),
     labelHeight: z.number().nonnegative(),
-    columnCount: z.number().nonnegative(),
-    rowCount: z.number().nonnegative(),
+    columnCount: z.number().int().nonnegative(),
+    rowCount: z.number().int().nonnegative(),
     margin: z.number().nonnegative(),
     spacing: z.number().nonnegative(),
     font_size: z.number().nonnegative(),

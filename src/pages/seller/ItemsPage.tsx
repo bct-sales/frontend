@@ -8,13 +8,20 @@ import { listItems } from "@/rest/items";
 import { Item } from "@/rest/models";
 import { useRequest } from "@/rest/request";
 import { isDonation } from "@/settings";
-import { Box, Button, Card, Center, Flex, Group, Header, Paper, Space, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
+import { Box, Button, Card, Center, Flex, Group, Header, Paper, Space, Stack, Table, Text, Title, Tooltip, createStyles } from "@mantine/core";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { AddItemState } from "./AddItemPage";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
 
+
+
+const useStyles = createStyles(() => ({
+    headerColumn: {
+        width: '0%',
+    },
+}));
 
 const ItemsPageState = z.object({
     url: z.string(), // url
@@ -66,6 +73,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 {
     const { eventId } = props;
     const navigate = useNavigate();
+    const { classes } = useStyles();
 
     return (
         <>
@@ -106,11 +114,11 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                 <Table>
                     <tbody>
                         <tr>
-                            <th>Description</th>
+                            <th className={classes.headerColumn}>Description</th>
                             <td>{item.description}</td>
                         </tr>
                         <tr>
-                            <th>Category</th>
+                            <th className={classes.headerColumn}>Category</th>
                             <td>{item.category}</td>
                         </tr>
                     </tbody>

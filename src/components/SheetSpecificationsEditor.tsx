@@ -39,7 +39,6 @@ export default function SheetSpecificationsEditor(props: Props): JSX.Element
                 <NumberInput label="Label Width (mm)" step={0.1} precision={2} onChange={onChange('labelWidth')} value={props.data.labelWidth} />
                 <NumberInput label="Label Height (mm)" step={0.1} precision={2} onChange={onChange('labelHeight')} value={props.data.labelHeight} />
                 <NumberInput label="Margin" onChange={onChange('margin')} value={props.data.margin} />
-                <NumberInput label="Spacing" onChange={onChange('spacing')} value={props.data.spacing} />
                 <NumberInput label="Font Size" onChange={onChange('font_size')} value={props.data.font_size} />
                 <Switch label="Draw label borders" checked={props.data.border} onChange={onBorderChange} />
             </Stack>

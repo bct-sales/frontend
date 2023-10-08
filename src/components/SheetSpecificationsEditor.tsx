@@ -33,15 +33,15 @@ export default function SheetSpecificationsEditor(props: Props): JSX.Element
     return (
         <>
             <Stack maw={400} mx='auto' my='xl'>
-                <IntegerInput label="Sheet Width (mm)" onChange={onChange('sheetWidth')} value={props.data.sheetWidth} />
-                <IntegerInput label="Sheet Height (mm)" onChange={onChange('sheetHeight')} value={props.data.sheetHeight} />
-                <IntegerInput label="Column Count" onChange={onChange('columnCount')} value={props.data.columnCount} />
-                <IntegerInput label="Row Count" onChange={onChange('rowCount')} value={props.data.rowCount} />
+                <NumberInput label="Sheet Width (mm)" onChange={onChange('sheetWidth')} value={props.data.sheetWidth} />
+                <NumberInput label="Sheet Height (mm)" onChange={onChange('sheetHeight')} value={props.data.sheetHeight} />
+                <NumberInput label="Column Count" onChange={onChange('columnCount')} value={props.data.columnCount} />
+                <NumberInput label="Row Count" onChange={onChange('rowCount')} value={props.data.rowCount} />
                 <NumberInput label="Label Width (mm)" step={0.1} precision={2} onChange={onChange('labelWidth')} value={props.data.labelWidth} />
                 <NumberInput label="Label Height (mm)" step={0.1} precision={2} onChange={onChange('labelHeight')} value={props.data.labelHeight} />
-                <IntegerInput label="Margin" onChange={onChange('margin')} value={props.data.margin} />
-                <IntegerInput label="Spacing" onChange={onChange('spacing')} value={props.data.spacing} />
-                <IntegerInput label="Font Size" onChange={onChange('font_size')} value={props.data.font_size} />
+                <NumberInput label="Margin" onChange={onChange('margin')} value={props.data.margin} />
+                <NumberInput label="Spacing" onChange={onChange('spacing')} value={props.data.spacing} />
+                <NumberInput label="Font Size" onChange={onChange('font_size')} value={props.data.font_size} />
                 <Switch label="Draw label borders" checked={props.data.border} onChange={onBorderChange} />
             </Stack>
         </>

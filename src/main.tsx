@@ -32,10 +32,6 @@ if ( root )
                     element: <AuthGuard role='seller' child={auth => <pages.seller.EventsPage auth={auth} />} />,
                 },
                 {
-                    path: "/edit-item",
-                    element: <AuthGuard role='seller' child={auth => <pages.seller.EditItemPage auth={auth} />} />,
-                },
-                {
                     path: "/add-item",
                     element: <AuthGuard role='seller' child={auth => <pages.seller.AddItemPage auth={auth} />} />,
                 },

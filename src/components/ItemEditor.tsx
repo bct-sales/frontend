@@ -29,7 +29,7 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
 
     return (
         <>
-            <TextInput autoFocus value={description} label='Description' placeholder="Description" onChange={onChangeDescription} m='xl' />
+            {renderDescriptionInput()}
             <Select label="Category" data={itemCategories} searchable value={data.category} m='xl' onChange={onChangeCategory} />
             <NumberInput value={priceInCents / 100} label='Price' parser={parsePrice} formatter={formatPrice} onChange={onChangePrice} step={0.5} min={0} precision={2} m='xl' {...priceError} />
             <Switch checked={donation} label="Donate proceeds to BCT" m='xl' onChange={onChangeDonation} />
@@ -37,6 +37,26 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
         </>
     );
 
+
+    function renderDescriptionInput(): React.ReactNode
+    {
+        return (
+            <TextInput autoFocus value={description} label='Description' placeholder="Description" onChange={onChangeDescription} m='xl' error={determineError()} />
+        );
+
+
+        function determineError(): string | undefined
+        {
+            if ( description.length <= 25 )
+            {
+                return undefined;
+            }
+            else
+            {
+                return "Warning: long descriptions might not fit on label!";
+            }
+        }
+    }
 
     function parsePrice(string: string): string
     {

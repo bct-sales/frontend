@@ -83,7 +83,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                         Sale Event {eventId} Items
                     </Title>
                     <Group position="right">
-                        <Button onClick={onGenerateLabels}>
+                        <Button onClick={onGenerateLabels} disabled={props.items.length === 0}>
                             Generate Labels
                         </Button>
                     </Group>

@@ -90,7 +90,7 @@ export default function SalePage(props: Props): JSX.Element
                                 </Center>
                             </Box>
                             <Center mt='xl'>
-                                <Button onClick={onFinalize}>
+                                <Button onClick={onFinalize} disabled={selectedItems.length === 0}>
                                     Finalize Order
                                 </Button>
                             </Center>

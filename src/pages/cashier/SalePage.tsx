@@ -3,9 +3,11 @@ import { DeleteButton } from "@/components/DeleteButton";
 import { MoneyAmount } from "@/money-amount";
 import * as rest from '@/rest';
 import { useRestApiRoot } from "@/rest/root";
+import { RegisterSaleData } from "@/rest/sales";
 import { isDonation } from "@/settings";
 import { Box, Button, Card, Center, Paper, Table, Text, TextInput, createStyles } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { IconAlertCircle } from "@tabler/icons-react";
 import React, { ChangeEvent } from "react";
 
 
@@ -33,6 +35,10 @@ const useStyles = createStyles(() => ({
     },
     itemIdColumn: {
         width: '1%',
+    },
+    alreadySold: {
+        background: '#FAA',
+        color: 'black',
     }
 }));
 
@@ -48,6 +54,7 @@ interface ItemData
     price_in_cents: number;
     recipient_id: number;
     charity: boolean;
+    has_been_sold: boolean;
 }
 
 export default function SalePage(props: Props): JSX.Element
@@ -58,6 +65,7 @@ export default function SalePage(props: Props): JSX.Element
     const { classes } = useStyles();
     const restApiRoot = useRestApiRoot();
     const baseUrl = restApiRoot.links.items;
+    const saleUrl = restApiRoot.links.sales;
 
     const totalCost = selectedItems.map(item => item.price_in_cents).reduce((x, y) => x + y, 0);
 
@@ -83,7 +91,7 @@ export default function SalePage(props: Props): JSX.Element
                             </Box>
                             <Center mt='xl'>
                                 <Button onClick={onFinalize}>
-                                    Finalize
+                                    Finalize Order
                                 </Button>
                             </Center>
                         </Card>
@@ -138,7 +146,25 @@ export default function SalePage(props: Props): JSX.Element
 
     function onFinalize()
     {
-        // NOP
+        const data: RegisterSaleData = {
+            item_ids: selectedItems.map(item => item.item_id)
+        };
+
+        rest.registerSale(props.auth.accessToken, data, saleUrl).then(() => {
+            setSelectedItems([]);
+            selectAllTextInInputBox();
+            notifications.show({
+                message: 'Sale registered',
+                color: 'green',
+             });
+        }).catch(reason => {
+            console.error(reason);
+            notifications.show({
+                message: 'FAILED to register sale',
+                color: 'red',
+                icon: <IconAlertCircle />
+            })
+        });
     }
 
     function onRemoveAll()
@@ -193,7 +219,7 @@ export default function SalePage(props: Props): JSX.Element
     function renderItem(item: ItemData, itemIndex: number): React.ReactNode
     {
         return (
-            <tr key={item.item_id}>
+            <tr key={item.item_id} className={determineClassName()}>
                 <td>
                     {item.item_id}
                 </td>
@@ -211,6 +237,19 @@ export default function SalePage(props: Props): JSX.Element
                 </td>
             </tr>
         );
+
+
+        function determineClassName(): string | undefined
+        {
+            if ( item.has_been_sold )
+            {
+                return classes.alreadySold;
+            }
+            else
+            {
+                return undefined;
+            }
+        }
     }
 
     function onRemoveItem(itemIndex: number)

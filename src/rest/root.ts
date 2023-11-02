@@ -9,6 +9,7 @@ export const Root = z.object({
         login: z.string(),
         events: z.string(),
         items: z.string(),
+        sales: z.string(),
     }).strict(),
 }).strict();
 

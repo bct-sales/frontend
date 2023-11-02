@@ -1,13 +1,12 @@
 import { AuthenticatedSellerStatus } from "@/auth/types";
 import { DeleteButton } from "@/components/DeleteButton";
 import { MoneyAmount } from "@/money-amount";
-import { isDonation } from "@/settings";
-import { Text, Card, Center, Paper, Table, TextInput, createStyles, Box, Button } from "@mantine/core";
-import { getHotkeyHandler } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
-import React, { ChangeEvent } from "react";
 import * as rest from '@/rest';
 import { useRestApiRoot } from "@/rest/root";
+import { isDonation } from "@/settings";
+import { Box, Button, Card, Center, Paper, Table, Text, TextInput, createStyles } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import React, { ChangeEvent } from "react";
 
 
 const useStyles = createStyles(() => ({
@@ -67,12 +66,15 @@ export default function SalePage(props: Props): JSX.Element
             <Center>
                 <Paper maw={800}>
                     <Center>
-                        <Card m='xl'>
-                            <TextInput m='xl' error={isValidCurrentItem() ? undefined : 'Invalid'} label="Item ID" ref={inputBoxRef} autoFocus={true} onChange={onChangeCurrentItem} onKeyDown={getHotkeyHandler([
-                                ['Enter', onAddItem]
-                            ])} />
-                            <Box>
-                                <Text>Total</Text>
+                        <Card m='xl' p='xl'>
+                            <TextInput error={isValidCurrentItem() ? undefined : 'Invalid'} label="Item ID" ref={inputBoxRef} autoFocus={true} onChange={onChangeCurrentItem} onKeyDown={onKeyDown} />
+                            <Center>
+                                <Button onClick={onAddItem} mt='sm'>
+                                    Add
+                                </Button>
+                            </Center>
+                            <Box mt='xl'>
+                                <Text weight='bold' fz='lg'>Total</Text>
                                 <Center>
                                     <Text fz="2rem">
                                         {new MoneyAmount(totalCost).format()}
@@ -122,6 +124,17 @@ export default function SalePage(props: Props): JSX.Element
         </>
     );
 
+
+    function onKeyDown(event: React.KeyboardEvent)
+    {
+        const key = event.key;
+
+        if ( key === "Enter" || key === 'x' || key === 'X' )
+        {
+            onAddItem();
+            event.preventDefault();
+        }
+    }
 
     function onFinalize()
     {

@@ -8,6 +8,7 @@ export const Root = z.object({
     links: z.object({
         login: z.string(),
         events: z.string(),
+        items: z.string(),
     }).strict(),
 }).strict();
 

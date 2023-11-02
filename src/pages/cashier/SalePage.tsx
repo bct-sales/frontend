@@ -7,6 +7,7 @@ import { getHotkeyHandler } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import React, { ChangeEvent } from "react";
 import * as rest from '@/rest';
+import { useRestApiRoot } from "@/rest/root";
 
 
 const useStyles = createStyles(() => ({
@@ -56,6 +57,8 @@ export default function SalePage(props: Props): JSX.Element
     const [currentItem, setCurrentItem] = React.useState<string>("");
     const inputBoxRef = React.useRef<HTMLInputElement>(null);
     const { classes } = useStyles();
+    const restApiRoot = useRestApiRoot();
+    const baseUrl = restApiRoot.links.items;
 
     const totalCost = selectedItems.map(item => item.price_in_cents).reduce((x, y) => x + y, 0);
 
@@ -158,8 +161,7 @@ export default function SalePage(props: Props): JSX.Element
             return;
         }
 
-        const url = `http://localhost:8000/api/v1/items/${currentItemId}`; // TODO HATEOAS
-        rest.getItem(props.auth.accessToken, url).then(itemData => {
+        rest.getItem(props.auth.accessToken, baseUrl, currentItemId).then(itemData => {
             const newSelectedItems = [itemData, ...selectedItems];
             setSelectedItems(newSelectedItems);
         }).catch(reason => {

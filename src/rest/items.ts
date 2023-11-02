@@ -121,18 +121,34 @@ const GetItemData = z.object({
     sales_event_id: z.number().nonnegative(),
     owner_id: z.number().nonnegative(),
     charity: z.boolean(),
+    has_been_sold: z.boolean(),
 }).strict();
 
 export type GetItemData = z.infer<typeof GetItemData>;
 
-export async function getItem(accessToken: string, url: string): Promise<GetItemData>
+/**
+ * Fetches item data.
+ * Diverges a bit from HATEOAS as it constructs the url from a base url and an item id.
+ *
+ * @param accessToken Access token to be used
+ * @param baseUrl Url received by root
+ * @param itemId Id of item
+ * @returns Item data
+ */
+export async function getItem(accessToken: string, baseUrl: string, itemId: number): Promise<GetItemData>
 {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     };
 
+    const url = buildItemUrl(baseUrl, itemId);
     const response = await axios.get<unknown>( url, { headers } );
     const result = GetItemData.parse(response.data);
 
     return result;
+}
+
+function buildItemUrl(baseUrl: string, itemId: number): string
+{
+    return `${baseUrl}${itemId}`;
 }

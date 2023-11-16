@@ -75,7 +75,7 @@ export default function SalePage(props: Props): JSX.Element
                 <Paper maw={800}>
                     <Center>
                         <Card m='xl' p='xl'>
-                            <TextInput error={isValidCurrentItem() ? undefined : 'Invalid'} label="Item ID" ref={inputBoxRef} autoFocus={true} onChange={onChangeCurrentItem} onKeyDown={onKeyDown} />
+                            <TextInput error={isValidCurrentItem() ? undefined : 'Invalid'} label="Item ID" ref={inputBoxRef} autoFocus={true} onChange={onChangeCurrentItem} onKeyDown={onKeyDown} value={currentItem} />
                             <Center>
                                 <Button onClick={onAddItem} mt='sm'>
                                     Add
@@ -152,7 +152,7 @@ export default function SalePage(props: Props): JSX.Element
 
         rest.registerSale(props.auth.accessToken, data, saleUrl).then(() => {
             setSelectedItems([]);
-            selectAllTextInInputBox();
+            prepareTextInputBoxForNextItem();
             notifications.show({
                 message: 'Sale registered',
                 color: 'green',
@@ -174,7 +174,7 @@ export default function SalePage(props: Props): JSX.Element
 
     function isValidCurrentItem()
     {
-        return /^\d+$/.test(currentItem);
+        return /^\d*$/.test(currentItem);
     }
 
     function onChangeCurrentItem(event: ChangeEvent<HTMLInputElement>)
@@ -186,6 +186,11 @@ export default function SalePage(props: Props): JSX.Element
 
     function onAddItem()
     {
+        if ( currentItem === '' )
+        {
+            return;
+        }
+
         if ( !isValidCurrentItem() )
         {
             notifications.show({message: "Invalid item id"});
@@ -208,12 +213,13 @@ export default function SalePage(props: Props): JSX.Element
             notifications.show({message: 'Failed to add item'});
         });
 
-        selectAllTextInInputBox();
+        prepareTextInputBoxForNextItem();
     }
 
-    function selectAllTextInInputBox()
+    function prepareTextInputBoxForNextItem()
     {
-        inputBoxRef.current?.select();
+        // inputBoxRef.current?.select();
+        setCurrentItem("");
     }
 
     function renderItem(item: ItemData, itemIndex: number): React.ReactNode

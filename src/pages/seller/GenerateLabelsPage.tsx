@@ -55,6 +55,10 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
         margin: 5,
         spacing: 2,
         font_size: 12,
+        leftMargin: 0,
+        rightMargin: 0,
+        topMargin: 0,
+        bottomMargin: 0,
         border: true,
     });
     const [error, setError] = React.useState<boolean>(false);
@@ -131,11 +135,15 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
             rows: sheetSpecs.rowCount,
             label_width: sheetSpecs.labelWidth,
             label_height: sheetSpecs.labelHeight,
-            corner_radius: 2,
+            corner_radius: 0,
             margin: sheetSpecs.margin,
             spacing: sheetSpecs.spacing,
             font_size: sheetSpecs.font_size,
             border: sheetSpecs.border,
+            left_margin: sheetSpecs.leftMargin,
+            right_margin: sheetSpecs.rightMargin,
+            top_margin: sheetSpecs.topMargin,
+            bottom_margin: sheetSpecs.bottomMargin,
         };
 
         generateLabels(props.auth.accessToken, data, props.generateLabelsUrl).then((statusUrl: string) => {
@@ -153,44 +161,66 @@ function validateSheetSpecifications(specs: SheetSpecificationsData): string[]
 {
     const errors: string[] = [];
 
-    if ( specs.labelWidth === 0 )
+    if ( specs.labelWidth <= 0 )
     {
         errors.push("Invalid label width");
     }
 
-    if ( specs.labelHeight === 0 )
+    if ( specs.labelHeight <= 0 )
     {
         errors.push("Invalid label height");
     }
 
-    if ( specs.rowCount === 0 )
+    if ( specs.rowCount <= 0 )
     {
         errors.push("Invalid row count");
     }
 
-    if ( specs.columnCount === 0 )
+    if ( specs.columnCount <= 0 )
     {
         errors.push("Invalid column count");
     }
 
-    if ( specs.sheetWidth === 0 )
+    if ( specs.sheetWidth <= 0 )
     {
         errors.push("Invalid sheet width");
     }
 
-    if ( specs.sheetHeight === 0 )
+    if ( specs.sheetHeight <= 0 )
     {
         errors.push("Invalid sheet height");
     }
 
-    if ( specs.labelWidth * specs.columnCount > specs.sheetWidth )
+    if ( specs.leftMargin < 0 )
     {
-        errors.push("Labels don't fit horizontally");
+        errors.push("Invalid left margin");
     }
 
-    if ( specs.labelHeight * specs.rowCount > specs.sheetHeight )
+    if ( specs.rightMargin < 0 )
     {
-        errors.push("Labels don't fit vertically");
+        errors.push("Invalid right margin");
+    }
+
+    if ( specs.topMargin < 0 )
+    {
+        errors.push("Invalid top margin");
+    }
+
+    if ( specs.bottomMargin < 0 )
+    {
+        errors.push("Invalid bottom margin");
+    }
+
+    const totalWidth = specs.labelWidth * specs.columnCount + specs.leftMargin + specs.rightMargin
+    if ( totalWidth > specs.sheetWidth )
+    {
+        errors.push(`Labels don't fit horizontally (${totalWidth} > ${specs.sheetWidth})`);
+    }
+
+    const totalHeight = specs.labelHeight * specs.rowCount + specs.topMargin + specs.bottomMargin;
+    if ( totalHeight > specs.sheetHeight )
+    {
+        errors.push(`Labels don't fit vertically (${totalHeight} > ${specs.sheetHeight})`);
     }
 
     return errors;

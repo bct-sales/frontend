@@ -10,9 +10,13 @@ const GenerateLabelsData = z.object({
     label_width: z.number().nonnegative(),
     label_height: z.number().nonnegative(),
     corner_radius: z.number().int().nonnegative(),
-    margin: z.number().nonnegative().nonnegative(),
-    spacing: z.number().nonnegative().nonnegative(),
-    font_size: z.number().nonnegative().nonnegative(),
+    margin: z.number().nonnegative(),
+    spacing: z.number().nonnegative(),
+    font_size: z.number().nonnegative(),
+    left_margin: z.number().nonnegative(),
+    right_margin: z.number().nonnegative(),
+    top_margin: z.number().nonnegative(),
+    bottom_margin: z.number().nonnegative(),
     border: z.boolean(),
 }).strict();
 

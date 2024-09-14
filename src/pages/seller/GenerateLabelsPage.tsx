@@ -107,7 +107,14 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
 
     function validateItemLabelCounts(): string[]
     {
-        return [];
+        if ( Object.values(itemLabelCounts).some(n => n > 0) )
+        {
+            return [];
+        }
+        else
+        {
+            return ['No labels to be generated'];
+        }
     }
 
     function renderGenerateButton() : React.ReactNode

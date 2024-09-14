@@ -2,7 +2,7 @@ import { AuthenticatedSellerStatus } from "@/auth/types";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import SheetSpecificationsEditor, { SheetSpecificationsData } from "@/components/SheetSpecificationsEditor";
 import { generateLabels, GenerateLabelsData } from "@/rest/labels";
-import { Button, Center, Group, Paper, Title, Text, Box, createStyles, Accordion, Flex, Table, NumberInput, Tooltip } from "@mantine/core";
+import { Button, Center, Group, Paper, Title, Text, Box, createStyles, Accordion, Flex, Table, NumberInput, Tooltip, Alert } from "@mantine/core";
 import React from "react";
 import { z } from "zod";
 import { DownloadLabelsPageState } from "./DownloadLabelsPage";
@@ -12,6 +12,7 @@ import { useCallback } from "react";
 import { useRequest } from "@/rest/request";
 import RequestWrapper from "@/components/RequestWrapper";
 import { Item } from "@/rest/models";
+import { IconAlertCircle } from "@tabler/icons-react";
 
 
 const useStyles = createStyles(() => ({
@@ -231,22 +232,29 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
         const errors = specErrors.map(error => {
             return (
                 <>
-                    <li className={classes.errorMessage}>{error}</li>
+                    <Text>{error}</Text>
                 </>
             );
         });
 
-        return (
-            <>
-                <Center>
-                    <Box w={400}>
-                        <ul>
-                            {errors}
-                        </ul>
-                    </Box>
-                </Center>
-            </>
-        )
+        if ( errors.length > 0 )
+        {
+            return (
+                <>
+                    <Center>
+                        <Alert icon={<IconAlertCircle size="1rem" />} title="Error!" color="red">
+                            <Flex direction="column">
+                                {errors}
+                            </Flex>
+                        </Alert>
+                    </Center>
+                </>
+            );
+        }
+        else
+        {
+            return <></>;
+        }
     }
 
 

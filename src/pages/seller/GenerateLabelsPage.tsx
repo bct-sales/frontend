@@ -121,9 +121,24 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
     {
         return (
             <Center m='lg'>
-                <Button mx='auto' onClick={onGenerateLabels} disabled={!generateButtonEnabled}>Generate Labels</Button>
+                <Tooltip label={tooltipLabel()}>
+                    <Button mx='auto' onClick={onGenerateLabels} disabled={!generateButtonEnabled}>Generate Labels</Button>
+                </Tooltip>
             </Center>
         );
+
+
+        function tooltipLabel(): string
+        {
+            if ( errors.length > 0 )
+            {
+                return "Errors prevent you from generating labels";
+            }
+            else
+            {
+                return "Press this button to generate a PDF with labels for all selected items";
+            }
+        }
     }
 
     function updateItemLabelCount(itemId: number, labelCount: number)

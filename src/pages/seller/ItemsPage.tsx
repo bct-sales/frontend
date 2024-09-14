@@ -83,7 +83,9 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                 <Box my={50}>
                     <Stack>
                         <Center>
-                            <Button onClick={onAddItem} w='10em'>Add Item</Button>
+                            <Tooltip label="Click here to add a new item to the list">
+                                <Button onClick={onAddItem} w='10em'>Add Item</Button>
+                            </Tooltip>
                         </Center>
                         <Center>
                             <Flex direction="column" justify="flex-start" align="stretch" gap="md">

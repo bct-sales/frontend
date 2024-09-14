@@ -18,6 +18,7 @@ const GenerateLabelsData = z.object({
     top_margin: z.number().nonnegative(),
     bottom_margin: z.number().nonnegative(),
     border: z.boolean(),
+    item_selection: z.array(z.number()),
 }).strict();
 
 export type GenerateLabelsData = z.infer<typeof GenerateLabelsData>;
@@ -39,7 +40,6 @@ export async function generateLabels(accessToken: string, data: GenerateLabelsDa
 
     return response.status_url;
 }
-
 
 
 const StatusResponse = z.discriminatedUnion("status", [

@@ -284,6 +284,7 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
             right_margin: sheetSpecs.rightMargin,
             top_margin: sheetSpecs.topMargin,
             bottom_margin: sheetSpecs.bottomMargin,
+            item_selection: deriveItemSelection(),
         };
 
         generateLabels(props.auth.accessToken, data, props.generateLabelsUrl).then((statusUrl: string) => {
@@ -294,6 +295,23 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
             console.error(reason);
             setError(true);
         });
+    }
+
+    function deriveItemSelection(): number[]
+    {
+        const result: number[] = [];
+
+        for ( const [ itemId, count ] of Object.entries(itemLabelCounts) )
+        {
+            const id = parseInt(itemId);
+
+            for ( let i = 0; i < count; ++i )
+            {
+                result.push(id);
+            }
+        }
+
+        return result;
     }
 }
 

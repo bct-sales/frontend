@@ -15,12 +15,6 @@ import { Item } from "@/rest/models";
 import { IconAlertCircle } from "@tabler/icons-react";
 
 
-const useStyles = createStyles(() => ({
-    errorMessage: {
-        color: '#F00',
-    },
-}));
-
 const GenerateLabelsPageState = z.object({
     url: z.string(), // url
     itemsUrl: z.string(), // url to be used to get list of items
@@ -87,7 +81,6 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
     });
     const [ itemLabelCounts, setItemLabelCounts ] = React.useState<Record<string, number>>(() => Object.fromEntries(props.items.map(item => [item.item_id, 2])));
     const [ error, setError ] = React.useState<boolean>(false);
-    const { classes } = useStyles();
 
     const specErrors = validateSheetSpecifications(sheetSpecs);
     const generateButtonEnabled = specErrors.length === 0;

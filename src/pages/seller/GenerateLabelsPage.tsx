@@ -82,8 +82,8 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
     const [ itemLabelCounts, setItemLabelCounts ] = React.useState<Record<string, number>>(() => Object.fromEntries(props.items.map(item => [item.item_id, 2])));
     const [ error, setError ] = React.useState<boolean>(false);
 
-    const specErrors = validateSheetSpecifications(sheetSpecs);
-    const generateButtonEnabled = specErrors.length === 0;
+    const errors = [...validateSheetSpecifications(sheetSpecs), ...validateItemLabelCounts() ];
+    const generateButtonEnabled = errors.length === 0;
 
     return (
         <>
@@ -104,6 +104,11 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
         </>
     );
 
+
+    function validateItemLabelCounts(): string[]
+    {
+        return [];
+    }
 
     function renderGenerateButton() : React.ReactNode
     {
@@ -222,7 +227,7 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
 
     function renderSpecificationErrors(): React.ReactNode
     {
-        const errors = specErrors.map(error => {
+        const renderedErrors = errors.map(error => {
             return (
                 <>
                     <Text>{error}</Text>
@@ -230,14 +235,14 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
             );
         });
 
-        if ( errors.length > 0 )
+        if ( renderedErrors.length > 0 )
         {
             return (
                 <>
                     <Center>
                         <Alert icon={<IconAlertCircle size="1rem" />} title="Error!" color="red">
                             <Flex direction="column">
-                                {errors}
+                                {renderedErrors}
                             </Flex>
                         </Alert>
                     </Center>

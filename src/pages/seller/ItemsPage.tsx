@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { AddItemState } from "./AddItemPage";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
+import { isEmail } from "@mantine/form";
 
 
 
@@ -101,17 +102,34 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
         return (
             <Header height={80} p='sm'>
                 <Group position="apart">
-                    <Title order={2} p={10}>
-                        Sale Event {eventId} Items
-                    </Title>
-                    <Group position="right">
-                        <Button onClick={onGenerateLabels} disabled={props.items.length === 0}>
-                            Generate Labels
-                        </Button>
-                    </Group>
+                    {renderTitle()}
+                    {renderGenerateLabelsButton()}
                 </Group>
             </Header>
         );
+
+
+        function renderTitle(): React.ReactNode
+        {
+            return (
+                <Title order={2} p={10}>
+                    Sale Event {eventId} Items
+                </Title>
+            );
+        }
+
+        function renderGenerateLabelsButton(): React.ReactNode
+        {
+            const isEnabled = props.items.length > 0;
+
+            return (
+                <Group position="right">
+                    <Button onClick={onGenerateLabels} disabled={!isEnabled}>
+                        Generate Labels
+                    </Button>
+                </Group>
+            );
+        }
     }
 
     function renderItem(item: Item): React.ReactNode

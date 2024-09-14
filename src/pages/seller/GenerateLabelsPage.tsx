@@ -2,7 +2,7 @@ import { AuthenticatedSellerStatus } from "@/auth/types";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import SheetSpecificationsEditor, { SheetSpecificationsData } from "@/components/SheetSpecificationsEditor";
 import { generateLabels, GenerateLabelsData } from "@/rest/labels";
-import { Button, Center, Group, Paper, Title, Text, Box, createStyles } from "@mantine/core";
+import { Button, Center, Group, Paper, Title, Text, Box, createStyles, Accordion } from "@mantine/core";
 import React from "react";
 import { z } from "zod";
 import { DownloadLabelsPageState } from "./DownloadLabelsPage";
@@ -37,9 +37,16 @@ export default function GenerateLabelsPage(props: { auth: AuthenticatedSellerSta
     function createPage(state: GenerateLabelsPageState): JSX.Element
     {
         return (
-            <ActualGenerateLabelsPage auth={props.auth} generateLabelsUrl={state.url} />
+            <LabelsPageWithState auth={props.auth} generateLabelsUrl={state.url} />
         );
     }
+}
+
+function LabelsPageWithState(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string }) : JSX.Element
+{
+    return (
+        <ActualGenerateLabelsPage auth={props.auth} generateLabelsUrl={props.generateLabelsUrl} />
+    );
 }
 
 function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string }): JSX.Element
@@ -75,12 +82,30 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
                         Generate Labels
                     </Title>
                 </Group>
-                <SheetSpecificationsEditor data={sheetSpecs} onChange={setSheetSpecs} />
-                <Center>
-                    <Button mx='auto' onClick={onGenerateLabels} disabled={!generateButtonEnabled}>Generate Labels</Button>
-                </Center>
+                <Accordion m='xl'>
+                    <Accordion.Item value="label-selection">
+                        <Accordion.Control>
+                            Select Items
+                        </Accordion.Control>
+                        <Accordion.Panel>
+                            test
+                        </Accordion.Panel>
+                    </Accordion.Item>
+                    <Accordion.Item value="sheet-specifications">
+                        <Accordion.Control>
+                            Customize Sheet Specifications
+                        </Accordion.Control>
+                        <Accordion.Panel>
+                            <SheetSpecificationsEditor data={sheetSpecs} onChange={setSheetSpecs} />
+
+                        </Accordion.Panel>
+                    </Accordion.Item>
+                </Accordion>
                 {renderError()}
                 {renderSpecificationErrors()}
+                <Center m='lg'>
+                    <Button mx='auto' onClick={onGenerateLabels} disabled={!generateButtonEnabled}>Generate Labels</Button>
+                </Center>
             </Paper>
         </>
     );

@@ -105,13 +105,20 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
                 </Accordion>
                 {renderError()}
                 {renderSpecificationErrors()}
-                <Center m='lg'>
-                    <Button mx='auto' onClick={onGenerateLabels} disabled={!generateButtonEnabled}>Generate Labels</Button>
-                </Center>
+                {renderGenerateButton()}
             </Paper>
         </>
     );
 
+
+    function renderGenerateButton() : React.ReactNode
+    {
+        return (
+            <Center m='lg'>
+                <Button mx='auto' onClick={onGenerateLabels} disabled={!generateButtonEnabled}>Generate Labels</Button>
+            </Center>
+        );
+    }
 
     function updateItemLabelCount(itemId: number, labelCount: number)
     {

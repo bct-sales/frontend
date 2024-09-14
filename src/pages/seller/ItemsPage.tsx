@@ -77,18 +77,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 
     return (
         <>
-            <Header height={80} p='sm'>
-                <Group position="apart">
-                    <Title order={2} p={10}>
-                        Sale Event {eventId} Items
-                    </Title>
-                    <Group position="right">
-                        <Button onClick={onGenerateLabels} disabled={props.items.length === 0}>
-                            Generate Labels
-                        </Button>
-                    </Group>
-                </Group>
-            </Header>
+            {renderHeader()}
             <Paper maw={800} mx='auto' p="md">
                 <Box my={50}>
                     <Stack>
@@ -106,6 +95,24 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
         </>
     );
 
+
+    function renderHeader(): React.ReactNode
+    {
+        return (
+            <Header height={80} p='sm'>
+                <Group position="apart">
+                    <Title order={2} p={10}>
+                        Sale Event {eventId} Items
+                    </Title>
+                    <Group position="right">
+                        <Button onClick={onGenerateLabels} disabled={props.items.length === 0}>
+                            Generate Labels
+                        </Button>
+                    </Group>
+                </Group>
+            </Header>
+        );
+    }
 
     function renderItem(item: Item): React.ReactNode
     {

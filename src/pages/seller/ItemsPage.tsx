@@ -120,15 +120,31 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 
         function renderGenerateLabelsButton(): React.ReactNode
         {
-            const isEnabled = props.items.length > 0;
+            const atLeastOneItem = props.items.length > 0;
+            const isEnabled = atLeastOneItem;
 
             return (
                 <Group position="right">
-                    <Button onClick={onGenerateLabels} disabled={!isEnabled}>
-                        Generate Labels
-                    </Button>
+                    <Tooltip label={tooltipLabel()}>
+                        <Button onClick={onGenerateLabels} disabled={!isEnabled}>
+                            Generate Labels
+                        </Button>
+                    </Tooltip>
                 </Group>
             );
+
+
+            function tooltipLabel(): string
+            {
+                if ( atLeastOneItem )
+                {
+                    return "Once you have entered all your items, press this button to generate labels for them";
+                }
+                else
+                {
+                    return "You need to enter at least one item before generating labels";
+                }
+            }
         }
     }
 

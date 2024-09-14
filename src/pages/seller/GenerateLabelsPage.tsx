@@ -2,11 +2,16 @@ import { AuthenticatedSellerStatus } from "@/auth/types";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import SheetSpecificationsEditor, { SheetSpecificationsData } from "@/components/SheetSpecificationsEditor";
 import { generateLabels, GenerateLabelsData } from "@/rest/labels";
-import { Button, Center, Group, Paper, Title, Text, Box, createStyles, Accordion } from "@mantine/core";
+import { Button, Center, Group, Paper, Title, Text, Box, createStyles, Accordion, Stack, Flex, Table, NumberInput, Tooltip } from "@mantine/core";
 import React from "react";
 import { z } from "zod";
 import { DownloadLabelsPageState } from "./DownloadLabelsPage";
 import { useNavigate } from "react-router-dom";
+import { listItems } from "@/rest/items";
+import { useCallback } from "react";
+import { useRequest } from "@/rest/request";
+import RequestWrapper from "@/components/RequestWrapper";
+import { Item } from "@/rest/models";
 
 
 const useStyles = createStyles(() => ({
@@ -17,6 +22,7 @@ const useStyles = createStyles(() => ({
 
 const GenerateLabelsPageState = z.object({
     url: z.string(), // url
+    itemsUrl: z.string(), // url to be used to get list of items
 }).strict();
 
 export type GenerateLabelsPageState = z.infer<typeof GenerateLabelsPageState>;
@@ -37,22 +43,32 @@ export default function GenerateLabelsPage(props: { auth: AuthenticatedSellerSta
     function createPage(state: GenerateLabelsPageState): JSX.Element
     {
         return (
-            <LabelsPageWithState auth={props.auth} generateLabelsUrl={state.url} />
+            <LabelsPageWithState auth={props.auth} generateLabelsUrl={state.url} listItemsUrl={state.itemsUrl} />
         );
     }
 }
 
-function LabelsPageWithState(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string }) : JSX.Element
+function LabelsPageWithState(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string, listItemsUrl: string }) : JSX.Element
 {
+    const { auth, listItemsUrl } = props;
+    const { accessToken } = auth;
+    const requester = useCallback(async () => listItems(listItemsUrl, accessToken), [accessToken, listItemsUrl]);
+    const response = useRequest(requester);
+
     return (
-        <ActualGenerateLabelsPage auth={props.auth} generateLabelsUrl={props.generateLabelsUrl} />
+        <>
+            <RequestWrapper
+                requestResult={response}
+                success={response => <ActualGenerateLabelsPage auth={auth} generateLabelsUrl={props.generateLabelsUrl} items={response.items} />}
+            />
+        </>
     );
 }
 
-function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string }): JSX.Element
+function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, generateLabelsUrl: string, items: Item[] }): JSX.Element
 {
     const navigate = useNavigate();
-    const [sheetSpecs, setSheetSpecs] = React.useState<SheetSpecificationsData>({
+    const [ sheetSpecs, setSheetSpecs ] = React.useState<SheetSpecificationsData>({
         sheetWidth: 210,
         sheetHeight: 297,
         labelWidth: 65,
@@ -68,7 +84,8 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
         bottomMargin: 0,
         border: true,
     });
-    const [error, setError] = React.useState<boolean>(false);
+    const [ itemLabelCounts, setItemLabelCounts ] = React.useState<Record<string, number>>(() => Object.fromEntries(props.items.map(item => [item.item_id, 2])));
+    const [ error, setError ] = React.useState<boolean>(false);
     const { classes } = useStyles();
 
     const specErrors = validateSheetSpecifications(sheetSpecs);
@@ -83,23 +100,8 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
                     </Title>
                 </Group>
                 <Accordion m='xl'>
-                    <Accordion.Item value="label-selection">
-                        <Accordion.Control>
-                            Select Items
-                        </Accordion.Control>
-                        <Accordion.Panel>
-                            test
-                        </Accordion.Panel>
-                    </Accordion.Item>
-                    <Accordion.Item value="sheet-specifications">
-                        <Accordion.Control>
-                            Customize Sheet Specifications
-                        </Accordion.Control>
-                        <Accordion.Panel>
-                            <SheetSpecificationsEditor data={sheetSpecs} onChange={setSheetSpecs} />
-
-                        </Accordion.Panel>
-                    </Accordion.Item>
+                    {renderItemSelectionPane()}
+                    {renderSheetSpecificationPane()}
                 </Accordion>
                 {renderError()}
                 {renderSpecificationErrors()}
@@ -110,6 +112,112 @@ function ActualGenerateLabelsPage(props: { auth: AuthenticatedSellerStatus, gene
         </>
     );
 
+
+    function updateItemLabelCount(itemId: number, labelCount: number)
+    {
+        const updatedItemLabelCounts = { ...itemLabelCounts, [itemId]: labelCount };
+
+        setItemLabelCounts(updatedItemLabelCounts);
+    }
+
+    function setAllItemLabelCountsTo(n: number)
+    {
+        const updatedItemLabelCounts = Object.fromEntries(Object.keys(itemLabelCounts).map(itemId => [itemId, n]));
+
+        setItemLabelCounts(updatedItemLabelCounts);
+    }
+
+    function renderItemSelectionPane(): React.ReactNode
+    {
+        return (
+            <Accordion.Item value="label-selection">
+                <Accordion.Control>
+                    Select Items
+                </Accordion.Control>
+                <Accordion.Panel>
+                    <Group position='right'>
+                        <Flex direction='row'>
+                            {[0, 1, 2].map(createQuickSetAllButton)}
+                        </Flex>
+                    </Group>
+                    <Center m='xl'>
+                        <Table withBorder striped>
+                            <thead>
+                                <tr>
+                                    <th>Item Id</th>
+                                    <th>Item Description</th>
+                                    <th>Label Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {props.items.map(renderItemRow)}
+                            </tbody>
+                        </Table>
+                    </Center>
+                </Accordion.Panel>
+            </Accordion.Item>
+        );
+
+
+        function createQuickSetAllButton(setAllTo: number): React.ReactNode
+        {
+            return (
+                <Tooltip label={`Set all label counts to ${setAllTo}`}>
+                    <Button m='sm' onClick={onSetAllClicked}>All to {setAllTo}</Button>
+                </Tooltip>
+            );
+
+
+            function onSetAllClicked()
+            {
+                setAllItemLabelCountsTo(setAllTo);
+            }
+        }
+
+        function renderItemRow(item: Item): React.ReactNode
+        {
+            return (
+                <>
+                    <tr key={item.item_id}>
+                        <td width='10%'>
+                            {item.item_id}
+                        </td>
+                        <td width='70%'>
+                            {item.description}
+                        </td>
+                        <td>
+                            <NumberInput min={0} precision={0} value={itemLabelCounts[item.item_id]} onChange={onUpdateItemLabelCount} />
+                        </td>
+                    </tr>
+                </>
+            );
+
+
+            function onUpdateItemLabelCount(value : number | "") : void
+            {
+                if ( value === "" )
+                {
+                    value = 0;
+                }
+
+                updateItemLabelCount(item.item_id, value);
+            }
+        }
+    }
+
+    function renderSheetSpecificationPane(): React.ReactNode
+    {
+        return (
+            <Accordion.Item value="sheet-specifications">
+                <Accordion.Control>
+                    Customize Sheet Specifications
+                </Accordion.Control>
+                <Accordion.Panel>
+                    <SheetSpecificationsEditor data={sheetSpecs} onChange={setSheetSpecs} />
+                </Accordion.Panel>
+            </Accordion.Item>
+        );
+    }
 
     function renderSpecificationErrors(): React.ReactNode
     {

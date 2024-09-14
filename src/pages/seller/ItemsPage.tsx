@@ -63,13 +63,13 @@ function ItemsPageWithState(props: { url: string, eventId: number, auth: Authent
         <>
             <RequestWrapper
                 requestResult={response}
-                success={response => <ActualItemsPage auth={auth} items={response.items} addItemUrl={response.links.add} generateLabelsUrl={response.links.generate_labels} eventId={eventId} />}
+                success={response => <ActualItemsPage auth={auth} items={response.items} itemsUrl={url} addItemUrl={response.links.add} generateLabelsUrl={response.links.generate_labels} eventId={eventId} />}
             />
         </>
     );
 }
 
-function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[], addItemUrl: string, generateLabelsUrl: string, eventId: number }): JSX.Element
+function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[], itemsUrl: string, addItemUrl: string, generateLabelsUrl: string, eventId: number }): JSX.Element
 {
     const { eventId } = props;
     const navigate = useNavigate();
@@ -187,6 +187,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
     function onGenerateLabels()
     {
         const state: GenerateLabelsPageState = {
+            itemsUrl: props.itemsUrl,
             url: props.generateLabelsUrl,
         };
 

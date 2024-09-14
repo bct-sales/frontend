@@ -2,7 +2,7 @@ import { AuthenticatedSellerStatus } from "@/auth/types";
 import PersistentStateGuard from "@/components/PersistentStateGuard";
 import SheetSpecificationsEditor, { SheetSpecificationsData } from "@/components/SheetSpecificationsEditor";
 import { generateLabels, GenerateLabelsData } from "@/rest/labels";
-import { Button, Center, Group, Paper, Title, Text, Box, createStyles, Accordion, Stack, Flex, Table, NumberInput, Tooltip } from "@mantine/core";
+import { Button, Center, Group, Paper, Title, Text, Box, createStyles, Accordion, Flex, Table, NumberInput, Tooltip } from "@mantine/core";
 import React from "react";
 import { z } from "zod";
 import { DownloadLabelsPageState } from "./DownloadLabelsPage";

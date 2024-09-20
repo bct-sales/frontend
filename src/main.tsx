@@ -40,6 +40,10 @@ if ( root )
                     element: <AuthGuard role='seller' child={auth => <pages.seller.GenerateLabelsPage auth={auth} />} />,
                 },
                 {
+                    path: "/large-items",
+                    element: <AuthGuard role='seller' child={auth => <pages.seller.LargeItemsPage auth={auth} />} />,
+                },
+                {
                     path: "/download",
                     element: <AuthGuard role='seller' child={auth => <pages.seller.DownloadLabelsPage auth={auth} />} />,
                 },

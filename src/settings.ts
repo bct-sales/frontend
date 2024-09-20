@@ -18,7 +18,7 @@ export function isDonation(recipientId: number): boolean
     return recipientId === getDonationUserId();
 }
 
-const largeItemCategory = 'Large Items';
+export const largeItemCategory = 'Large Items';
 
 export function getItemCategories(): string[]
 {

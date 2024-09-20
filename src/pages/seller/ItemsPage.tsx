@@ -15,6 +15,7 @@ import { z } from "zod";
 import { AddItemState } from "./AddItemPage";
 import { GenerateLabelsPageState } from "./GenerateLabelsPage";
 import { isEmail } from "@mantine/form";
+import { LargeItemsPageState } from "./LargeItemsPage";
 
 
 
@@ -127,16 +128,21 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 
             return (
                 <Group position="right">
-                    <Tooltip label={tooltipLabel()}>
+                    <Tooltip label={generateLabelsTooltipLabel()}>
                         <Button onClick={onGenerateLabels} disabled={!isEnabled}>
                             Generate Labels
+                        </Button>
+                    </Tooltip>
+                    <Tooltip label={generateLargeItemsFormTooltipLabel()}>
+                        <Button onClick={onGenerateLargeItemsForm}>
+                            Large Items Form
                         </Button>
                     </Tooltip>
                 </Group>
             );
 
 
-            function tooltipLabel(): string
+            function generateLabelsTooltipLabel(): string
             {
                 if ( atLeastOneItem )
                 {
@@ -146,6 +152,11 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
                 {
                     return "You need to enter at least one item before generating labels";
                 }
+            }
+
+            function generateLargeItemsFormTooltipLabel(): string
+            {
+                return "Generate form for large items";
             }
         }
     }
@@ -235,6 +246,15 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
         };
 
         navigate('/labels', { state });
+    }
+
+    function onGenerateLargeItemsForm()
+    {
+        const state: LargeItemsPageState = {
+            itemsUrl: props.itemsUrl,
+        };
+
+        navigate('/large-items', { state });
     }
 
     function onAddItem()

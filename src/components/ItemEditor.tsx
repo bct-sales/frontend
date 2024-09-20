@@ -3,6 +3,7 @@ import { isValidItemPrice } from "@/validation";
 import { NumberInput, Select, Switch, TextInput } from "@mantine/core";
 import { ChangeEvent } from "react";
 import { getItemCategories, isCharityAllowedForCategory } from '@/settings';
+import { notifications } from "@mantine/notifications";
 
 export interface ItemEditorData
 {
@@ -26,6 +27,16 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
     const validPrice = isValidItemPrice(priceInCents);
     const priceError = validPrice ? {} : { error: 'Must be multiple of 50 cents' };
     const itemCategories = getItemCategories();
+    const isCharityAllowed = isCharityAllowedForCategory(data.category);
+
+    if ( !isCharityAllowed && data.isForCharity )
+    {
+        console.error("Charity is disallowed, yet it is selected. This should not be possible.");
+        notifications.show({
+            message: 'You have encountered a bug. Please report. Message: charity inconsistency.',
+            color: "red"
+        });
+    }
 
     return (
         <>
@@ -33,7 +44,7 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
             <Select label="Category" data={itemCategories} searchable value={data.category} m='xl' onChange={onChangeCategory} />
             <NumberInput value={priceInCents / 100} label='Price' parser={parsePrice} formatter={formatPrice} onChange={onChangePrice} step={0.5} min={0} precision={2} m='xl' {...priceError} />
             <Switch checked={donation} label="Donate proceeds to BCT" m='xl' onChange={onChangeDonation} />
-            <Switch checked={isForCharity} label="Donate to charity if unsold" m='xl' onChange={onChangeCharity} />
+            <Switch checked={isForCharity} label="Donate to charity if unsold" m='xl' onChange={onChangeCharity} disabled={!isCharityAllowed} />
         </>
     );
 
@@ -89,9 +100,17 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
 
     function onChangeCategory(category: string)
     {
-        const newData = {...data, category};
-
-        onChange(newData, areAllFieldsValid(newData));
+        if ( isCharityAllowedForCategory(category) )
+        {
+            const newData = {...data, category};
+            onChange(newData, areAllFieldsValid(newData));
+        }
+        else
+        {
+            const newData = {...data, isForCharity: false, category};
+            notifications.show({message: "Large items cannot be donated to charity"});
+            onChange(newData, areAllFieldsValid(newData));
+        }
     }
 
     function onChangeCharity(event: ChangeEvent<HTMLInputElement>)

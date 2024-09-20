@@ -2,7 +2,7 @@ import { MoneyAmount } from "@/money-amount";
 import { isValidItemPrice } from "@/validation";
 import { NumberInput, Select, Switch, TextInput } from "@mantine/core";
 import { ChangeEvent } from "react";
-import { getItemCategories } from '@/settings';
+import { getItemCategories, isCharityAllowedForCategory } from '@/settings';
 
 export interface ItemEditorData
 {
@@ -132,6 +132,16 @@ export default function ItemEditor<T extends ItemEditorData>({ data, onChange }:
 
     function areAllFieldsValid(data: ItemEditorData): boolean
     {
-        return isValidItemPrice(data.price_in_cents);
+        if ( !isValidItemPrice(data.price_in_cents) )
+        {
+            return false;
+        }
+
+        if ( !isCharityAllowedForCategory(data.category) && data.isForCharity )
+        {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -18,6 +18,8 @@ export function isDonation(recipientId: number): boolean
     return recipientId === getDonationUserId();
 }
 
+const largeItemCategory = 'Large Items';
+
 export function getItemCategories(): string[]
 {
     return [
@@ -33,8 +35,13 @@ export function getItemCategories(): string[]
         'Shoes (infant to 12 yrs)',
         'Toys',
         'Baby/Child Equipment',
-        'Large Items',
+        largeItemCategory,
     ];
+}
+
+export function isCharityAllowedForCategory(category: string) : boolean
+{
+    return category !== largeItemCategory;
 }
 
 

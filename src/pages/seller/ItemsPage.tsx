@@ -128,19 +128,33 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
 
             return (
                 <Group position="right">
+                    {renderGenerateLabelsButton()}
+                    {/* {renderLargeItemsButton()} */}
+                </Group>
+            );
+
+
+            function renderGenerateLabelsButton(): React.ReactNode
+            {
+                return (
                     <Tooltip label={generateLabelsTooltipLabel()}>
                         <Button onClick={onGenerateLabels} disabled={!isEnabled}>
                             Generate Labels
                         </Button>
                     </Tooltip>
+                );
+            }
+
+            function renderLargeItemsButton(): React.ReactNode
+            {
+                return (
                     <Tooltip label={generateLargeItemsFormTooltipLabel()}>
                         <Button onClick={onGenerateLargeItemsForm}>
                             Large Items Form
                         </Button>
                     </Tooltip>
-                </Group>
-            );
-
+                );
+            }
 
             function generateLabelsTooltipLabel(): string
             {

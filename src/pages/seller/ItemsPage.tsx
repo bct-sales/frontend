@@ -106,7 +106,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
             <Header height={80} p='sm'>
                 <Group position="apart">
                     {renderTitle()}
-                    {renderGenerateLabelsButton()}
+                    {renderHeaderButtons()}
                 </Group>
             </Header>
         );
@@ -121,7 +121,7 @@ function ActualItemsPage(props: { auth: AuthenticatedSellerStatus, items: Item[]
             );
         }
 
-        function renderGenerateLabelsButton(): React.ReactNode
+        function renderHeaderButtons(): React.ReactNode
         {
             const atLeastOneItem = props.items.length > 0;
             const isEnabled = atLeastOneItem;
